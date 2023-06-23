@@ -1,7 +1,7 @@
-package com.kosa.gather.e.test.service;
+package com.kosa.gather_e.test.service;
 
-import com.kosa.gather.e.test.dao.TestDAO;
-import com.kosa.gather.e.test.vo.TestVO;
+import com.kosa.gather_e.test.dao.TestDAO;
+import com.kosa.gather_e.test.vo.TestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

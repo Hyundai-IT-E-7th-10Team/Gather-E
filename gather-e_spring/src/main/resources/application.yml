@@ -4,7 +4,7 @@ server:
     context-path: /api
 
 mybatis:
-  type-aliases-package: com.kosa.gather.e.*.vo
+  type-aliases-package: com.kosa.gather_e.*.vo
   mapper-locations: mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true

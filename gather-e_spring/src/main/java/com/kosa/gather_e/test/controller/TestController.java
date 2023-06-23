@@ -1,7 +1,7 @@
-package com.kosa.gather.e.test.controller;
+package com.kosa.gather_e.test.controller;
 
-import com.kosa.gather.e.test.service.TestService;
-import com.kosa.gather.e.test.vo.TestVO;
+import com.kosa.gather_e.test.service.TestService;
+import com.kosa.gather_e.test.vo.TestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

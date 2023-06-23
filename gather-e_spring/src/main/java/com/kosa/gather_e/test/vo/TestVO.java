@@ -1,4 +1,4 @@
-package com.kosa.gather.e.test.vo;
+package com.kosa.gather_e.test.vo;
 
 import lombok.Data;
 

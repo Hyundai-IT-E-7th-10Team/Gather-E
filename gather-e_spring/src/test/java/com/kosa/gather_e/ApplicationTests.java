@@ -1,4 +1,4 @@
-package com.kosa.gather.e;
+package com.kosa.gather_e;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

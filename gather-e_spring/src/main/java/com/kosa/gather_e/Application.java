@@ -1,4 +1,4 @@
-package com.kosa.gather.e;
+package com.kosa.gather_e;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
