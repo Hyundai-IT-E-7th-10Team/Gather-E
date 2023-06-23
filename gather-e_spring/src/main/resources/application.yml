@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+mybatis:
+  type-aliases-package: com.kosa.gather.e.*.vo
+  mapper-locations: mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+spring:
+  datasource:
+    url: ${db-url}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: ${db-username}
+    password: ${db-password}
+  profiles:
+    include:
+      - dev
+
+
