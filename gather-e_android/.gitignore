@@ -1,4 +1,5 @@
 *.iml
+**/strings.xml
 .gradle
 /local.properties
 /.idea/caches
@@ -13,8 +14,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-
-
 
 # Created by https://www.toptal.com/developers/gitignore/api/androidstudio,intellij,gradle,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio,intellij,gradle,macos
