@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosa.gather_e.gather.dao.GatherDAO">
+
+    <insert id="insertGatherVO" parameterType="GatherVO">
+        <selectKey keyProperty="gatherSeq" resultType="int" order="AFTER">
+            SELECT TB_GATHER_SEQ.CURRVAL AS gatherSeq FROM DUAL
+        </selectKey>
+        INSERT INTO TB_GATHER
+        (
+            category_seq,
+            gather_title,
+            gather_date,
+            gather_description,
+            gather_limit,
+            gather_latitude,
+            gather_longitude
+        )
+        VALUES
+        (
+            #{categorySeq},
+            #{gatherTitle},
+            #{gatherDate},
+            #{gatherDescription},
+            #{gatherLimit},
+            #{gatherLatitude},
+            #{gatherLongitude}
+        )
+        </insert>
+
+
+    <select id="selectAllGather" resultType="GatherVO">
+        SELECT * FROM TB_GATHER
+    </select>
+
+    <select id="selectOneGather"
+            parameterType="int"
+            resultType="GatherVO">
+        SELECT * FROM TB_GATHER
+        WHERE gather_seq = #{gatherSeq}
+    </select>
+
+    <delete id="deleteGather"
+            parameterType="int">
+        DELETE FROM TB_GATHER
+        WHERE gather_seq = #{gatherSeq}
+    </delete>
+
+    <update id="updateGather" parameterType="GatherVO">
+    <![CDATA[
+        UPDATE TB_GATHER
+        SET
+            category_seq = #{categorySeq},
+            gather_title = #{gatherTitle},
+            gather_date = #{gatherDate},
+            gather_description = #{gatherDescription},
+            gather_limit = #{gatherLimit},
+            gather_latitude = #{gatherLatitude},
+            gather_longitude = #{gatherLongitude}
+        WHERE gather_seq = #{gatherSeq}
+        ]]>
+</update>
+
+
+
+</mapper>
