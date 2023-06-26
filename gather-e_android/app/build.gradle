@@ -33,9 +33,22 @@ android {
     viewBinding {
         enabled = true
     }
+    buildFeatures {
+        viewBinding true
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core:1.9.0'
+        }
+    }
 }
 
+
 dependencies {
+    // 네이버 지도 SDK
+    implementation("com.naver.maps:map-sdk:3.16.2")
+    // 네이버 지도 SDK는 appcompat-v7 28 버전을 사용함
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -49,6 +62,10 @@ dependencies {
     //retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
