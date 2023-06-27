@@ -1,4 +1,4 @@
-package com.kosa.gather_e.config.util;
+package com.kosa.gather_e.util;
 
 import com.kosa.gather_e.auth.vo.UserVO;
 import io.jsonwebtoken.*;
@@ -22,9 +22,6 @@ public class JwtTokenUtils {
     public JwtTokenUtils(@Value("${jwt.secret}") String secretKey) {
         key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
-
-//    @Value("${jwt.secret}")
-//    private static String secretKey = "thisSecretCodeisGoingToBeUsedOnlyForDevButthisIsTooShort";
 
     public String generateJwtToken(UserVO user) {
         return Jwts.builder()

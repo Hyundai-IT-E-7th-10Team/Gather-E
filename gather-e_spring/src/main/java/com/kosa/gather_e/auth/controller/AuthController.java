@@ -1,9 +1,8 @@
 package com.kosa.gather_e.auth.controller;
 
 import com.kosa.gather_e.auth.service.KakaoAuthService;
-import com.kosa.gather_e.auth.service.KakaoClient;
 import com.kosa.gather_e.auth.vo.UserVO;
-import com.kosa.gather_e.config.util.JwtTokenUtils;
+import com.kosa.gather_e.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class AuthController {
      */
     @GetMapping("/kakao")
     public ResponseEntity<String> login(@RequestParam String accessToken) {
-        UserVO user = (kakaoAuthService.login(accessToken));
+        UserVO user = kakaoAuthService.login(accessToken);
         String token = jwtTokenUtils.generateJwtToken(user);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
