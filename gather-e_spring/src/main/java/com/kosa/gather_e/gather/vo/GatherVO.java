@@ -2,6 +2,8 @@ package com.kosa.gather_e.gather.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class GatherVO {
     private int gatherSeq;
@@ -12,4 +14,5 @@ public class GatherVO {
     private int gatherLimit;
     private double gatherLatitude;
     private double gatherLongitude;
+//    private List<GatherImgVO> gatherImages;
 }

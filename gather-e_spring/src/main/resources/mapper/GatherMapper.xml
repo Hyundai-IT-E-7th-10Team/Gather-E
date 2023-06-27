@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kosa.gather_e.gather.dao.GatherDAO">
 
+
     <insert id="insertGatherVO" parameterType="GatherVO">
         <selectKey keyProperty="gatherSeq" resultType="int" order="AFTER">
             SELECT TB_GATHER_SEQ.CURRVAL AS gatherSeq FROM DUAL
@@ -31,18 +32,53 @@
         </insert>
 
 
+<!--
+    <insert id="insertGatherImgVO" parameterType="java.util.List">
+        INSERT INTO TB_GATHER_IMG (gather_seq, gather_img_url)
+        <foreach collection="gatherImages" item="img" separator="UNION ALL">
+            SELECT #{gatherSeq}, #{img.gatherImgUrl} FROM DUAL
+        </foreach>
+    </insert>
+-->
+    <insert id="insertGatherImg" parameterType="GatherImgVO">
+        <selectKey keyProperty="gatherImgSeq" resultType="int" order="AFTER">
+            SELECT TB_GATHER_IMG_SEQ.CURRVAL AS gatherImgSeq FROM DUAL
+        </selectKey>
+        INSERT INTO TB_GATHER_IMG (gather_seq, gather_img_url)
+        VALUES (#{gatherSeq}, #{gatherImgUrl})
+    </insert>
+
+    <delete id="deleteGatherImageByGatherSeq"
+            parameterType="int">
+        DELETE FROM TB_GATHER_IMG
+        WHERE gather_seq = #{gatherSeq}
+    </delete>
+
+
+
     <select id="selectAllGather" resultType="GatherVO">
-        SELECT * FROM TB_GATHER
+        SELECT *
+        FROM TB_GATHER
     </select>
 
-    <select id="selectOneGather"
+    <select id="selectOneGatherByGatherSeq"
             parameterType="int"
             resultType="GatherVO">
         SELECT * FROM TB_GATHER
         WHERE gather_seq = #{gatherSeq}
     </select>
 
-    <delete id="deleteGather"
+
+    <select id="selectAllGatherImageByGatherSeq"
+            parameterType="int"
+            resultType="GatherImgVO">
+        SELECT * FROM TB_GATHER_IMG
+        WHERE gather_seq = #{gatherSeq}
+    </select>
+
+
+
+    <delete id="deleteGatherByGatherSeq"
             parameterType="int">
         DELETE FROM TB_GATHER
         WHERE gather_seq = #{gatherSeq}
