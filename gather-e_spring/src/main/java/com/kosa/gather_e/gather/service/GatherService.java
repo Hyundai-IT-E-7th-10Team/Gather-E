@@ -1,6 +1,7 @@
 package com.kosa.gather_e.gather.service;
 
 import com.kosa.gather_e.gather.dao.GatherDAO;
+import com.kosa.gather_e.gather.vo.GatherImgVO;
 import com.kosa.gather_e.gather.vo.GatherVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GatherService {
+public class GatherService implements GatherServiceImpl{
 
     private final GatherDAO gatherDAO;
 
@@ -23,11 +24,11 @@ public class GatherService {
     }
 
     public GatherVO getOneGather(int gatherSeq) {
-        return gatherDAO.selectOneGather(gatherSeq);
+        return gatherDAO.selectOneGatherByGatherSeq(gatherSeq);
     }
 
     public String deleteGather(int gatherSeq) {
-        gatherDAO.deleteGather(gatherSeq);
+        gatherDAO.deleteGatherByGatherSeq(gatherSeq);
         return "";
     }
 
@@ -36,4 +37,5 @@ public class GatherService {
         return gatherVO;
 
     }
+
 }
