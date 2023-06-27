@@ -3,6 +3,7 @@ package com.kosa.gather_e
 import android.R
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kosa.gather_e.databinding.ActivityWriteBinding
+import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import java.security.MessageDigest
 
 
@@ -65,6 +67,9 @@ class WriteActivity : AppCompatActivity() {
 
         // 장소
         binding.placeBtn.setOnClickListener {
+            val intent = Intent(this, SearchLocationActivity::class.java)
+            startActivity(intent)
+
 
         }
     }
