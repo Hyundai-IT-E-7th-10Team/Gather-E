@@ -46,14 +46,18 @@ android {
 
 
 dependencies {
-    // 네이버 지도 SDK
+    // 네이버 지도 SDK, appcompat-v7 28 버전을 사용함
     implementation("com.naver.maps:map-sdk:3.16.2")
-    // 네이버 지도 SDK는 appcompat-v7 28 버전을 사용함
+    // 네이버 지도 SDK는 Google Play 서비스의 FusedLocationProviderClient와 지자기, 가속도 센서를 활용해 최적의 위치를 반환하는 구현체인 FusedLocationSource를 제공
+    implementation("com.google.android.gms:play-services-location:16.0.0")
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     // view pager2
     implementation group: 'androidx.viewpager2', name: 'viewpager2', version: '1.0.0'
