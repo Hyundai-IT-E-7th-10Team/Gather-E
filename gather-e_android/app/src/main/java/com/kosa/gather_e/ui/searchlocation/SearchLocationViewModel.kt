@@ -1,9 +1,9 @@
 package com.kosa.gather_e.ui.searchlocation
 
 import androidx.lifecycle.ViewModel
-import com.kosa.gather_e.data.model.LocationApiResponse
-import com.kosa.gather_e.data.repository.searchLocation.SearchLocationDataSource
-import com.kosa.gather_e.data.repository.searchLocation.SearchLocationRepository
+import com.kosa.gather_e.model.entity.location.LocationApiResponse
+import com.kosa.gather_e.model.repository.kakao.SearchLocationDataSource
+import com.kosa.gather_e.model.repository.kakao.SearchLocationRepository
 
 
 // ViewModel()를 상속받지 않고 구현했음

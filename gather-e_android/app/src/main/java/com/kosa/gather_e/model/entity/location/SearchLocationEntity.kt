@@ -1,4 +1,4 @@
-package com.kosa.gather_e.data.model
+package com.kosa.gather_e.model.entity.location
 
 import java.io.Serializable
 

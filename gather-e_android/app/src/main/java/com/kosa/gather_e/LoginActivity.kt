@@ -9,8 +9,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
-import com.kosa.gather_e.model.spring.RetrofitProvider
-import com.kosa.gather_e.model.spring.user.JwtToken
+import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         } else if( token != null) {
             Log.d("gather", "카카오 로그인 성공")
             Log.d("gather", "카카오 로그인 accessToken ${token.accessToken}")
-            val callLogin = RetrofitProvider.getRetrofit().login(token.accessToken)
+            val callLogin = SpringRetrofitProvider.getRetrofit().login(token.accessToken)
             callLogin.enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     Log.d("gather", "성공")
