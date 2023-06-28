@@ -13,11 +13,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/messageEditText" />
 
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/messageEditText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/baseline_image_24"
+        />
+
     <EditText
         android:id="@+id/messageEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnSelectImage"
         app:layout_constraintEnd_toStartOf="@id/sendButton"
         app:layout_constraintBottom_toBottomOf="parent" />
 

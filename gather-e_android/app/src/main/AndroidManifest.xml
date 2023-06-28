@@ -35,7 +35,6 @@
         <activity
             android:name=".ui.searchlocation.LocationDetailActivity"
             android:exported="false" />
-
       
         <activity
             android:name=".WriteActivity"
@@ -51,7 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
          </activity>
-
   
         <activity
             android:name=".MainActivity"
