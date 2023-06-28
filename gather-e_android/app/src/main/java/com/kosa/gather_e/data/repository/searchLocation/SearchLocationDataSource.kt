@@ -18,9 +18,15 @@ object SearchLocationDataSource {
 
     private val locationApiService = retrofit.create(SearchLocationAPIService::class.java)
 
-    fun getLocationInfo(apiKey: String, query: String, callback: SearchLocationRepository.GetDataCallback<LocationApiResponse>) {
+    fun getLocationInfo(apiKey: String,
+                        query: String,
+                        x: String,
+                        y: String,
+                        radius: Int,
+                        sort: String,
+                        callback: SearchLocationRepository.GetDataCallback<LocationApiResponse>) {
 
-        val locationCall = locationApiService.getLocationData(apiKey, query)
+        val locationCall = locationApiService.getLocationData(apiKey, query, x, y, radius, sort)
 
         locationCall.enqueue(object : Callback<LocationApiResponse> {
             override fun onResponse(call: Call<LocationApiResponse>, response: Response<LocationApiResponse>) {

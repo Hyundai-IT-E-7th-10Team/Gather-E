@@ -13,11 +13,10 @@ interface SearchLocationAPIService {
     fun getLocationData(
         @Header("Authorization") apiKey: String,
         @Query("query") query: String,
-/*        @Query("x") x: String,
+        @Query("x") x: String,
         @Query("y") y: String,
         @Query("radius") radius: Int,
-        @Query("size") size: Int,
-        @Query("sort") sort: String*/
+        @Query("sort") sort: String
     ) : Call<LocationApiResponse>
 
 }
