@@ -33,9 +33,9 @@ class WriteActivity : AppCompatActivity() {
 
         }
         // toolbar의 작성 완료 버튼
-        binding.completeBtn.setOnClickListener {
-
-        }
+//        binding.completeBtn.setOnClickListener {
+//
+//        }
 
         // 만나는 날짜 - Calendar
         val calendar = Calendar.getInstance()
@@ -80,7 +80,28 @@ class WriteActivity : AppCompatActivity() {
         binding.personnelNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             Log.d("gather", "선택된 인원: $newVal")
         }
+
+
+        binding.completeBtn.setOnClickListener {
+
+            val chatRoom = ChatListItem(
+                userId = "user01",
+                itemTitle = "chatRoom01",
+                key = System.currentTimeMillis()
+            )
+
+            val chatDB = Firebase.database.reference.child("Chats")
+
+            val newChatRoomRef = chatDB.push()
+
+            newChatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+                }
+                .addOnFailureListener { error ->
+                }
+        }
     }
+
 
     // LocationDetailActivity에서 선택한 장소를 받아옴
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -91,30 +112,6 @@ class WriteActivity : AppCompatActivity() {
                 binding.placeText.text = selectedLocation.place_name
             }
         }
-
-
-        binding.completeBtn.setOnClickListener {
-            val chatRoom = ChatListItem(
-                userId = "user01",
-                itemTitle = "chatRoom02",
-                key = System.currentTimeMillis()
-            )
-
-            val chatDB = Firebase.database.reference.child("Chats")
-
-            val newChatRoomRef = chatDB.push()
-
-            newChatRoomRef.setValue(chatRoom)
-                .addOnSuccessListener {
-
-                }
-                .addOnFailureListener { error ->
-
-                }
-        }
-
-
-
-
     }
+
 }
