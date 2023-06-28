@@ -8,9 +8,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kosa.gather_e.R
-import com.kosa.gather_e.data.model.LocationApiResponse
-import com.kosa.gather_e.data.model.SearchLocationEntity
-import com.kosa.gather_e.data.repository.searchLocation.SearchLocationRepository
+import com.kosa.gather_e.model.entity.location.LocationApiResponse
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
+import com.kosa.gather_e.model.repository.kakao.SearchLocationRepository
 import com.kosa.gather_e.databinding.ActivitySearchLocationBinding
 
 class SearchLocationActivity : AppCompatActivity(), OnLocationSelectedListener {

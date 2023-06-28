@@ -5,10 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.kosa.gather_e.R
 import com.kosa.gather_e.WriteActivity
-import com.kosa.gather_e.data.model.SearchLocationEntity
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.databinding.ActivityLocationDetailBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation

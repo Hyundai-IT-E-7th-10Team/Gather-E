@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.kosa.gather_e.data.model.chat.ChatListItem
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.ItemChatListBinding
 
 class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) : ListAdapter<ChatListItem, ChatListAdapter.ViewHolder>(diffUtil) {
