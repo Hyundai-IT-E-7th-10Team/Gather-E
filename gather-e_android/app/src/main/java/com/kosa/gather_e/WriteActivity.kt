@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.data.model.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import java.security.MessageDigest
@@ -72,5 +75,40 @@ class WriteActivity : AppCompatActivity() {
 
 
         }
+
+        // 완료
+//        binding.completeBtn.setOnClickListener {
+//            val chatRoom = ChatListItem(
+//                buyerId = "user01",
+//                sellerId = "seller01",
+//                itemTitle = "chatRoom01",
+//                key = System.currentTimeMillis()
+//            )
+//
+//        }
+
+        binding.completeBtn.setOnClickListener {
+            val chatRoom = ChatListItem(
+                userId = "user01",
+                itemTitle = "chatRoom02",
+                key = System.currentTimeMillis()
+            )
+
+            val chatDB = Firebase.database.reference.child("Chats")
+
+            val newChatRoomRef = chatDB.push()
+
+            newChatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener { error ->
+
+                }
+        }
+
+
+
+
     }
 }
