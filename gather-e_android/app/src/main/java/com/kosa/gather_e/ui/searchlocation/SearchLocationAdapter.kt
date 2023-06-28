@@ -1,12 +1,9 @@
 package com.kosa.gather_e.ui.searchlocation
 
-import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.RecyclerView
-import com.kosa.gather_e.data.model.SearchLocationEntity
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.databinding.ItemLocationListBinding
 
 interface OnLocationSelectedListener {

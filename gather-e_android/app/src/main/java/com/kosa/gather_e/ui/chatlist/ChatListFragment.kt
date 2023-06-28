@@ -11,7 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kosa.gather_e.R
-import com.kosa.gather_e.data.model.chat.ChatListItem
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.FragmentChatListBinding
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 

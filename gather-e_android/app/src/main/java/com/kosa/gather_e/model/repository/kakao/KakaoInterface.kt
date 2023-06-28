@@ -1,13 +1,13 @@
-package com.kosa.gather_e.data.repository.searchLocation
+package com.kosa.gather_e.model.repository.kakao
 
-import com.kosa.gather_e.data.model.LocationApiResponse
-import com.kosa.gather_e.data.model.SearchLocationEntity
+import com.kosa.gather_e.model.entity.location.LocationApiResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface SearchLocationAPIService {
+interface KakaoInterface {
 
     @GET("https://dapi.kakao.com/v2/local/search/keyword")
     fun getLocationData(
@@ -18,5 +18,6 @@ interface SearchLocationAPIService {
         @Query("radius") radius: Int,
         @Query("sort") sort: String
     ) : Call<LocationApiResponse>
+
 
 }

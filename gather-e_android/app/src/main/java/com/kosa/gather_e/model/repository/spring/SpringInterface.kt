@@ -1,6 +1,5 @@
-package com.kosa.gather_e.model.spring
+package com.kosa.gather_e.model.repository.spring
 
-import com.kosa.gather_e.model.spring.user.JwtToken
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

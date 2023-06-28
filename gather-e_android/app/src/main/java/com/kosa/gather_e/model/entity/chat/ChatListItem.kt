@@ -1,4 +1,4 @@
-package com.kosa.gather_e.data.model.chat
+package com.kosa.gather_e.model.entity.chat
 
 data class ChatListItem(
     val userId: String,

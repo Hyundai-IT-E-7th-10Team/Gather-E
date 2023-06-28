@@ -22,9 +22,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
-import com.kosa.gather_e.data.model.chat.ChatItem
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.databinding.ItemChatBinding
+import com.kosa.gather_e.model.entity.chat.ChatItem
 
 class ChatRoomActivity : AppCompatActivity() {
 

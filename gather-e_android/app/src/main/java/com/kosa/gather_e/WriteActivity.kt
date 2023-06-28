@@ -10,10 +10,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.kosa.gather_e.data.model.SearchLocationEntity
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.kosa.gather_e.data.model.chat.ChatListItem
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 
