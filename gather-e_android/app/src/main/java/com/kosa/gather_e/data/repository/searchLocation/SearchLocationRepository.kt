@@ -8,8 +8,14 @@ object SearchLocationRepository {
 
     private val searchLocationDataSource = SearchLocationDataSource
 
-    fun getLocationInfo(apiKey: String, query: String, callback: GetDataCallback<LocationApiResponse>){
-        searchLocationDataSource.getLocationInfo(apiKey, query, callback)
+    fun getLocationInfo(apiKey: String,
+                        query: String,
+                        x: String,
+                        y: String,
+                        radius: Int,
+                        sort: String,
+                        callback: GetDataCallback<LocationApiResponse>){
+        searchLocationDataSource.getLocationInfo(apiKey, query, x, y, radius, sort, callback)
     }
 
     // 데이터 조회 콜백

@@ -24,7 +24,7 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="Cancel Button"
         android:padding="10dp"
-        android:src="@drawable/ic_cancel"
+        android:src="@drawable/ic_before"
         android:tint="@color/purple"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolbar" />

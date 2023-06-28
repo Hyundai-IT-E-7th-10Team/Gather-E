@@ -1,12 +1,22 @@
 package com.kosa.gather_e.ui.searchlocation
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.RecyclerView
 import com.kosa.gather_e.data.model.SearchLocationEntity
 import com.kosa.gather_e.databinding.ItemLocationListBinding
 
-class SearchLocationAdapter(private val locationList: List<SearchLocationEntity>) : RecyclerView.Adapter<SearchLocationAdapter.SearchLocationViewHolder>() {
+interface OnLocationSelectedListener {
+    fun onLocationSelected(location: SearchLocationEntity)
+}
+
+class SearchLocationAdapter(
+    private val locationList: List<SearchLocationEntity>,
+    private val listener: OnLocationSelectedListener
+    ): RecyclerView.Adapter<SearchLocationAdapter.SearchLocationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchLocationViewHolder {
         val binding = ItemLocationListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,6 +39,10 @@ class SearchLocationAdapter(private val locationList: List<SearchLocationEntity>
             binding.x.text = location.x
             binding.y.text = location.y
             binding.distance.text = location.distance
+
+            binding.root.setOnClickListener {
+                listener.onLocationSelected(location)
+            }
 
         }
     }

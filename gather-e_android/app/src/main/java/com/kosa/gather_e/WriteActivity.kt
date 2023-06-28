@@ -1,40 +1,39 @@
 package com.kosa.gather_e
 
-import android.R
+
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.kosa.gather_e.data.model.SearchLocationEntity
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kosa.gather_e.data.model.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
-import java.security.MessageDigest
 
 
 class WriteActivity : AppCompatActivity() {
 
-
-
-
+    lateinit var binding : ActivityWriteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var binding = ActivityWriteBinding.inflate(layoutInflater)
+        binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
-
-        // toolbar의 X(취소) 버튼
+       // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
+
+        }
+        // toolbar의 작성 완료 버튼
+        binding.completeBtn.setOnClickListener {
 
         }
 
@@ -71,21 +70,28 @@ class WriteActivity : AppCompatActivity() {
         // 장소
         binding.placeBtn.setOnClickListener {
             val intent = Intent(this, SearchLocationActivity::class.java)
-            startActivity(intent)
-
-
+            startForResult.launch(intent)
         }
 
-        // 완료
-//        binding.completeBtn.setOnClickListener {
-//            val chatRoom = ChatListItem(
-//                buyerId = "user01",
-//                sellerId = "seller01",
-//                itemTitle = "chatRoom01",
-//                key = System.currentTimeMillis()
-//            )
-//
-//        }
+        // 모집 인원
+        binding.personnelNumberPicker.minValue = 2
+        binding.personnelNumberPicker.maxValue = 22
+
+        binding.personnelNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            Log.d("gather", "선택된 인원: $newVal")
+        }
+    }
+
+    // LocationDetailActivity에서 선택한 장소를 받아옴
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedLocation = result.data?.getSerializableExtra("selectedLocation") as? SearchLocationEntity
+            Log.d("gather", "writeActivity에서 ${selectedLocation.toString()}")
+            if (selectedLocation != null) {
+                binding.placeText.text = selectedLocation.place_name
+            }
+        }
+
 
         binding.completeBtn.setOnClickListener {
             val chatRoom = ChatListItem(
