@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_list"
-        android:name="com.kosa.gather_e.ui.list.ListFragment"
+        android:name="com.kosa.gather_e.ui.chatlist.ChatListFragment"
         android:label="@string/title_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_chat_list" />
 
     <fragment
         android:id="@+id/navigation_map"

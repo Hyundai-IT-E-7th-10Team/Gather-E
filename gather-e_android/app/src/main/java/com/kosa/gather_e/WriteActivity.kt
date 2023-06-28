@@ -11,6 +11,9 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.kosa.gather_e.data.model.SearchLocationEntity
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.data.model.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 
@@ -88,5 +91,30 @@ class WriteActivity : AppCompatActivity() {
                 binding.placeText.text = selectedLocation.place_name
             }
         }
+
+
+        binding.completeBtn.setOnClickListener {
+            val chatRoom = ChatListItem(
+                userId = "user01",
+                itemTitle = "chatRoom02",
+                key = System.currentTimeMillis()
+            )
+
+            val chatDB = Firebase.database.reference.child("Chats")
+
+            val newChatRoomRef = chatDB.push()
+
+            newChatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener { error ->
+
+                }
+        }
+
+
+
+
     }
 }
