@@ -10,7 +10,6 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
 import com.kosa.gather_e.model.spring.RetrofitProvider
-import com.kosa.gather_e.model.spring.user.JwtToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
