@@ -2,6 +2,7 @@ package com.kosa.gather_e.test.controller;
 
 import com.kosa.gather_e.test.service.TestService;
 import com.kosa.gather_e.test.vo.TestVO;
+import com.kosa.gather_e.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public class TestController {
 
     @GetMapping("/test")
     public ResponseEntity<TestVO> test() {
+        System.out.println(SecurityUtil.getCurrentMemberSeq());
         return new ResponseEntity<>(testService.getTestVO(), HttpStatus.NOT_FOUND);
     }
 
