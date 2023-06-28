@@ -14,6 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+.idea/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/androidstudio,intellij,gradle,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio,intellij,gradle,macos

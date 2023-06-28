@@ -1,35 +1,39 @@
 package com.kosa.gather_e
 
-import android.R
+
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
-import java.security.MessageDigest
+import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 
 
 class WriteActivity : AppCompatActivity() {
 
-
-
-
+    lateinit var binding : ActivityWriteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var binding = ActivityWriteBinding.inflate(layoutInflater)
+        binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
-
-        // toolbar의 X(취소) 버튼
+       // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
+
+        }
+        // toolbar의 작성 완료 버튼
+        binding.completeBtn.setOnClickListener {
 
         }
 
@@ -65,7 +69,52 @@ class WriteActivity : AppCompatActivity() {
 
         // 장소
         binding.placeBtn.setOnClickListener {
-
+            val intent = Intent(this, SearchLocationActivity::class.java)
+            startForResult.launch(intent)
         }
+
+        // 모집 인원
+        binding.personnelNumberPicker.minValue = 2
+        binding.personnelNumberPicker.maxValue = 22
+
+        binding.personnelNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            Log.d("gather", "선택된 인원: $newVal")
+        }
+    }
+
+    // LocationDetailActivity에서 선택한 장소를 받아옴
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedLocation = result.data?.getSerializableExtra("selectedLocation") as? SearchLocationEntity
+            Log.d("gather", "writeActivity에서 ${selectedLocation.toString()}")
+            if (selectedLocation != null) {
+                binding.placeText.text = selectedLocation.place_name
+            }
+        }
+
+
+        binding.completeBtn.setOnClickListener {
+            val chatRoom = ChatListItem(
+                userId = "user01",
+                itemTitle = "chatRoom02",
+                key = System.currentTimeMillis()
+            )
+
+            val chatDB = Firebase.database.reference.child("Chats")
+
+            val newChatRoomRef = chatDB.push()
+
+            newChatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener { error ->
+
+                }
+        }
+
+
+
+
     }
 }
