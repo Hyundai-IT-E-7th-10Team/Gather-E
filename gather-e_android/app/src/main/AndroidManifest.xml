@@ -37,10 +37,6 @@
             android:exported="false" />
       
         <activity
-            android:name=".SearchLocationActivity"
-            android:exported="true"/>
-      
-        <activity
             android:name=".WriteActivity"
             android:exported="true" />
       
@@ -54,15 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
          </activity>
-      
-        <activity
-            android:name=".MapTestActivity"
-            android:exported="true" />
-            android:label="@string/title_activity_bottom_navigation_var" />
-      
-        <activity
-            android:name=".MapTestActivity"
-            android:exported="true" />
   
         <activity
             android:name=".MainActivity"
