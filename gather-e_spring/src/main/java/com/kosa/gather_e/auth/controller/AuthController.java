@@ -1,5 +1,6 @@
 package com.kosa.gather_e.auth.controller;
 
+import com.kosa.gather_e.auth.dto.Token;
 import com.kosa.gather_e.auth.service.KakaoAuthService;
 import com.kosa.gather_e.auth.vo.UserVO;
 import com.kosa.gather_e.util.JwtTokenUtils;
@@ -24,9 +25,9 @@ public class AuthController {
      * @return ResponseEntity<AuthResource>
      */
     @GetMapping("/kakao")
-    public ResponseEntity<String> login(@RequestParam String accessToken) {
+    public ResponseEntity<Token> login(@RequestParam String accessToken) {
         UserVO user = kakaoAuthService.login(accessToken);
         String token = jwtTokenUtils.generateJwtToken(user);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(new Token(token), HttpStatus.OK);
     }
 }
