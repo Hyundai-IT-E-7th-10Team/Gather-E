@@ -3,11 +3,27 @@ package com.kosa.gather_e.ui.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kakao.sdk.user.UserApiClient
 
 class MypageViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Mypage Fragment"
+    private val _name = MutableLiveData<String>().apply {
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                value = user.kakaoAccount?.profile?.nickname
+            }
+        }
     }
-    val text: LiveData<String> = _text
+
+    private val _profileImg = MutableLiveData<String>().apply {
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                value = user.kakaoAccount?.profile?.thumbnailImageUrl
+            }
+        }
+    }
+
+
+    val name: LiveData<String> = _name
+    val profileImg: LiveData<String> = _profileImg
 }

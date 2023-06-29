@@ -150,6 +150,7 @@ class WriteActivity : AppCompatActivity() {
         binding.calendarBtn.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
+
                 { _, year, month, day -> binding.dateText.text = "$year/${month + 1}/${day}" },
                 year, month, day
             )
