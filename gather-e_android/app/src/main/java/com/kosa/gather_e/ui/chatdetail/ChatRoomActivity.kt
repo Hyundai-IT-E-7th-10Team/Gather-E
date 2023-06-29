@@ -1,17 +1,27 @@
 package com.kosa.gather_e.ui.chatdetail
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +30,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
@@ -35,26 +47,18 @@ class ChatRoomActivity : AppCompatActivity() {
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
     private var selectedImageUri: Uri? = null
-    companion object {
-        private const val REQUEST_IMAGE_GALLERY = 1001
+
+    private val storage: FirebaseStorage by lazy {
+        Firebase.storage
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var binding = ActivityChatRoomBinding.inflate(layoutInflater)
+        val binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var itemBinding = ItemChatBinding.inflate(layoutInflater)
-        // Notification
-//        FirebaseMessaging.getInstance().token
-//            .addOnCompleteListener{task ->
-//                if(task.isSuccessful){
-//                    val token = task.result
-//
-//
-//                }
-//            }
+        val itemBinding = ItemChatBinding.inflate(layoutInflater)
 
         val chatKey = intent.getLongExtra("chatKey", -1)
 
@@ -85,52 +89,139 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
 
         binding.btnSelectImage.setOnClickListener {
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY)
-        }
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.READ_MEDIA_IMAGES
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    startContentProvider()
+                }
+                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
+                    showPermissionContextPopup()
+                }
+                else -> {
+                    requestPermissions(arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES), 1010)
+                }
 
-        fun isImageSelected(): Boolean {
-            val imagePreview = itemBinding.imagePreview
-            return imagePreview.visibility == View.VISIBLE
-        }
+            }
 
+        }
 
         binding.sendButton.setOnClickListener {
             val messageEditText = binding.messageEditText
             val message = messageEditText.text.toString()
-
-            if (isImageSelected()) {
-//                val chatItem = ChatItem(senderId = user, message = selectedImageUri.toString())
-//                chatDB?.push()?.setValue(chatItem)
+            Log.d("Gatherne", "selectedImageUri : : " + selectedImageUri)
+            if (selectedImageUri != null) {
+                val photoUri = selectedImageUri ?: return@setOnClickListener
+                uploadPhoto(photoUri,
+                    successHandler = { uri ->
+                        val chatItem = ChatItem(senderId = user, message = "", image = uri)
+                        chatDB?.push()?.setValue(chatItem)
+                        Log.d("Gatherne", "photoUri : " + uri)
+                        selectedImageUri = null
+                    },
+                    errorHandler = {
+                        hideProgress()
+                        Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                )
             } else {
-                val chatItem = ChatItem(senderId = user, message = message)
+                val chatItem = ChatItem(senderId = user, message = message, image = "")
                 chatDB?.push()?.setValue(chatItem)
-            }
+                Log.d("Gatherne", "No photoUri")
 
+
+            }
+            selectedImageUri = null
             messageEditText.text.clear()
         }
+
     }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-//            // Image selected from gallery
-//            selectedImageUri = data.data
-//            if (selectedImageUri != null) {
-//                displaySelectedImage(selectedImageUri!!)
-//            }
-//        }
-//    }
-//
-//    private fun displaySelectedImage(imageUri: Uri) {
-//        val imagePreview = findViewById<ImageView>(R.id.imagePreview)
-//        val messageEditText = findViewById<EditText>(R.id.messageEditText)
-//
-//        // Show the ImageView and hide the TextView
-//        imagePreview.visibility = View.VISIBLE
-//        messageEditText.visibility = View.GONE
-//
-//        // Set the selected image to the ImageView
-//        imagePreview.setImageURI(imageUri)
-//    }
+
+    private fun uploadPhoto(uri: Uri, successHandler: (String) -> Unit, errorHandler: () -> Unit) {
+        showProgress()
+        val fileName = "${System.currentTimeMillis()}.png"
+        storage.reference.child("chat").child(fileName)
+            .putFile(uri)
+            .addOnSuccessListener { uploadTask ->
+                uploadTask.storage.downloadUrl
+                    .addOnSuccessListener { uri ->
+                        successHandler(uri.toString())
+                    }
+                    .addOnFailureListener {
+                        errorHandler()
+                    }
+            }
+            .addOnFailureListener {
+                errorHandler()
+            }
+        hideProgress()
+
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            1010 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startContentProvider()
+                } else {
+                    Toast.makeText(this, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun startContentProvider() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, 2020)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        when (requestCode) {
+            2020 -> {
+                val uri = data?.data
+                if (uri != null) {
+                    selectedImageUri = uri
+                } else {
+                    Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else -> {
+                Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showPermissionContextPopup() {
+        AlertDialog.Builder(this)
+            .setTitle("권한이 필요합니다.")
+            .setMessage("사진을 가져오기 위해 필요합니다.")
+            .setPositiveButton("동의") { _, _ ->
+                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1010)
+            }
+            .create()
+            .show()
+
+    }
+
+    private fun showProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
+    }
+
+    private fun hideProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = false
+    }
+
 }
