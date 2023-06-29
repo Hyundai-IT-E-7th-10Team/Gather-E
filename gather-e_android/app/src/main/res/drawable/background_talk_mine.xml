@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- left_message_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!-- 말풍선의 배경색 -->
+<solid android:color="@color/purple" />
+
+<!-- 말풍선의 테두리 -->
+<stroke
+    android:color="@color/purple"
+    android:width="1dp" />
+
+<!-- 말풍선의 모서리 둥글기 -->
+<corners
+    android:topLeftRadius="12dp"
+    android:topRightRadius="12dp"
+    android:bottomRightRadius="12dp" />
+
+</shape>

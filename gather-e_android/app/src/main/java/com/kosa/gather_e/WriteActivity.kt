@@ -21,6 +21,7 @@ import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +60,7 @@ class WriteActivity : AppCompatActivity() {
             // 완료 버튼 누르면 채팅방 생성
             val chatRoom = ChatListItem(
                 userId = "user01",
-                itemTitle = "chatRoom02",
+                itemTitle = "chatRoom03",
                 key = System.currentTimeMillis()
             )
             val chatDB = Firebase.database.reference.child("Chats")
@@ -70,6 +71,9 @@ class WriteActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { error ->
                 }
+            val intent = Intent(this, ChatRoomActivity::class.java)
+            intent.putExtra("chatKey", chatRoom.key)
+            startActivity(intent)
 
 
             // 완료 버튼 누르면 글 작성 완료
@@ -150,7 +154,6 @@ class WriteActivity : AppCompatActivity() {
         binding.calendarBtn.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
-
                 { _, year, month, day -> binding.dateText.text = "$year/${month + 1}/${day}" },
                 year, month, day
             )
