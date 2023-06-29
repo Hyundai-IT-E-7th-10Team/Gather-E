@@ -44,6 +44,7 @@ class WriteActivity : AppCompatActivity() {
 
         }
         // toolbar의 작성 완료 버튼
+
         binding.completeBtn.setOnClickListener {
             // 완료 버튼 누르면 채팅방 생성
             val chatRoom = ChatListItem(
@@ -76,6 +77,7 @@ class WriteActivity : AppCompatActivity() {
             }
 
         }
+
 
         // 카테고리 선택 버튼 동적으로 생성
         val callCategoryList: Call<List<CategoryEntity>> = SpringRetrofitProvider.getRetrofit().getCategory()
@@ -149,7 +151,6 @@ class WriteActivity : AppCompatActivity() {
         binding.personnelNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             Log.d("gather", "선택된 인원: $newVal")
         }
-    }
 
     // LocationDetailActivity에서 선택한 장소를 받아옴
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -161,4 +162,5 @@ class WriteActivity : AppCompatActivity() {
             }
         }
     }
+
 }

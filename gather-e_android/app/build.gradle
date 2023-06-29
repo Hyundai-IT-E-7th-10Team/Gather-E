@@ -36,8 +36,12 @@ android {
     viewBinding {
         enabled = true
     }
+    dataBinding{
+        enabled = true
+    }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 
     configurations.all {
@@ -72,7 +76,8 @@ dependencies {
     // lifecycle
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    // ??
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     // firebase
@@ -80,7 +85,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
 
     //kakao login
     implementation "com.kakao.sdk:v2-user:2.14.0" // 카카오 로그인
