@@ -25,7 +25,7 @@ object SpringRetrofitProvider {
         val httpClient = OkHttpClient.Builder()
 
         // string.xml에 넣어야 하는데 얘는 fragment같은게 아니라서 어려움 ㅠ
-        val token = ""
+        val token = "eyJyZWdEYXRlIjoxNjg3OTk4MDc1NjEzLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyRW1haWwiOiJkeWZmaDEwMzFAZ21haWwuY29tIiwidXNlclNlcSI6MSwic3ViIjoi6rmA7Jqw7JuQIiwiZXhwIjoxNjg4MDM0MDc1fQ.gMXjuMuT6O3NHN1FfufLr8vgWY8py-lHoDY0oqJvAqQ"
 
         httpClient.addInterceptor { chain ->
             val request = chain.request().newBuilder()
