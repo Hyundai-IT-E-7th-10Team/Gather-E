@@ -1,39 +1,60 @@
 package com.kosa.gather_e
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
+import com.kosa.gather_e.model.entity.user.JwtToken
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class LoginActivity : AppCompatActivity() {
-    val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+
+    private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "user")
+
+    private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if(error != null) {
             Log.d("gather", "카카오 로그인 실패")
         } else if( token != null) {
             Log.d("gather", "카카오 로그인 성공")
-            Log.d("gather", "카카오 로그인 accessToken ${token.accessToken}")
             val callLogin = SpringRetrofitProvider.getRetrofit().login(token.accessToken)
-            callLogin.enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    Log.d("gather", "성공")
+            callLogin.enqueue(object : Callback<JwtToken> {
+                override fun onFailure(call: Call<JwtToken>, t: Throwable) {
+                    Log.d("gather", "토큰 요청 실패")
                 }
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Log.d("gather", "실패")
-                    Log.d("gather", t.toString())
+                override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
+                    Log.d("gather", "토큰 요청 성공")
+                    GlobalScope.launch {
+                        response.body()?.accessToken?.let { saveToken(it) }
+                    }
                 }
             })
         }
     }
+    suspend fun saveToken(token: String) {
+        dataStore.edit {
+            it[stringPreferencesKey("access_token")] = token
+            Log.d("gather", token)
+            startActivity(Intent(this, BottomNavigationVarActivity::class.java))
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
