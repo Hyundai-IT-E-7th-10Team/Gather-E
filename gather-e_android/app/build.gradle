@@ -85,6 +85,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
+    // DataStore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     // glide

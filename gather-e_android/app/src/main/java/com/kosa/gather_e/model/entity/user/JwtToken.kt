@@ -1,3 +1,8 @@
 package com.kosa.gather_e.model.entity.user
 
-data class JwtToken (val accessToken: String)
+import com.google.gson.annotations.SerializedName
+
+data class JwtToken(
+    @SerializedName("accessToken")
+    val accessToken: String
+)
