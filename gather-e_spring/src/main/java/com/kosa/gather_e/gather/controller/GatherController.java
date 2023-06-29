@@ -17,7 +17,6 @@ import java.util.List;
 public class GatherController {
 
     private final GatherService gatherService;
-
     private final GatherImgService gatherImgService;
 
     /**
