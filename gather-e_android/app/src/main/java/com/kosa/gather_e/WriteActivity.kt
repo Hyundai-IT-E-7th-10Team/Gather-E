@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
@@ -14,15 +13,14 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat.getCategory
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.model.entity.category.CategoryEntity
+import com.kosa.gather_e.model.entity.chat.ChatListItem
+import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +36,7 @@ class WriteActivity : AppCompatActivity() {
         binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       // toolbar의 X(취소) 버튼
+        // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
 
@@ -49,7 +47,7 @@ class WriteActivity : AppCompatActivity() {
             // 완료 버튼 누르면 채팅방 생성
             val chatRoom = ChatListItem(
                 userId = "user01",
-                itemTitle = "chatRoom02",
+                itemTitle = "chatRoom03",
                 key = System.currentTimeMillis()
             )
             val chatDB = Firebase.database.reference.child("Chats")
@@ -60,6 +58,9 @@ class WriteActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { error ->
                 }
+            val intent = Intent(this, ChatRoomActivity::class.java)
+            intent.putExtra("chatKey", chatRoom.key)
+            startActivity(intent)
 
             // 완료 버튼 누르면 글 작성 완료
             val title = binding.titleEditText.text.toString()
@@ -80,17 +81,19 @@ class WriteActivity : AppCompatActivity() {
 
 
         // 카테고리 선택 버튼 동적으로 생성
-        val callCategoryList: Call<List<CategoryEntity>> = SpringRetrofitProvider.getRetrofit().getCategory()
+        val callCategoryList: Call<List<CategoryEntity>> =
+            SpringRetrofitProvider.getRetrofit().getCategory()
         callCategoryList.enqueue(object : Callback<List<CategoryEntity>> {
-            override fun onResponse(call: Call<List<CategoryEntity>>, response: Response<List<CategoryEntity>>
+            override fun onResponse(
+                call: Call<List<CategoryEntity>>, response: Response<List<CategoryEntity>>
             ) {
                 Log.d("gather", "$call, $response") // 403 에러 떠서 retrofitProvider에 bearear 토큰 추가
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     val categoryList = response.body()
                     categoryList?.let { categories ->
                         val buttonContainer: LinearLayout = findViewById(R.id.buttonContainer)
 
-                        for (category in categories){
+                        for (category in categories) {
                             val button = Button(this@WriteActivity)
                             button.text = category.categoryName
                             button.id = category.categorySeq
@@ -116,9 +119,11 @@ class WriteActivity : AppCompatActivity() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         binding.calendarBtn.setOnClickListener {
-            val datePickerDialog = DatePickerDialog(this,
-                { _, year, month, day -> binding.dateText.text = "$year / ${month + 1} / ${day}"},
-                year, month, day)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, year, month, day -> binding.dateText.text = "$year / ${month + 1} / ${day}" },
+                year, month, day
+            )
 
             // 오늘 날짜 이후로 가져오도록 함, 근데 왜 어제 날짜부터 가져오는지..?
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
@@ -131,9 +136,11 @@ class WriteActivity : AppCompatActivity() {
         val minute = calendar.get(Calendar.MINUTE)
 
         binding.clockBtn.setOnClickListener {
-            val timePickerDialog = TimePickerDialog(this,
-                { _, hour, minute -> binding.timeText.text = "${hour}시 ${minute}분"},
-                hour, minute, true)
+            val timePickerDialog = TimePickerDialog(
+                this,
+                { _, hour, minute -> binding.timeText.text = "${hour}시 ${minute}분" },
+                hour, minute, true
+            )
 
             timePickerDialog.show()
         }
@@ -151,7 +158,7 @@ class WriteActivity : AppCompatActivity() {
         binding.personnelNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             Log.d("gather", "선택된 인원: $newVal")
         }
-
+    }
     // LocationDetailActivity에서 선택한 장소를 받아옴
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {

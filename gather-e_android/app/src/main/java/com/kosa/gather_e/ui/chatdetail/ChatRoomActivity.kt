@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -35,7 +36,6 @@ import com.google.firebase.storage.ktx.storage
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
-import com.kosa.gather_e.databinding.ItemChatBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
 
 class ChatRoomActivity : AppCompatActivity() {
@@ -58,7 +58,7 @@ class ChatRoomActivity : AppCompatActivity() {
         val binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val itemBinding = ItemChatBinding.inflate(layoutInflater)
+//        val itemBinding = ItemChatBinding.inflate(layoutInflater)
 
         val chatKey = intent.getLongExtra("chatKey", -1)
 
@@ -89,20 +89,51 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
 
         binding.btnSelectImage.setOnClickListener {
-            when {
-                ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.READ_MEDIA_IMAGES
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    startContentProvider()
-                }
-                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
-                    showPermissionContextPopup()
-                }
-                else -> {
-                    requestPermissions(arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES), 1010)
-                }
+            Log.d("Gatherne","${Build.VERSION.RELEASE}")
 
+            // 안드로이드 버전 13 미만의 코드를 작성해야함
+            // READ_EXTERNAL_STORAGE
+            if (Build.VERSION.SDK_INT < 33){
+                when {
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        startContentProvider()
+                    }
+
+                    shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                        showPermissionContextPopup()
+                    }
+
+                    else -> {
+                        requestPermissions(
+                            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                            1010
+                        )
+                    }
+                }
+            }else {
+                when {
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.READ_MEDIA_IMAGES
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        startContentProvider()
+                    }
+
+                    shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
+                        showPermissionContextPopup()
+                    }
+
+                    else -> {
+                        requestPermissions(
+                            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
+                            1010
+                        )
+                    }
+
+                }
             }
 
         }
@@ -110,25 +141,25 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.sendButton.setOnClickListener {
             val messageEditText = binding.messageEditText
             val message = messageEditText.text.toString()
-            Log.d("Gatherne", "selectedImageUri : : " + selectedImageUri)
             if (selectedImageUri != null) {
                 val photoUri = selectedImageUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,
                     successHandler = { uri ->
-                        val chatItem = ChatItem(senderId = user, message = "", image = uri)
+                        val chatItem = ChatItem(senderId = user, message = message, image = uri, viewType = 0)
+                        Log.d("Gatherne", "photoUri, Mine")
+
                         chatDB?.push()?.setValue(chatItem)
-                        Log.d("Gatherne", "photoUri : " + uri)
                         selectedImageUri = null
-                    },
+//                        binding.progressBar.isVisible = false
+                     },
                     errorHandler = {
-                        hideProgress()
                         Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
             } else {
-                val chatItem = ChatItem(senderId = user, message = message, image = "")
+                val chatItem = ChatItem(senderId = user, message = message, image = "", viewType = 1)
                 chatDB?.push()?.setValue(chatItem)
-                Log.d("Gatherne", "No photoUri")
+                Log.d("Gatherne", "No photoUri, YOur")
 
 
             }
@@ -139,7 +170,8 @@ class ChatRoomActivity : AppCompatActivity() {
     }
 
     private fun uploadPhoto(uri: Uri, successHandler: (String) -> Unit, errorHandler: () -> Unit) {
-        showProgress()
+//        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
+
         val fileName = "${System.currentTimeMillis()}.png"
         storage.reference.child("chat").child(fileName)
             .putFile(uri)
@@ -155,7 +187,6 @@ class ChatRoomActivity : AppCompatActivity() {
             .addOnFailureListener {
                 errorHandler()
             }
-        hideProgress()
 
     }
     override fun onRequestPermissionsResult(
@@ -185,7 +216,7 @@ class ChatRoomActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        var binding = ActivityChatRoomBinding.inflate(layoutInflater)
         if (resultCode != Activity.RESULT_OK) {
             return
         }
@@ -216,12 +247,5 @@ class ChatRoomActivity : AppCompatActivity() {
 
     }
 
-    private fun showProgress() {
-        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
-    }
-
-    private fun hideProgress() {
-        findViewById<ProgressBar>(R.id.progressBar).isVisible = false
-    }
 
 }
