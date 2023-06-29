@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.chat.ChatListItem
+import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
@@ -30,19 +31,31 @@ import retrofit2.Response
 class WriteActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityWriteBinding
+
+    lateinit var gather : GatherEntity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        gather = GatherEntity(
+            categorySeq = 0, // 선택된 카테고리 ID를 설정해야 함
+            gatherTitle = "",
+            gatherDate = "",
+            gatherDescription = "",
+            gatherLimit = 0,
+            gatherLatitude = 0.0,
+            gatherLongitude = 0.0
+        )
+
         // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
-
         }
-        // toolbar의 작성 완료 버튼
 
+        // toolbar의 작성 완료 버튼
         binding.completeBtn.setOnClickListener {
             // 완료 버튼 누르면 채팅방 생성
             val chatRoom = ChatListItem(
@@ -62,21 +75,36 @@ class WriteActivity : AppCompatActivity() {
             intent.putExtra("chatKey", chatRoom.key)
             startActivity(intent)
 
+
             // 완료 버튼 누르면 글 작성 완료
-            val title = binding.titleEditText.text.toString()
-            val content = binding.contentEditText.text.toString()
-            val selectedLocation = binding.placeText.text.toString()
-            val selectedDate = binding.dateText.text.toString()
-            val selectedTime = binding.timeText.text.toString()
-            val selectedPersonnel = binding.personnelNumberPicker.value
+            gather.gatherTitle = binding.titleEditText.text.toString()
+            gather.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
+            gather.gatherDescription = binding.contentEditText.text.toString()
+            gather.gatherLimit = binding.personnelNumberPicker.value
 
-            // 데이터 유효성 검사 (예: 제목과 내용은 비어있으면 안됨)
-            if (title.isBlank() || content.isBlank()) {
-                // 유효성 검사에 실패하면 사용자에게 알림
-                Toast.makeText(this, "제목과 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
 
+//            // 데이터 유효성 검사 (예: 제목과 내용은 비어있으면 안됨)
+//            if (title.isBlank() || gatherDescription.isBlank()) {
+//                // 유효성 검사에 실패하면 사용자에게 알림
+//                Toast.makeText(this, "제목과 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+
+            val callCreateGather: Call<GatherEntity> = SpringRetrofitProvider.getRetrofit().createGather(gather = gather)
+            callCreateGather.enqueue(object : Callback<GatherEntity> {
+                override fun onResponse(
+                    call: Call<GatherEntity>,
+                    response: Response<GatherEntity>
+                ) {
+                    Log.d("gather", "성공 $call, $response")
+                    Log.d("gather", "$gather")
+                }
+
+                override fun onFailure(call: Call<GatherEntity>, t: Throwable) {
+                    Log.d("gather", "실패 $t")
+                    Log.d("gather", "실패 $call")
+                }
+            })
         }
 
 
@@ -99,8 +127,13 @@ class WriteActivity : AppCompatActivity() {
                             button.id = category.categorySeq
 
                             buttonContainer.addView(button)
-                        }
 
+                            button.setOnClickListener {
+                                gather.categorySeq = category.categorySeq
+                                Log.d("Button Clicked", "Category ID: ${category.categoryName}")
+                                Log.d("Button Clicked", "Category ID: ${category.categorySeq}")
+                            }
+                        }
                     }
                 }
             }
@@ -121,7 +154,7 @@ class WriteActivity : AppCompatActivity() {
         binding.calendarBtn.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
-                { _, year, month, day -> binding.dateText.text = "$year / ${month + 1} / ${day}" },
+                { _, year, month, day -> binding.dateText.text = "$year/${month + 1}/${day}" },
                 year, month, day
             )
 
@@ -159,6 +192,7 @@ class WriteActivity : AppCompatActivity() {
             Log.d("gather", "선택된 인원: $newVal")
         }
     }
+
     // LocationDetailActivity에서 선택한 장소를 받아옴
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -166,6 +200,10 @@ class WriteActivity : AppCompatActivity() {
             Log.d("gather", "writeActivity에서 ${selectedLocation.toString()}")
             if (selectedLocation != null) {
                 binding.placeText.text = selectedLocation.place_name
+
+                gather.gatherLongitude = selectedLocation.x.toDouble()
+                gather.gatherLatitude = selectedLocation.y.toDouble()
+
             }
         }
     }
