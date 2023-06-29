@@ -16,6 +16,7 @@ object SpringRetrofitProvider {
     // Bearer 토큰을 추가
     private fun createOkHttpClient(token: String): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
+
         httpClient.addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .header("Authorization", "Bearer $token") // Bearer 토큰을 헤더에 추가
@@ -26,7 +27,6 @@ object SpringRetrofitProvider {
     }
 
     fun init(token: String) {
-        Log.d("gather", "초기화를 해보자")
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

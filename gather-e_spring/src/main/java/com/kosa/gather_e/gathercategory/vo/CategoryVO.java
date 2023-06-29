@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class CategoryVO {
 	private String categoryName;
+	private String categorySeq;
 }
