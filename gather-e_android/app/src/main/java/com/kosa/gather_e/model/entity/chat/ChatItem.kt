@@ -4,8 +4,9 @@ data class ChatItem(
     val senderId: String,
     val message: String,
     val image: String,
+    val sendTime: String,
     val viewType: Int
 ) {
 
-    constructor(): this("", "","",0)
+    constructor(): this("", "","","",0)
 }
