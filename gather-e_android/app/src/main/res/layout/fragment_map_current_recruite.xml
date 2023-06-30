@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.map.MapFragment">
+    android:id="@+id/frameLayout_map_current_recruite"
+    tools:context=".ui.map.MapCurrentRecruiteFragment">
 
     <fragment
         android:id="@+id/map_fragment"
@@ -12,9 +13,7 @@
         android:layout_height="match_parent"
         android:name="com.naver.maps.map.MapFragment" />
 
-    <include
-        android:id="@+id/toolbar_map_layout"
-        layout="@layout/toolbar_map" />
+    <include layout="@layout/toolbar_map" />
 
 
 

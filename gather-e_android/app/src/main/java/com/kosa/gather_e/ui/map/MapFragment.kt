@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapBinding
+import com.kosa.gather_e.databinding.ToolbarMapBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
@@ -20,9 +22,13 @@ import com.naver.maps.map.util.FusedLocationSource
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentMapBinding
+    private lateinit var toolbarBinding: ToolbarMapBinding
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
+
+    val mapCurrentRecruiteFragment = MapCurrentRecruiteFragment()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +36,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapBinding.inflate(inflater, container, false)
+        toolbarBinding = ToolbarMapBinding.bind(binding.root.findViewById(R.id.toolbar_map_layout))
         return binding.root
     }
 
@@ -49,6 +56,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
         mapFragment.getMapAsync(this)
+
+
+
+        toolbarBinding.mapButton2.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout_map_current_recruite, mapCurrentRecruiteFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
