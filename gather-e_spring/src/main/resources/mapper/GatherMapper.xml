@@ -12,22 +12,26 @@
         INSERT INTO TB_GATHER
         (
             category_seq,
+            gather_creator,
             gather_title,
             gather_date,
             gather_description,
             gather_limit,
             gather_latitude,
-            gather_longitude
+            gather_longitude,
+            gather_location_name
         )
         VALUES
         (
             #{categorySeq},
+            #{gatherCreator},
             #{gatherTitle},
             #{gatherDate},
             #{gatherDescription},
             #{gatherLimit},
             #{gatherLatitude},
-            #{gatherLongitude}
+            #{gatherLongitude},
+            #{gatherLocationName}
         )
         </insert>
 
@@ -48,8 +52,7 @@
         VALUES (#{gatherSeq}, #{gatherImgUrl})
     </insert>
 
-    <delete id="deleteGatherImageByGatherSeq"
-            parameterType="int">
+    <delete id="deleteGatherImageByGatherSeq">
         DELETE FROM TB_GATHER_IMG
         WHERE gather_seq = #{gatherSeq}
     </delete>
@@ -62,7 +65,6 @@
     </select>
 
     <select id="selectOneGatherByGatherSeq"
-            parameterType="int"
             resultType="GatherVO">
         SELECT * FROM TB_GATHER
         WHERE gather_seq = #{gatherSeq}
@@ -70,7 +72,6 @@
 
 
     <select id="selectAllGatherImageByGatherSeq"
-            parameterType="int"
             resultType="GatherImgVO">
         SELECT * FROM TB_GATHER_IMG
         WHERE gather_seq = #{gatherSeq}
@@ -78,8 +79,7 @@
 
 
 
-    <delete id="deleteGatherByGatherSeq"
-            parameterType="int">
+    <delete id="deleteGatherByGatherSeq">
         DELETE FROM TB_GATHER
         WHERE gather_seq = #{gatherSeq}
     </delete>
