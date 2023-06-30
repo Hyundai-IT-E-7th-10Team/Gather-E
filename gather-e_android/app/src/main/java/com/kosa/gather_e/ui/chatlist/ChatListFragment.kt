@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.FragmentChatListBinding
@@ -51,7 +52,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
             return
         }
 
-        val chatDB = Firebase.database.reference.child("Chats")
+        val chatDB = Firebase.database.reference.child(DB_CHATS)
 
         chatDB.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

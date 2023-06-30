@@ -18,6 +18,7 @@ android:background="@color/white">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
+
 <ImageButton
     android:id="@+id/imgbtn_quit"
     android:layout_width="wrap_content"

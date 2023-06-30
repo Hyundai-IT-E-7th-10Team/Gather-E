@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.chat.ChatListItem
@@ -22,6 +23,7 @@ import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
+import com.kosa.gather_e.ui.chatlist.ChatListFragment
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,25 +59,6 @@ class WriteActivity : AppCompatActivity() {
 
         // toolbar의 작성 완료 버튼
         binding.completeBtn.setOnClickListener {
-            // 완료 버튼 누르면 채팅방 생성
-            val chatRoom = ChatListItem(
-                userId = "user01",
-                itemTitle = "chatRoom03",
-                key = System.currentTimeMillis()
-            )
-            val chatDB = Firebase.database.reference.child("Chats")
-            val newChatRoomRef = chatDB.push()
-
-            newChatRoomRef.setValue(chatRoom)
-                .addOnSuccessListener {
-                }
-                .addOnFailureListener { error ->
-                }
-            val intent = Intent(this, ChatRoomActivity::class.java)
-            intent.putExtra("chatKey", chatRoom.key)
-            startActivity(intent)
-
-
             // 완료 버튼 누르면 글 작성 완료
             gather.gatherTitle = binding.titleEditText.text.toString()
             gather.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
@@ -89,6 +72,27 @@ class WriteActivity : AppCompatActivity() {
 //                Toast.makeText(this, "제목과 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
 //                return@setOnClickListener
 //            }
+
+            // 완료 버튼 누르면 채팅방 생성
+            val chatRoom = ChatListItem(
+                userId = "user01",
+                gatherTitle = binding.titleEditText.text.toString(),
+                gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString(),
+                gatherLimit = binding.personnelNumberPicker.value,
+                gatherCategory = "",
+                key = System.currentTimeMillis()
+            )
+            val chatDB = Firebase.database.reference.child(DB_CHATS)
+            val newChatRoomRef = chatDB.push()
+
+            newChatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+                }
+                .addOnFailureListener { error ->
+                }
+//            val intent = Intent(this, ChatRoomActivity::class.java)
+//            intent.putExtra("chatKey", chatRoom.key)
+//            startActivity(intent)
 
             val callCreateGather: Call<GatherEntity> = SpringRetrofitProvider.getRetrofit().createGather(gather = gather)
             callCreateGather.enqueue(object : Callback<GatherEntity> {
@@ -105,6 +109,7 @@ class WriteActivity : AppCompatActivity() {
                     Log.d("gather", "실패 $call")
                 }
             })
+            finish()
         }
 
 

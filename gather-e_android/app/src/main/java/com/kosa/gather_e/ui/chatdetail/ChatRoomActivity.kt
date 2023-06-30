@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,10 +34,15 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.kosa.gather_e.DBKey.Companion.CHILD_CHAT
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.Date
+import java.util.Locale
 
 class ChatRoomActivity : AppCompatActivity() {
 
@@ -62,7 +68,7 @@ class ChatRoomActivity : AppCompatActivity() {
 
         val chatKey = intent.getLongExtra("chatKey", -1)
 
-        chatDB = Firebase.database.reference.child(DB_CHATS).child("$chatKey")
+        chatDB = Firebase.database.reference.child(CHILD_CHAT).child("$chatKey")
 
         chatDB?.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -85,15 +91,20 @@ class ChatRoomActivity : AppCompatActivity() {
 
         })
 
+        // toolbar의 X(취소) 버튼
+        binding.imgbtnQuit.setOnClickListener {
+            finish()
+        }
+
         binding.chatRecyclerView.adapter = adapter
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
 
         binding.btnSelectImage.setOnClickListener {
-            Log.d("Gatherne","${Build.VERSION.RELEASE}")
+            Log.d("Gatherne", "${Build.VERSION.RELEASE}")
 
             // 안드로이드 버전 13 미만의 코드를 작성해야함
             // READ_EXTERNAL_STORAGE
-            if (Build.VERSION.SDK_INT < 33){
+            if (Build.VERSION.SDK_INT < 33) {
                 when {
                     ContextCompat.checkSelfPermission(
                         this,
@@ -113,7 +124,7 @@ class ChatRoomActivity : AppCompatActivity() {
                         )
                     }
                 }
-            }else {
+            } else {
                 when {
                     ContextCompat.checkSelfPermission(
                         this,
@@ -145,26 +156,44 @@ class ChatRoomActivity : AppCompatActivity() {
                 val photoUri = selectedImageUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,
                     successHandler = { uri ->
-                        val chatItem = ChatItem(senderId = user, message = message, image = uri, viewType = 0)
+                        val chatItem =
+                            ChatItem(senderId = user, message = message, image = uri,sendTime = getCurrentTime(), viewType = 0)
                         Log.d("Gatherne", "photoUri, Mine")
 
                         chatDB?.push()?.setValue(chatItem)
                         selectedImageUri = null
+                        if (message.isBlank()) {
+                            findViewById<TextView>(R.id.messageTextView).isVisible = false
+                        }
 //                        binding.progressBar.isVisible = false
-                     },
+                    },
                     errorHandler = {
                         Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
             } else {
-                val chatItem = ChatItem(senderId = user, message = message, image = "", viewType = 1)
+                val chatItem =
+                    ChatItem(senderId = user, message = message, image = "", sendTime = getCurrentTime(), viewType = 1)
+                if (message.isBlank()) {
+                    // Show an error message or handle it as desired
+                    Toast.makeText(this, "메시지를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 chatDB?.push()?.setValue(chatItem)
+//                findViewById<TextView>(R.id.messageTextView).isVisible = false
                 Log.d("Gatherne", "No photoUri, YOur")
 
 
             }
             selectedImageUri = null
             messageEditText.text.clear()
+        }
+
+
+        fun getCurrentTime(): String {
+            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val currentTime = Date()
+            return dateFormat.format(currentTime)
         }
 
     }
@@ -189,6 +218,7 @@ class ChatRoomActivity : AppCompatActivity() {
             }
 
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -225,10 +255,14 @@ class ChatRoomActivity : AppCompatActivity() {
                 val uri = data?.data
                 if (uri != null) {
                     selectedImageUri = uri
+                    Glide.with(this)
+                        .load(uri)
+                        .into(binding.selectedImage)
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
+
             else -> {
                 Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -245,6 +279,12 @@ class ChatRoomActivity : AppCompatActivity() {
             .create()
             .show()
 
+    }
+
+    fun getCurrentTime(): String {
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val currentTime = Date()
+        return dateFormat.format(currentTime)
     }
 
 

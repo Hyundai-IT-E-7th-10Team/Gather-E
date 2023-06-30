@@ -3,10 +3,13 @@ package com.kosa.gather_e.ui.chatdetail
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
 import com.kosa.gather_e.databinding.ItemChatYourBinding
@@ -60,8 +63,12 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatItem: ChatItem) {
+            if (chatItem.message.isBlank()){
+                binding.messageTextView.isVisible = false
+            }
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
+            binding.txtDate.text = chatItem.sendTime
 
             Glide.with(binding.imagePreview)
                 .load(chatItem.image)
@@ -75,6 +82,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         fun bind(chatItem: ChatItem) {
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
+            binding.txtDate.text = chatItem.sendTime
 
             Glide.with(binding.imagePreview)
                 .load(chatItem.image)
