@@ -13,8 +13,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.databinding.ActivityWriteBinding
 import com.kosa.gather_e.model.entity.category.CategoryEntity
@@ -35,12 +37,26 @@ class WriteActivity : AppCompatActivity() {
     lateinit var binding : ActivityWriteBinding
 
     lateinit var gather : GatherEntity
+    lateinit var chatRoom : ChatListItem
+    lateinit var userName : String
+    lateinit var userImage : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                userName = user.kakaoAccount?.profile?.nickname.toString()
+            }
+        }
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                userImage = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+            }
+        }
 
         gather = GatherEntity(
             categorySeq = 0, // 선택된 카테고리 ID를 설정해야 함
@@ -51,7 +67,7 @@ class WriteActivity : AppCompatActivity() {
             gatherLatitude = 0.0,
             gatherLongitude = 0.0
         )
-
+        chatRoom = ChatListItem()
         // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
@@ -74,14 +90,21 @@ class WriteActivity : AppCompatActivity() {
 //            }
 
             // 완료 버튼 누르면 채팅방 생성
-            val chatRoom = ChatListItem(
-                userId = "user01",
-                gatherTitle = binding.titleEditText.text.toString(),
-                gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString(),
-                gatherLimit = binding.personnelNumberPicker.value,
-                gatherCategory = "",
-                key = System.currentTimeMillis()
-            )
+            chatRoom.userId = userName
+            chatRoom.gatherTitle = binding.titleEditText.text.toString()
+            chatRoom.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
+            chatRoom.gatherLimit = binding.personnelNumberPicker.value
+            chatRoom.key = System.currentTimeMillis()
+
+//            chatRoom = ChatListItem(
+//                userId = userName,
+//                gatherTitle = binding.titleEditText.text.toString(),
+//                gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString(),
+//                gatherLimit = binding.personnelNumberPicker.value,
+//                gatherCategory = "",
+//                gatherPlace="",
+//                key = System.currentTimeMillis()
+//            )
             val chatDB = Firebase.database.reference.child(DB_CHATS)
             val newChatRoomRef = chatDB.push()
 
@@ -135,6 +158,7 @@ class WriteActivity : AppCompatActivity() {
 
                             button.setOnClickListener {
                                 gather.categorySeq = category.categorySeq
+                                chatRoom.gatherCategory = category.categoryName
                                 Log.d("Button Clicked", "Category ID: ${category.categoryName}")
                                 Log.d("Button Clicked", "Category ID: ${category.categorySeq}")
                             }
@@ -205,6 +229,7 @@ class WriteActivity : AppCompatActivity() {
             Log.d("gather", "writeActivity에서 ${selectedLocation.toString()}")
             if (selectedLocation != null) {
                 binding.placeText.text = selectedLocation.place_name
+                chatRoom.gatherPlace = selectedLocation.place_name
 
                 gather.gatherLongitude = selectedLocation.x.toDouble()
                 gather.gatherLatitude = selectedLocation.y.toDouble()

@@ -16,6 +16,7 @@ import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
 import com.kosa.gather_e.model.entity.user.JwtToken
@@ -30,7 +31,8 @@ class LoginActivity : AppCompatActivity() {
 
     private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.d("gather", "카카오 로그인 실패")
+            Log.d("gather", Utility.getKeyHash(this))
+            error.printStackTrace()
         } else if (token != null) {
             getJwtToken(token.accessToken)
             Log.d("gather", "카카오 로그인 성공")

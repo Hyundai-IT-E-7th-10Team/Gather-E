@@ -24,6 +24,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +36,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.DBKey.Companion.CHILD_CHAT
 import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
@@ -46,13 +49,13 @@ import java.util.Locale
 
 class ChatRoomActivity : AppCompatActivity() {
 
-    private val user: String = "user02"
-
-
     private val chatList = mutableListOf<ChatItem>()
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
     private var selectedImageUri: Uri? = null
+    lateinit var userName : String
+    lateinit var userImage : String
+
 
     private val storage: FirebaseStorage by lazy {
         Firebase.storage
@@ -64,9 +67,34 @@ class ChatRoomActivity : AppCompatActivity() {
         val binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val itemBinding = ItemChatBinding.inflate(layoutInflater)
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                userName = user.kakaoAccount?.profile?.nickname.toString()
+            }
+        }
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                userImage = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+            }
+        }
 
         val chatKey = intent.getLongExtra("chatKey", -1)
+        val gatherTitle = intent.getStringExtra("gatherTitle")
+        val gatherDate = intent.getStringExtra("gatherDate")
+        val gatherLimit = intent.getIntExtra("gatherLimit",-1)
+        val gatherPlace = intent.getStringExtra("gatherPlace")
+        val gatherCategory = intent.getStringExtra("gatherCategory")
+
+
+
+
+        binding.chatRoomTitleTextView.text = gatherTitle
+        binding.dateTextView.text = gatherDate
+        binding.participantsTextView.text = gatherLimit.toString()
+//        Glide.with(this)
+//            .load(userImage)
+//            .apply(RequestOptions().transform(CircleCrop()))
+//            .into(binding.circleImageView)
 
         chatDB = Firebase.database.reference.child(CHILD_CHAT).child("$chatKey")
 
@@ -157,14 +185,12 @@ class ChatRoomActivity : AppCompatActivity() {
                 uploadPhoto(photoUri,
                     successHandler = { uri ->
                         val chatItem =
-                            ChatItem(senderId = user, message = message, image = uri,sendTime = getCurrentTime(), viewType = 0)
+                            ChatItem(senderId = userName, senderImage = userImage, message = message, image = uri,sendTime = getCurrentTime(), viewType = 0)
                         Log.d("Gatherne", "photoUri, Mine")
 
                         chatDB?.push()?.setValue(chatItem)
                         selectedImageUri = null
-                        if (message.isBlank()) {
-                            findViewById<TextView>(R.id.messageTextView).isVisible = false
-                        }
+
 //                        binding.progressBar.isVisible = false
                     },
                     errorHandler = {
@@ -173,7 +199,7 @@ class ChatRoomActivity : AppCompatActivity() {
                 )
             } else {
                 val chatItem =
-                    ChatItem(senderId = user, message = message, image = "", sendTime = getCurrentTime(), viewType = 1)
+                    ChatItem(senderId = userName, senderImage = userImage, message = message, image = "", sendTime = getCurrentTime(), viewType = 1)
                 if (message.isBlank()) {
                     // Show an error message or handle it as desired
                     Toast.makeText(this, "메시지를 입력해주세요.", Toast.LENGTH_SHORT).show()
