@@ -1,10 +1,13 @@
 package com.kosa.gather_e.gather.service;
 
 import com.kosa.gather_e.gather.dao.GatherDAO;
-import com.kosa.gather_e.gather.vo.GatherImgVO;
 import com.kosa.gather_e.gather.vo.GatherVO;
+import com.kosa.gather_e.user_gather.dao.UserGatherDAO;
+import com.kosa.gather_e.user_gather.vo.UserGatherVO;
+import com.kosa.gather_e.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,9 +16,17 @@ import java.util.List;
 public class GatherService implements GatherServiceImpl{
 
     private final GatherDAO gatherDAO;
+    private final UserGatherDAO userGatherDAO;
 
+    @Transactional
     public GatherVO createGather(GatherVO gatherVO){
+        gatherVO.setGatherCreator(SecurityUtil.getCurrentMemberSeq());
+        System.out.println(gatherVO);
         gatherDAO.insertGatherVO(gatherVO);
+        UserGatherVO userGatherVO = new UserGatherVO();
+        userGatherVO.setGatherSeq(gatherVO.getGatherSeq());
+        userGatherVO.setUserSeq(gatherVO.getGatherCreator());
+        userGatherDAO.insertUserGather(userGatherVO);
         return gatherVO;
     }
 
@@ -35,7 +46,6 @@ public class GatherService implements GatherServiceImpl{
     public GatherVO updateGather(GatherVO gatherVO) {
         gatherDAO.updateGather(gatherVO);
         return gatherVO;
-
     }
 
 }

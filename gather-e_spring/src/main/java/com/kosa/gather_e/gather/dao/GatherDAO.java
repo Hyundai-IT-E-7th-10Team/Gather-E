@@ -9,21 +9,19 @@ import java.util.List;
 @Mapper
 public interface GatherDAO {
 
-    int insertGatherVO(GatherVO gatherVO);
-
-//    void insertGatherImgVO(int gatherSeq, List<GatherImgVO> gatherImages);
+    long insertGatherVO(GatherVO gatherVO);
 
     List<GatherVO> selectAllGather();
 
-    GatherVO selectOneGatherByGatherSeq(int gatherSeq);
+    GatherVO selectOneGatherByGatherSeq(long gatherSeq);
 
-    void deleteGatherByGatherSeq(int gatherSeq);
+    void deleteGatherByGatherSeq(long gatherSeq);
 
-    int updateGather(GatherVO gatherVO);
+    void updateGather(GatherVO gatherVO);
 
-    List<GatherImgVO> selectAllGatherImageByGatherSeq(int gatherSeq);
+    List<GatherImgVO> selectAllGatherImageByGatherSeq(long gatherSeq);
 
     void insertGatherImg(GatherImgVO gatherImgVO);
 
-    void deleteGatherImageByGatherSeq(int gatherSeq);
+    void deleteGatherImageByGatherSeq(long gatherSeq);
 }

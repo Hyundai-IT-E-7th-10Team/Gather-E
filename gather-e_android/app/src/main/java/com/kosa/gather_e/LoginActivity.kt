@@ -28,8 +28,6 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user")
-
     private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Log.d("gather", "카카오 로그인 실패")
@@ -40,7 +38,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun getJwtToken(token: String) {
-        Log.d("gather", "카카오 로그인 성공")
+        Log.d("gather", token)
+
         val callLogin = SpringRetrofitProvider.getRetrofit().login(token)
         callLogin.enqueue(object : Callback<JwtToken> {
             override fun onFailure(call: Call<JwtToken>, t: Throwable) {
@@ -48,6 +47,7 @@ class LoginActivity : AppCompatActivity() {
             }
             override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
                 val token = response.body()?.accessToken
+                Log.d("gather", "jwt : $token")
                 if (token != null) {
                     SpringRetrofitProvider.init(token)
                     startActivity(Intent(this@LoginActivity, BottomNavigationVarActivity::class.java))
@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
                             callback = kakaoLoginHandler
                         )
                     } else if (token != null) {
-                        Log.i("gather", "카카오톡으로 로그인 성공 ${token.accessToken}")
                         getJwtToken(token.accessToken)
                     }
                 }
