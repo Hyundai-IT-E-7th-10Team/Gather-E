@@ -2,6 +2,7 @@ package com.kosa.gather_e.ui.chatdetail
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
@@ -63,17 +66,29 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatItem: ChatItem) {
-            if (chatItem.message.isBlank()){
-                binding.messageTextView.isVisible = false
-            }
+//            if (chatItem.message.isBlank()){
+//                binding.messageTextView.isVisible = false
+//            }
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
 
+            Glide.with(itemView)
+                .load(chatItem.senderImage)
+                .apply(RequestOptions().transform(CircleCrop()))
+                .into(binding.userImage)
+
             Glide.with(binding.imagePreview)
                 .load(chatItem.image)
                 .into(binding.imagePreview)
+
+            if(chatItem.image != null){
+                binding.imagePreview.visibility = View.VISIBLE
+                binding.messageTextView.visibility = View.GONE
+            }
         }
+
+
     }
 
     inner class YourChatViewHolder(private val binding: ItemChatYourBinding) :
@@ -84,6 +99,11 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
 
+            Glide.with(itemView)
+                .load(chatItem.senderImage)
+                .apply(RequestOptions().transform(CircleCrop()))
+                .into(binding.userImage)
+
             Glide.with(binding.imagePreview)
                 .load(chatItem.image)
                 .into(binding.imagePreview)
@@ -91,55 +111,3 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
     }
 }
 
-//
-//class ChatItemAdapter : ListAdapter<ChatItem, ChatItemAdapter.ViewHolder>(diffUtil) {
-//
-//    inner class ViewHolder(private val binding: ItemChatMineBinding) : RecyclerView.ViewHolder(binding.root) {
-//
-//        fun bind(chatItem: ChatItem) {
-//            binding.senderTextView.text = chatItem.senderId
-//            binding.messageTextView.text = chatItem.message
-//
-//            Glide.with(itemView)
-//                .load(chatItem.image)
-//                .into(binding.imagePreview)
-//        }
-//    }
-//    inner class ViewHolder(private val binding: ItemChatYourBinding) : RecyclerView.ViewHolder(binding.root) {
-//
-//        fun bind(chatItem: ChatItem) {
-//            binding.senderTextView.text = chatItem.senderId
-//            binding.messageTextView.text = chatItem.message
-//
-//            Glide.with(itemView)
-//                .load(chatItem.image)
-//                .into(binding.imagePreview)
-//        }
-//    }
-//
-//    override fun getItemViewType(position: Int): Int {
-//        return super.getItemViewType(position)
-//    }
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        return ViewHolder(ItemChatMineBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-//    }
-//
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(currentList[position])
-//    }
-//
-//    companion object {
-//        val diffUtil = object : DiffUtil.ItemCallback<ChatItem>() {
-//            override fun areItemsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
-//                return oldItem == newItem
-//            }
-//
-//            override fun areContentsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
-//                return oldItem == newItem
-//            }
-//
-//
-//        }
-//    }
-//
-//}
