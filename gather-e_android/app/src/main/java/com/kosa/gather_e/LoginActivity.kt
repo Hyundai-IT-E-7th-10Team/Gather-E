@@ -47,6 +47,7 @@ class LoginActivity : AppCompatActivity() {
             }
             override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
                 val token = response.body()?.accessToken
+                Log.d("gather", "jwt : $token")
                 if (token != null) {
                     SpringRetrofitProvider.init(token)
                     startActivity(Intent(this@LoginActivity, BottomNavigationVarActivity::class.java))
