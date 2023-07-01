@@ -29,7 +29,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
 
         createNotificationChannelIfNeeded()
 
-        val type = remo teMessage.data["type"]
+        val type = remoteMessage.data["type"]
             ?.let { NotificationType.valueOf(it) }
         val title = remoteMessage.data["title"]
         val message = remoteMessage.data["message"]
