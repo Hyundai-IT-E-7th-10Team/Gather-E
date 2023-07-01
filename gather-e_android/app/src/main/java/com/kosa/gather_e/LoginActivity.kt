@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -21,14 +22,21 @@ import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
 import com.kosa.gather_e.model.entity.user.JwtToken
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
+    private val loadingDialog = CircleProgressDialog()
+    
     private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Log.d("gather", Utility.getKeyHash(this))
@@ -61,8 +69,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
-        KakaoSdk.init(this, "da3fb6c1f547e9e4707b46e0e748cc80")
-        isLoggedIn()
+
         binding.kakaoLoginBtn.setOnClickListener {
             // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
@@ -90,14 +97,37 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun isLoggedIn() {
-        if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { token, error ->
-                if(error == null) {
-                    AuthApiClient.instance.tokenManagerProvider.manager.getToken()
-                        ?.let { getJwtToken(it.accessToken) }
+    private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.d("gather", "카카오 로그인 실패")
+        } else if (token != null) {
+            getJwtToken(token.accessToken)
+            Log.d("gather", "카카오 로그인 성공")
+        }
+    }
+
+    private fun getJwtToken(token: String) {
+        loadingDialog.show(supportFragmentManager, loadingDialog.tag)
+        Log.d("gather", token)
+        val callLogin = SpringRetrofitProvider.getRetrofit().login(token)
+        callLogin.enqueue(object : Callback<JwtToken> {
+            override fun onFailure(call: Call<JwtToken>, t: Throwable) {
+                Log.d("gather", "토큰 요청 실패")
+                loadingDialog.dismiss()
+            }
+            override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
+                val token = response.body()?.accessToken
+                Log.d("gather", "jwt : $token")
+                loadingDialog.dismiss()
+                val main = Intent(
+                    this@LoginActivity,
+                    BottomNavigationVarActivity::class.java
+                )
+                if (token != null) {
+                    SpringRetrofitProvider.init(token)
+                    startActivity(main)
                 }
             }
-        }
+        })
     }
 }
