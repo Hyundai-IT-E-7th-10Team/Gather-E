@@ -22,20 +22,14 @@ import com.kosa.gather_e.databinding.ItemChatYourBinding
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
     private var userName = ""
+    private var scrollToBottom = true
 
-
-
-    private val userImage = MutableLiveData<String>().apply {
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                value = user.kakaoAccount?.profile?.thumbnailImageUrl
-            }
-        }
+    fun scrollToBottom() {
+        scrollToBottom = true
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
         return if (viewType == MY_CHAT_ITEM_VIEW_TYPE) {
             val binding = ItemChatMineBinding.inflate(inflater, parent, false)
             MyChatViewHolder(binding)
@@ -51,25 +45,45 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             is MyChatViewHolder -> holder.bind(chatItem)
             is YourChatViewHolder -> holder.bind(chatItem)
         }
+        if (scrollToBottom) {
+            holder.itemView.post {
+                holder.itemView.scrollTo(0, holder.itemView.bottom)
+            }
+            scrollToBottom = false
+        }
     }
+
+//    override fun getItemViewType(position: Int): Int {
+//        val chatItem = getItem(position)
+//        UserApiClient.instance.me { user, error ->
+//            if (user != null) {
+//                userName = user.kakaoAccount?.profile?.nickname.toString()
+//            }
+//        }
+//        return if (chatItem.senderId == userName) {
+//            MY_CHAT_ITEM_VIEW_TYPE
+//        } else {
+//            YOUR_CHAT_ITEM_VIEW_TYPE
+//        }
+//
+//    }
 
     override fun getItemViewType(position: Int): Int {
         val chatItem = getItem(position)
+        return getItemViewTypeBySenderId(chatItem.senderId)
+    }
+
+    private fun getItemViewTypeBySenderId(senderId: String): Int {
         UserApiClient.instance.me { user, error ->
             if (user != null) {
                 userName = user.kakaoAccount?.profile?.nickname.toString()
             }
         }
-        return if (chatItem.senderId == userName) {
+        return if (senderId == userName) {
             MY_CHAT_ITEM_VIEW_TYPE
         } else {
             YOUR_CHAT_ITEM_VIEW_TYPE
         }
-//        return if (chatItem.viewType == MY_CHAT_ITEM_VIEW_TYPE) {
-//            MY_CHAT_ITEM_VIEW_TYPE
-//        } else {
-//            YOUR_CHAT_ITEM_VIEW_TYPE
-//        }
     }
 
     companion object {

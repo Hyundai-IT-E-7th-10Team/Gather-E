@@ -106,8 +106,10 @@ class ChatRoomActivity : AppCompatActivity() {
                 chatItem ?: return
 
                 chatList.add(chatItem)
+                adapter.scrollToBottom()
                 adapter.submitList(chatList)
                 adapter.notifyDataSetChanged()
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -128,6 +130,10 @@ class ChatRoomActivity : AppCompatActivity() {
 
         binding.chatRecyclerView.adapter = adapter
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.chatRecyclerView.post {
+            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
+        }
+        adapter.scrollToBottom()
 
         binding.btnSelectImage.setOnClickListener {
             Log.d("Gatherne", "${Build.VERSION.RELEASE}")
@@ -215,6 +221,7 @@ class ChatRoomActivity : AppCompatActivity() {
 
 
             }
+            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             selectedImageUri = null
             messageEditText.text.clear()
         }
@@ -225,6 +232,7 @@ class ChatRoomActivity : AppCompatActivity() {
             val currentTime = Date()
             return dateFormat.format(currentTime)
         }
+
 
     }
 
