@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
@@ -19,8 +21,21 @@ import com.kosa.gather_e.databinding.ItemChatYourBinding
 
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
+    private var userName = ""
+
+
+
+    private val userImage = MutableLiveData<String>().apply {
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                value = user.kakaoAccount?.profile?.thumbnailImageUrl
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+
         return if (viewType == MY_CHAT_ITEM_VIEW_TYPE) {
             val binding = ItemChatMineBinding.inflate(inflater, parent, false)
             MyChatViewHolder(binding)
@@ -40,11 +55,21 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
     override fun getItemViewType(position: Int): Int {
         val chatItem = getItem(position)
-        return if (chatItem.viewType == MY_CHAT_ITEM_VIEW_TYPE) {
+        UserApiClient.instance.me { user, error ->
+            if (user != null) {
+                userName = user.kakaoAccount?.profile?.nickname.toString()
+            }
+        }
+        return if (chatItem.senderId == userName) {
             MY_CHAT_ITEM_VIEW_TYPE
         } else {
             YOUR_CHAT_ITEM_VIEW_TYPE
         }
+//        return if (chatItem.viewType == MY_CHAT_ITEM_VIEW_TYPE) {
+//            MY_CHAT_ITEM_VIEW_TYPE
+//        } else {
+//            YOUR_CHAT_ITEM_VIEW_TYPE
+//        }
     }
 
     companion object {
@@ -66,9 +91,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatItem: ChatItem) {
-//            if (chatItem.message.isBlank()){
-//                binding.messageTextView.isVisible = false
-//            }
+
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
@@ -84,11 +107,9 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
             if(chatItem.image != null){
                 binding.imagePreview.visibility = View.VISIBLE
-                binding.messageTextView.visibility = View.GONE
+//                binding.messageTextView.visibility = View.GONE
             }
         }
-
-
     }
 
     inner class YourChatViewHolder(private val binding: ItemChatYourBinding) :
@@ -107,7 +128,13 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             Glide.with(binding.imagePreview)
                 .load(chatItem.image)
                 .into(binding.imagePreview)
+
+            if(chatItem.image != null){
+                binding.imagePreview.visibility = View.VISIBLE
+//                binding.messageTextView.visibility = View.GONE
+            }
         }
     }
+
 }
 
