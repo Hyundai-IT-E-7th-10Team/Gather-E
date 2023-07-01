@@ -41,6 +41,10 @@ class WriteActivity : AppCompatActivity() {
     lateinit var userName : String
     lateinit var userImage : String
 
+
+    var date: String? = null
+    var time: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,7 +69,8 @@ class WriteActivity : AppCompatActivity() {
             gatherDescription = "",
             gatherLimit = 0,
             gatherLatitude = 0.0,
-            gatherLongitude = 0.0
+            gatherLongitude = 0.0,
+            gatherLocationName = ""
         )
         chatRoom = ChatListItem()
         // toolbar의 X(취소) 버튼
@@ -77,9 +82,10 @@ class WriteActivity : AppCompatActivity() {
         binding.completeBtn.setOnClickListener {
             // 완료 버튼 누르면 글 작성 완료
             gather.gatherTitle = binding.titleEditText.text.toString()
-            gather.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
             gather.gatherDescription = binding.contentEditText.text.toString()
             gather.gatherLimit = binding.personnelNumberPicker.value
+            gather.gatherDate = "$date $time"
+
 
 
 //            // 데이터 유효성 검사 (예: 제목과 내용은 비어있으면 안됨)
@@ -180,14 +186,20 @@ class WriteActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+
         binding.calendarBtn.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
-                { _, year, month, day -> binding.dateText.text = "$year/${month + 1}/${day}" },
+                { _, year, month, day ->
+                    binding.dateText.text = "$year/${month + 1}/${day}"
+                    // DB로 넣기 위해 포맷팅
+                    val formattedMonth = String.format("%02d", month + 1)
+                    val formattedDay = String.format("%02d", day)
+                    date = "$year/$formattedMonth/$formattedDay"
+                },
                 year, month, day
             )
 
-            // 오늘 날짜 이후로 가져오도록 함, 근데 왜 어제 날짜부터 가져오는지..?
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
             datePickerDialog.show()
         }
@@ -200,7 +212,13 @@ class WriteActivity : AppCompatActivity() {
         binding.clockBtn.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
                 this,
-                { _, hour, minute -> binding.timeText.text = "${hour}시 ${minute}분" },
+                { _, hour, minute ->
+                    binding.timeText.text = "${hour}시 ${minute}분"
+                    // DB로 넣기 위해 포맷팅
+                    val formattedHour = String.format("%02d", hour)
+                    val formattedMinute = String.format("%02d", minute)
+                    time = "$formattedHour:$formattedMinute"
+                },
                 hour, minute, true
             )
 
@@ -233,6 +251,7 @@ class WriteActivity : AppCompatActivity() {
 
                 gather.gatherLongitude = selectedLocation.x.toDouble()
                 gather.gatherLatitude = selectedLocation.y.toDouble()
+                gather.gatherLocationName = selectedLocation.place_name
 
             }
         }
