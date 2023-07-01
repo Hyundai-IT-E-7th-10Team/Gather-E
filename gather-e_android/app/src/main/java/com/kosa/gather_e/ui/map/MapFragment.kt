@@ -56,23 +56,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         mapFragment.getMapAsync(this)
 
-/*        // 초기화 버튼
-        toolbarBinding.mapButton1.setOnClickListener {
+        // 초기화 버튼
+        toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
+            val mapFragment = MapFragment()
             parentFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
-            .replace(R.id.fragment_map, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+            .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
             .addToBackStack(null)
             .commit()
-        }*/
+        }
 
         // 현재 모집 중 버튼
         toolbarBinding.actionNavigationMapToMapButton2.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_map_to_map_button2)
+            val mapCurrentRecruiteFragment = MapCurrentRecruiteFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapCurrentRecruiteFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
         }
 
-        // 참여했던 모임 추억
-        toolbarBinding.mapButton3.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_map_to_map_button3)
+        // 참여했던 모임 추억 버튼
+        toolbarBinding.actionNavigationMapToMapButton3.setOnClickListener {
+            val mapPastMeetingFragment = MapPastMeetingFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapPastMeetingFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // 내가 주최한 모임 버튼
+        toolbarBinding.actionNavigationMapToMapButton4.setOnClickListener {
+            val mapFragment = MapFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
         }
 
     }

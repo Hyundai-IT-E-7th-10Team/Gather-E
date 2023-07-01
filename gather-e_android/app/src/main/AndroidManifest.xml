@@ -4,39 +4,24 @@
     <!-- 대략적인 / 정확한 위치 관련 권한 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Gather_e"
-        android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
-<<<<<<< HEAD
-        <activity
-            android:name=".ui.map.MapActivity"
-            android:exported="false"
-            android:label="@string/title_activity_map"
-            android:theme="@style/Theme.Gather_e.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-=======
 
         <activity
             android:name=".SplashActivity"
@@ -52,33 +37,35 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
->>>>>>> 71cf55b11a8f32d45eb22f4bbfa240df59ac3a01
         </activity>
+
         <activity
             android:name=".ui.chatdetail.ChatRoomActivity"
             android:exported="true" />
+
         <activity
             android:name=".ui.searchlocation.SearchLocationActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.searchlocation.LocationDetailActivity"
             android:exported="false" />
+
         <activity
             android:name=".WriteActivity"
             android:exported="true" />
+
         <activity
             android:name=".BottomNavigationVarActivity"
             android:exported="true"
-<<<<<<< HEAD
-            android:label="@string/title_activity_bottom_navigation_var" />
-=======
             android:label="@string/title_activity_bottom_navigation_var">
-   
+
         </activity>
->>>>>>> 71cf55b11a8f32d45eb22f4bbfa240df59ac3a01
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

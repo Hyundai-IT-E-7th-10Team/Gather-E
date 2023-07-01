@@ -6,7 +6,7 @@
     </style>
     <style name="Theme.Gather_e" parent="Base.Theme.Gather_e" />
 
-<<<<<<< HEAD
+
     <style name="Theme.Gather_e.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -15,12 +15,12 @@
     <style name="Theme.Gather_e.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Gather_e.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-=======
+
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/purple</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/white</item>
         <item name="postSplashScreenTheme">@style/Theme.Gather_e</item>
     </style>
->>>>>>> 71cf55b11a8f32d45eb22f4bbfa240df59ac3a01
+
 </resources>

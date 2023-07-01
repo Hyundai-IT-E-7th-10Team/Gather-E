@@ -15,7 +15,6 @@ import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.util.FusedLocationSource
 
 lateinit var binding : FragmentMapPastMeetingBinding
-private lateinit var toolbarBinding: ToolbarMapBinding
 
 class MapPastMeetingFragment : Fragment() {
 
@@ -29,20 +28,11 @@ class MapPastMeetingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapPastMeetingBinding.inflate(inflater, container, false)
-        toolbarBinding = ToolbarMapBinding.bind(binding.root.findViewById(R.id.toolbar_map_layout))
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        // 현재 모집 중 버튼
-        toolbarBinding.actionNavigationMapToMapButton2.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_map_to_map_button2)
-        }
-
-
 
     }
 

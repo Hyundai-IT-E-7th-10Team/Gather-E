@@ -20,7 +20,6 @@
         android:layout_marginTop="100dp"
         android:background="@drawable/edittext_background"/>
 
-    <include layout="@layout/toolbar_map" />
 
 
 
