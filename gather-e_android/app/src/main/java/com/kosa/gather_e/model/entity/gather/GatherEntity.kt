@@ -7,5 +7,6 @@ data class GatherEntity(
     var gatherDescription: String,
     var gatherLimit: Int,
     var gatherLatitude: Double,
-    var gatherLongitude: Double
+    var gatherLongitude: Double,
+    var gatherLocationName: String
 )
