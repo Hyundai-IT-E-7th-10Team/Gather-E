@@ -35,10 +35,6 @@ class MypageFragment : Fragment() {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textHome
-//        myPageViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
         myPageViewModel.profileImg.observe(viewLifecycleOwner) {
             Glide.with(this).load(it).into(binding.profileImg)
         }

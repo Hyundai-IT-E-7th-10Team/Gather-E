@@ -15,6 +15,7 @@ import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
+import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.entity.user.JwtToken
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +69,14 @@ class SplashActivity : AppCompatActivity() {
                 val jwtToken = response.body()!!.accessToken
                 Log.d("gather", "jwt : $jwtToken")
                 SpringRetrofitProvider.init(jwtToken)
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("gather", "사용자 정보 요청 실패", error)
+                    }
+                    else if (user != null) {
+                        CurrUser.setCurrUser(user)
+                    }
+                }
                 intent = Intent(
                     this@SplashActivity,
                     BottomNavigationVarActivity::class.java
