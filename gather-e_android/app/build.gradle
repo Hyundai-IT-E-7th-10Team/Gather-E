@@ -94,6 +94,8 @@ dependencies {
 
     //kakao login
     implementation "com.kakao.sdk:v2-user:2.14.0" // 카카오 로그인
+    //스플래시
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

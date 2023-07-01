@@ -38,6 +38,12 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
             context?.let {
                 val intent = Intent(it, ChatRoomActivity::class.java)
                 intent.putExtra("chatKey", chatRoom.key)
+                intent.putExtra("userId", chatRoom.userId)
+                intent.putExtra("gatherTitle", chatRoom.gatherTitle)
+                intent.putExtra("gatherDate", chatRoom.gatherDate)
+                intent.putExtra("gatherLimit", chatRoom.gatherLimit)
+                intent.putExtra("gatherCategory", chatRoom.gatherCategory)
+                intent.putExtra("gatherPlace", chatRoom.gatherPlace)
                 startActivity(intent)
             }
         })
