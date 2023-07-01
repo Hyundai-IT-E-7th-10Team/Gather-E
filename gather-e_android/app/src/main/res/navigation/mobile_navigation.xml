@@ -5,6 +5,8 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <include app:graph="@navigation/map" />
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.kosa.gather_e.ui.home.HomeFragment"
@@ -21,7 +23,7 @@
         android:id="@+id/navigation_map"
         android:name="com.kosa.gather_e.ui.map.MapFragment"
         android:label="@string/title_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/activity_map" />
 
     <fragment
         android:id="@+id/navigation_mypage"

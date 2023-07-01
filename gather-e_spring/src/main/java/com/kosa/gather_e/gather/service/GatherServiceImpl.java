@@ -1,6 +1,6 @@
 package com.kosa.gather_e.gather.service;
 
-import com.kosa.gather_e.gather.vo.GatherImgVO;
+
 import com.kosa.gather_e.gather.vo.GatherVO;
 
 import java.util.List;

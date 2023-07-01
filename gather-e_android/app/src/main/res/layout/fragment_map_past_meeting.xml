@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frameLayout_map_current_recruite"
-    tools:context=".ui.map.MapCurrentRecruiteFragment">
+    android:id="@+id/frameLayout_map_past_meeting"
+    tools:context=".ui.map.MapPastMeetingFragment">
 
     <fragment
         android:id="@+id/map_fragment"
@@ -16,7 +16,7 @@
     <TextView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:text="현재 모집중 페이지 입니다."
+        android:text="참여했던 모임 추억 페이지 입니다."
         android:layout_marginTop="100dp"
         android:background="@drawable/edittext_background"/>
 

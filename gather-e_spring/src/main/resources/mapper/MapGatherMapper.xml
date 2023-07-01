@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosa.gather_e.gather.dao.MapGatherDAO">
+
+
+    <select id="selectAllCurrentRecruitGather" resultType="CurrentRecruitGatherVO">
+        SELECT
+        	gather_seq,
+        	category_seq,
+        	gather_date,
+        	gather_latitude,
+        	gather_longitude 
+        FROM TB_GATHER
+    </select>
+
+
+</mapper>

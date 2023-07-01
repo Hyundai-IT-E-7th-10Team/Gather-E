@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_map"
     tools:context=".ui.map.MapFragment">
 
     <fragment
@@ -15,8 +15,6 @@
     <include
         android:id="@+id/toolbar_map_layout"
         layout="@layout/toolbar_map" />
-
-
 
 
 </FrameLayout>
