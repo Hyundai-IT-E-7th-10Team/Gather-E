@@ -53,8 +53,10 @@ class ChatRoomActivity : AppCompatActivity() {
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
     private var selectedImageUri: Uri? = null
-    lateinit var userName : String
-    lateinit var userImage : String
+//    lateinit var userName : String
+//    lateinit var userImage : String
+    private var userName :String = ""
+    private var userImage :String = ""
 
 
     private val storage: FirebaseStorage by lazy {
