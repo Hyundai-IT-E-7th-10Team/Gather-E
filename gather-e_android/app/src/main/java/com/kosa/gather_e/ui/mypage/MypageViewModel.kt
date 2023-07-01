@@ -4,25 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.user.UserApiClient
+import com.kosa.gather_e.model.entity.user.CurrUser
 
 class MypageViewModel : ViewModel() {
 
     private val _name = MutableLiveData<String>().apply {
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                value = user.kakaoAccount?.profile?.nickname
-            }
-        }
+        value = CurrUser.getUserName()
     }
 
     private val _profileImg = MutableLiveData<String>().apply {
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                value = user.kakaoAccount?.profile?.thumbnailImageUrl
-            }
-        }
+        value = CurrUser.getProfileImgUrl()
     }
-
 
     val name: LiveData<String> = _name
     val profileImg: LiveData<String> = _profileImg
