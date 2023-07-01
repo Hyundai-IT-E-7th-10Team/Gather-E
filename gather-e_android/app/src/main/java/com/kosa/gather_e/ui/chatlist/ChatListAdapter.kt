@@ -5,6 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.ItemChatListBinding
 
@@ -18,7 +22,12 @@ class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) : ListAdapter<C
             }
 
             binding.chatRoomTitleTextView.text = chatListItem.gatherTitle
-
+            binding.dateTextView.text = chatListItem.gatherDate
+            binding.participantsTextView.text = chatListItem.gatherLimit.toString()
+            Glide.with(itemView)
+                .load(R.drawable.logo)
+                .apply(RequestOptions().transform(CircleCrop()))
+                .into(binding.circleImageView)
         }
     }
 

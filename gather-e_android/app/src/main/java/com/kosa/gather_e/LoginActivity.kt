@@ -17,6 +17,7 @@ import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.databinding.ActivityLoginBinding
 import com.kosa.gather_e.model.entity.user.JwtToken
@@ -35,6 +36,35 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private val loadingDialog = CircleProgressDialog()
+    
+    private val kakaoLoginHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.d("gather", Utility.getKeyHash(this))
+            error.printStackTrace()
+        } else if (token != null) {
+            getJwtToken(token.accessToken)
+            Log.d("gather", "카카오 로그인 성공")
+        }
+    }
+
+    private fun getJwtToken(token: String) {
+        Log.d("gather", token)
+
+        val callLogin = SpringRetrofitProvider.getRetrofit().login(token)
+        callLogin.enqueue(object : Callback<JwtToken> {
+            override fun onFailure(call: Call<JwtToken>, t: Throwable) {
+                Log.d("gather", "토큰 요청 실패")
+            }
+            override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
+                val token = response.body()?.accessToken
+                Log.d("gather", "jwt : $token")
+                if (token != null) {
+                    SpringRetrofitProvider.init(token)
+                    startActivity(Intent(this@LoginActivity, BottomNavigationVarActivity::class.java))
+                }
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
