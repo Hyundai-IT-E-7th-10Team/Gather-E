@@ -1,6 +1,8 @@
 package com.kosa.gather_e.ui.map
 
 import android.os.Bundle
+import android.text.TextUtils.replace
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +28,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-
-    val mapCurrentRecruiteFragment = MapCurrentRecruiteFragment()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,11 +56,42 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         mapFragment.getMapAsync(this)
 
-
-
-        toolbarBinding.mapButton2.setOnClickListener {
+        // 초기화 버튼
+        toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
+            val mapFragment = MapFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout_map_current_recruite, mapCurrentRecruiteFragment)
+            .setReorderingAllowed(true)
+            .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+            .addToBackStack(null)
+            .commit()
+        }
+
+        // 현재 모집 중 버튼
+        toolbarBinding.actionNavigationMapToMapButton2.setOnClickListener {
+            val mapCurrentRecruiteFragment = MapCurrentRecruiteFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapCurrentRecruiteFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // 참여했던 모임 추억 버튼
+        toolbarBinding.actionNavigationMapToMapButton3.setOnClickListener {
+            val mapPastMeetingFragment = MapPastMeetingFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapPastMeetingFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // 내가 주최한 모임 버튼
+        toolbarBinding.actionNavigationMapToMapButton4.setOnClickListener {
+            val mapFragment = MapFragment()
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
                 .addToBackStack(null)
                 .commit()
         }
