@@ -18,7 +18,7 @@ public class KakaoAuthService {
         if(selectedUser == null) {//첫 로그인
             userDAO.insertUser(user);
         } else {//가입이 되어있는 경우
-            userDAO.updateUser(selectedUser);
+            userDAO.updateUser(user);
             user.setUserSeq(selectedUser.getUserSeq());
         }
         return user;
