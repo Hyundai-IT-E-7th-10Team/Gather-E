@@ -70,7 +70,13 @@ class WriteActivity : AppCompatActivity() {
             gatherLimit = 0,
             gatherLatitude = 0.0,
             gatherLongitude = 0.0,
-            gatherLocationName = ""
+            gatherLocationName = "",
+            gatherSeq = 0,
+            creatorImgUrl = "",
+            creatorName = "",
+            gatherCreator = 0,
+            gatherUserCnt = 0,
+            categoryName = ""
         )
         chatRoom = ChatListItem()
         // toolbar의 X(취소) 버튼

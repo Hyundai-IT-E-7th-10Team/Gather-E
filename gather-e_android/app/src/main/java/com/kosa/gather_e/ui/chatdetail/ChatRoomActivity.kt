@@ -42,6 +42,16 @@ import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
+import com.kosa.gather_e.model.entity.gather.GatherEntity
+import com.kosa.gather_e.model.entity.notification.PushNotificationData
+import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
+import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
+import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
+import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.Date
@@ -53,10 +63,9 @@ class ChatRoomActivity : AppCompatActivity() {
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
     private var selectedImageUri: Uri? = null
-//    lateinit var userName : String
-//    lateinit var userImage : String
-    private var userName :String = ""
-    private var userImage :String = ""
+
+    private var userName = CurrUser.getUserName()
+    private var userImage = CurrUser.getProfileImgUrl()
 
 
     private val storage: FirebaseStorage by lazy {
@@ -68,17 +77,6 @@ class ChatRoomActivity : AppCompatActivity() {
 
         val binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                userName = user.kakaoAccount?.profile?.nickname.toString()
-            }
-        }
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                userImage = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
-            }
-        }
 
         val chatKey = intent.getLongExtra("chatKey", -1)
         val gatherTitle = intent.getStringExtra("gatherTitle")
@@ -224,15 +222,37 @@ class ChatRoomActivity : AppCompatActivity() {
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             selectedImageUri = null
             messageEditText.text.clear()
+
+            val myToken = CurrUser.getToken()
+            val pushNotificationData = PushNotificationData(
+                type = "NORMAL",
+                title = gatherTitle!!,
+                message = message
+            )
+
+            val pushNotificationEntity = PushNotificationEntity(
+                to = myToken,
+                priority = "high",
+                data = pushNotificationData
+            )
+
+            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+
+
+                override fun onResponse(
+                    call: Call<PushNotificationResponse>,
+                    response: Response<PushNotificationResponse>
+                ) {
+                    Log.d("gather", "성공 $call, $response")
+                    Log.d("gather", "${pushNotificationEntity}")
+                }
+
+                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+                    Log.d("gather", "실패 $t")
+                    Log.d("gather", "실패 $call")                }
+            })
         }
-
-
-        fun getCurrentTime(): String {
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val currentTime = Date()
-            return dateFormat.format(currentTime)
-        }
-
 
     }
 
