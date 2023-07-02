@@ -6,11 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#8696FE"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/all_or_gathering_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20sp"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/white"
+            android:text="전체 보기"
+            />
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/round_button"
+            android:layout_marginStart="20sp"
+            android:backgroundTint="@color/white"/>
+
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="80dp"/>
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="80dp"/>
 
     <Button
         android:id="@+id/writeBtn"

@@ -61,7 +61,8 @@
         SELECT tg.*,
                tu.USER_NAME        AS creator_name,
                tu.USER_PROFILE_IMG AS creator_img_url,
-               tug.cnt             AS gather_user_cnt
+               tug.cnt             AS gather_user_cnt,
+               tc.category_name    as category_name
         FROM TB_GATHER tg
                  JOIN (SELECT gather_seq,
                               count(*) AS cnt
@@ -71,6 +72,8 @@
                           tg.GATHER_SEQ = tug.gather_seq
                  JOIN TB_USER tu
                       ON tg.GATHER_CREATOR = tu.USER_SEQ
+                 JOIN TB_CATEGORY tc
+                      ON tc.category_seq = tg.category_seq
     </select>
 
     <select id="selectOneGatherByGatherSeq"

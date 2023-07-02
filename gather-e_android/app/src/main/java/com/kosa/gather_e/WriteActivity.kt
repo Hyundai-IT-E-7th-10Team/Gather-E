@@ -75,7 +75,8 @@ class WriteActivity : AppCompatActivity() {
             creatorImgUrl = "",
             creatorName = "",
             gatherCreator = 0,
-            gatherUserCnt = 0
+            gatherUserCnt = 0,
+            categoryName = ""
         )
         chatRoom = ChatListItem()
         // toolbar의 X(취소) 버튼

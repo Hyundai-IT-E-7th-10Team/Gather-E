@@ -10,6 +10,7 @@ public class GatherVO {
     private long gatherSeq;
     private long categorySeq;
     private long gatherCreator;
+    private String categoryName;
     private String creatorName;
     private String creatorImgUrl;
     private String gatherTitle;
