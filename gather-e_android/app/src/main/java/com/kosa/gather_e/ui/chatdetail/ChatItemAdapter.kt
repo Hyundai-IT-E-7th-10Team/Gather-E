@@ -18,10 +18,12 @@ import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
 import com.kosa.gather_e.databinding.ItemChatYourBinding
+import com.kosa.gather_e.model.entity.user.CurrUser
 
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
-    private var userName = ""
+    private var userName = CurrUser.getUserName()
+    private var userImage = CurrUser.getProfileImgUrl()
     private var scrollToBottom = true
 
     fun scrollToBottom() {
@@ -41,6 +43,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val chatItem = getItem(position)
+
         when (holder) {
             is MyChatViewHolder -> holder.bind(chatItem)
             is YourChatViewHolder -> holder.bind(chatItem)
@@ -53,32 +56,14 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         }
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        val chatItem = getItem(position)
-//        UserApiClient.instance.me { user, error ->
-//            if (user != null) {
-//                userName = user.kakaoAccount?.profile?.nickname.toString()
-//            }
-//        }
-//        return if (chatItem.senderId == userName) {
-//            MY_CHAT_ITEM_VIEW_TYPE
-//        } else {
-//            YOUR_CHAT_ITEM_VIEW_TYPE
-//        }
-//
-//    }
 
     override fun getItemViewType(position: Int): Int {
         val chatItem = getItem(position)
         return getItemViewTypeBySenderId(chatItem.senderId)
     }
 
+
     private fun getItemViewTypeBySenderId(senderId: String): Int {
-        UserApiClient.instance.me { user, error ->
-            if (user != null) {
-                userName = user.kakaoAccount?.profile?.nickname.toString()
-            }
-        }
         return if (senderId == userName) {
             MY_CHAT_ITEM_VIEW_TYPE
         } else {
@@ -105,7 +90,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatItem: ChatItem) {
-
+            Log.d("gather",chatItem.image)
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
@@ -115,21 +100,32 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.userImage)
 
-            Glide.with(binding.imagePreview)
-                .load(chatItem.image)
-                .into(binding.imagePreview)
-
-            if(chatItem.image != null){
+            if (!chatItem.image.isBlank()) {
                 binding.imagePreview.visibility = View.VISIBLE
-//                binding.messageTextView.visibility = View.GONE
+                binding.messageTextView.visibility = View.GONE
+                Glide.with(binding.imagePreview)
+                    .load(chatItem.image)
+                    .into(binding.imagePreview)
+            } else {
+                binding.imagePreview.visibility = View.GONE
+                binding.messageTextView.visibility = View.VISIBLE
+
             }
         }
+        init {
+            // 초기화 작업을 수행합니다.
+            binding.imagePreview.visibility = View.GONE
+            binding.messageTextView.visibility = View.VISIBLE
+        }
+
     }
+
 
     inner class YourChatViewHolder(private val binding: ItemChatYourBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatItem: ChatItem) {
+            Log.d("gather",chatItem.image)
             binding.senderTextView.text = chatItem.senderId
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
@@ -139,14 +135,22 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.userImage)
 
-            Glide.with(binding.imagePreview)
-                .load(chatItem.image)
-                .into(binding.imagePreview)
-
-            if(chatItem.image != null){
+            if (!chatItem.image.isBlank()) {
                 binding.imagePreview.visibility = View.VISIBLE
-//                binding.messageTextView.visibility = View.GONE
+                binding.messageTextView.visibility = View.GONE
+                Glide.with(binding.imagePreview)
+                    .load(chatItem.image)
+                    .into(binding.imagePreview)
+            } else {
+                binding.imagePreview.visibility = View.GONE
+                binding.messageTextView.visibility = View.VISIBLE
+
             }
+        }
+        init {
+            // 초기화 작업을 수행합니다.
+            binding.imagePreview.visibility = View.GONE
+            binding.messageTextView.visibility = View.VISIBLE
         }
     }
 

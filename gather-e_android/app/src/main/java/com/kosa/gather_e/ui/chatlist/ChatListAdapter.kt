@@ -1,5 +1,6 @@
 package com.kosa.gather_e.ui.chatlist
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -24,8 +25,9 @@ class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) : ListAdapter<C
             binding.chatRoomTitleTextView.text = chatListItem.gatherTitle
             binding.dateTextView.text = chatListItem.gatherDate
             binding.participantsTextView.text = chatListItem.gatherLimit.toString()
+            Log.d("gather","카테고리 ${chatListItem.gatherCategory}")
             Glide.with(itemView)
-                .load(R.drawable.logo)
+                .load(R.drawable.ic_10_pingpong)
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.circleImageView)
         }

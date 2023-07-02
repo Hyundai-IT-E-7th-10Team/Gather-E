@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -33,7 +34,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
             ?.let { NotificationType.valueOf(it) }
         val title = remoteMessage.data["title"]
         val message = remoteMessage.data["message"]
-
+        Log.d("gather","title : ${title}")
         type ?: return
 
         if (ActivityCompat.checkSelfPermission(
@@ -78,7 +79,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
         val pendingIntent = PendingIntent.getActivity(this, type.id, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo)
