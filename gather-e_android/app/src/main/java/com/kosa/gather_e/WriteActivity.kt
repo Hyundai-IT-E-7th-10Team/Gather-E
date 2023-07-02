@@ -154,7 +154,6 @@ class WriteActivity : AppCompatActivity() {
             override fun onResponse(
                 call: Call<List<CategoryEntity>>, response: Response<List<CategoryEntity>>
             ) {
-                Log.d("gather", "$call, $response") // 403 에러 떠서 retrofitProvider에 bearear 토큰 추가
                 if (response.isSuccessful) {
                     val categoryList = response.body()
                     categoryList?.let { categories ->

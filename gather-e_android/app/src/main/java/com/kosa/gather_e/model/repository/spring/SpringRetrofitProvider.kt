@@ -17,6 +17,8 @@ object SpringRetrofitProvider {
     private fun createOkHttpClient(token: String): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
 
+        Log.d("gather", "$token")
+
         httpClient.addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .header("Authorization", "Bearer $token") // Bearer 토큰을 헤더에 추가

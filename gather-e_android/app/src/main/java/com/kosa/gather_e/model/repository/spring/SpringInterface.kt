@@ -3,6 +3,7 @@ package com.kosa.gather_e.model.repository.spring
 import com.kosa.gather_e.model.entity.user.JwtToken
 import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.gather.GatherEntity
+import com.kosa.gather_e.model.entity.map.CurrentRecruitGatherEntity
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,8 +19,8 @@ interface SpringInterface {
     fun getCategory() : Call<List<CategoryEntity>>
     @POST("gather")
     fun createGather(@Body gather: GatherEntity) : Call<GatherEntity>
-    @GET("gather")
-    fun getGather() : Call<List<GatherEntity>>
+    @GET("map/currentrecruit")
+    fun getCurrentRecruitGather() : Call<List<CurrentRecruitGatherEntity>>
 
 }
 
