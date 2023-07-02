@@ -19,6 +19,7 @@ class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.View
             binding.writer.text = gather.creatorName
             binding.itemTime.text = gather.gatherDate
             binding.cardPlace.text = gather.gatherLocationName
+            binding.cardCategory.text = gather.categoryName
             Glide.with(binding.root).load(gather.creatorImgUrl).into(binding.writerImg)
         }
     }
