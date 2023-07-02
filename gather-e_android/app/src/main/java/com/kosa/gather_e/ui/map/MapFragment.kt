@@ -1,11 +1,13 @@
 package com.kosa.gather_e.ui.map
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -34,7 +36,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    private lateinit var currentRecruitGatherList : List<CurrentRecruitGatherEntity>;
+
+    private lateinit var currentRecruitGatherList : List<CurrentRecruitGatherEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +98,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 내가 주최한 모임 버튼
         toolbarBinding.actionNavigationMapToMapButton4.setOnClickListener {
-            val mapFragment = MapFragment()
+            val mapFragment = MapRecruitedByMeFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
@@ -103,9 +106,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .commit()
         }
 
-        //
-        val callgetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
-        callgetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
+        val callGetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
+        callGetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
             override fun onResponse(
                 call: Call<List<CurrentRecruitGatherEntity>>,
                 response: Response<List<CurrentRecruitGatherEntity>>
@@ -114,6 +116,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         currentRecruitGatherList = it
+                        Log.d("gather", "$currentRecruitGatherList")
                     }
                 }
             }
@@ -121,6 +124,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Log.d("gather", "callgetCurrentRecruitGather 실패")
             }
         })
+
     }
 
 
@@ -135,44 +139,53 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-
+    @SuppressLint("ResourceAsColor")
+    @UiThread
     override fun onMapReady(naverMap: NaverMap) {
 
         val transaction = parentFragmentManager.beginTransaction()
 
-        for (i in 0..currentRecruitGatherList.size - 1) {
+        for (i in currentRecruitGatherList.indices) {
             val marker = Marker()
-//            marker.setOnClickListener { overlay ->
+
+//           marker.setOnClickListener { overlay ->
 //
 //            }
+
+
             marker.position = LatLng(
                 currentRecruitGatherList[i].gatherLatitude,
                 currentRecruitGatherList[i].gatherLongitude
             )
-            marker.width = 100
-            marker.height = 110
+            marker.width = 150
+            marker.height = 150
+
+
             when (currentRecruitGatherList[i].categorySeq) {
-                1 -> OverlayImage.fromResource(R.drawable.ic_1_football)
-                2 -> OverlayImage.fromResource(R.drawable.ic_2_tennis)
-                3 -> OverlayImage.fromResource(R.drawable.ic_3_golf)
-                4 -> OverlayImage.fromResource(R.drawable.ic_4_basketball)
-                5 -> OverlayImage.fromResource(R.drawable.ic_5_hiking)
-                6 -> OverlayImage.fromResource(R.drawable.ic_6_shuttlecock)
-                7 -> OverlayImage.fromResource(R.drawable.ic_7_volleyball)
-                8 -> OverlayImage.fromResource(R.drawable.ic_8_bowling)
-                9 -> OverlayImage.fromResource(R.drawable.ic_9_squash)
-                10 -> OverlayImage.fromResource(R.drawable.ic_10_pingpong)
-                11 -> OverlayImage.fromResource(R.drawable.ic_11_swimmig)
-                12 -> OverlayImage.fromResource(R.drawable.ic_12_riding)
-                13 -> OverlayImage.fromResource(R.drawable.ic_13_skate)
-                14 -> OverlayImage.fromResource(R.drawable.ic_14_cycling)
-                15 -> OverlayImage.fromResource(R.drawable.ic_15_yoga)
-                16 -> OverlayImage.fromResource(R.drawable.ic_16_pilates)
-                17 -> OverlayImage.fromResource(R.drawable.ic_17_climbing)
-                18 -> OverlayImage.fromResource(R.drawable.ic_18_billiard)
-                19 -> OverlayImage.fromResource(R.drawable.ic_19_dancing)
-                20 -> OverlayImage.fromResource(R.drawable.ic_20_boxing)
+                1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_1_football)
+                2 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_2_tennis)
+                3 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_3_golf)
+                4 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_4_basketball)
+                5 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_5_hiking)
+                6 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_6_shuttlecock)
+                7 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_7_volleyball)
+                8 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_8_bowling)
+                9 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_9_squash)
+                10 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_10_pingpong)
+                11 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_11_swimmig)
+                12 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_12_riding)
+                13 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_13_skate)
+                14 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_14_cycling)
+                15 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_15_yoga)
+                16 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_16_pilates)
+                17 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_17_climbing)
+                18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_18_billiard)
+                19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
+                20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
             }
+
+            marker.iconTintColor = R.color.purple
+            marker.alpha = 1f
             marker.map = naverMap
         }
         this.naverMap = naverMap
@@ -182,7 +195,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
 
