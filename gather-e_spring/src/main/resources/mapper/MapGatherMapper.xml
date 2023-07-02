@@ -2,17 +2,30 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kosa.gather_e.gather.dao.MapGatherDAO">
+<mapper namespace="com.kosa.gather_e.map_gather.dao.MapGatherDAO">
 
 
     <select id="selectAllCurrentRecruitGather" resultType="CurrentRecruitGatherVO">
-        SELECT
-        	gather_seq,
-        	category_seq,
-        	gather_date,
-        	gather_latitude,
-        	gather_longitude 
-        FROM TB_GATHER
+	<![CDATA[
+		SELECT
+		   tg.*,
+		   tug.cnt
+		FROM
+		   TB_GATHER tg
+		JOIN (
+		   SELECT
+		      gather_seq,
+		      count(*) AS cnt
+		   FROM
+		      TB_USER_GATHER tug
+		   GROUP BY
+		      gather_seq
+		      ) tug
+		ON
+		   tg.GATHER_SEQ = tug.gather_seq
+		WHERE
+		   TO_DATE(GATHER_DATE , 'YYYY/MM/DD HH24:MI') > SYSDATE
+	]]>
     </select>
 
 

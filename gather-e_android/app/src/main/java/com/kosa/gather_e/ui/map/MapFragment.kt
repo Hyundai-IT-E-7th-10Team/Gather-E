@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
+import com.kosa.gather_e.model.entity.map.CurrentRecruitGatherEntity
+import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
@@ -19,7 +21,11 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -28,6 +34,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
+    private lateinit var currentRecruitGatherList : List<CurrentRecruitGatherEntity>;
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,7 +103,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .commit()
         }
 
+        //
+        val callgetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
+        callgetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
+            override fun onResponse(
+                call: Call<List<CurrentRecruitGatherEntity>>,
+                response: Response<List<CurrentRecruitGatherEntity>>
+            ) {
+                Log.d("gather", "$call, $response")
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        currentRecruitGatherList = it
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<CurrentRecruitGatherEntity>>, t: Throwable) {
+                Log.d("gather", "callgetCurrentRecruitGather 실패")
+            }
+        })
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
@@ -112,26 +138,51 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(naverMap: NaverMap) {
 
-        val locationOverlay = naverMap.locationOverlay
-        locationOverlay.isVisible = true
+        val transaction = parentFragmentManager.beginTransaction()
 
-
+        for (i in 0..currentRecruitGatherList.size - 1) {
+            val marker = Marker()
+//            marker.setOnClickListener { overlay ->
+//
+//            }
+            marker.position = LatLng(
+                currentRecruitGatherList[i].gatherLatitude,
+                currentRecruitGatherList[i].gatherLongitude
+            )
+            marker.width = 100
+            marker.height = 110
+            when (currentRecruitGatherList[i].categorySeq) {
+                1 -> OverlayImage.fromResource(R.drawable.ic_1_football)
+                2 -> OverlayImage.fromResource(R.drawable.ic_2_tennis)
+                3 -> OverlayImage.fromResource(R.drawable.ic_3_golf)
+                4 -> OverlayImage.fromResource(R.drawable.ic_4_basketball)
+                5 -> OverlayImage.fromResource(R.drawable.ic_5_hiking)
+                6 -> OverlayImage.fromResource(R.drawable.ic_6_shuttlecock)
+                7 -> OverlayImage.fromResource(R.drawable.ic_7_volleyball)
+                8 -> OverlayImage.fromResource(R.drawable.ic_8_bowling)
+                9 -> OverlayImage.fromResource(R.drawable.ic_9_squash)
+                10 -> OverlayImage.fromResource(R.drawable.ic_10_pingpong)
+                11 -> OverlayImage.fromResource(R.drawable.ic_11_swimmig)
+                12 -> OverlayImage.fromResource(R.drawable.ic_12_riding)
+                13 -> OverlayImage.fromResource(R.drawable.ic_13_skate)
+                14 -> OverlayImage.fromResource(R.drawable.ic_14_cycling)
+                15 -> OverlayImage.fromResource(R.drawable.ic_15_yoga)
+                16 -> OverlayImage.fromResource(R.drawable.ic_16_pilates)
+                17 -> OverlayImage.fromResource(R.drawable.ic_17_climbing)
+                18 -> OverlayImage.fromResource(R.drawable.ic_18_billiard)
+                19 -> OverlayImage.fromResource(R.drawable.ic_19_dancing)
+                20 -> OverlayImage.fromResource(R.drawable.ic_20_boxing)
+            }
+            marker.map = naverMap
+        }
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
-
-//        val uiSettings = naverMap.uiSettings
-//        // 현위치 버튼
-//        uiSettings.isLocationButtonEnabled = true
-//
-//        // 마커 위도경도로 띄우기
-//        val marker = Marker()
-//        marker.position = LatLng(37.5670135, 126.9783740)
-//        marker.map = naverMap
     }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
+
