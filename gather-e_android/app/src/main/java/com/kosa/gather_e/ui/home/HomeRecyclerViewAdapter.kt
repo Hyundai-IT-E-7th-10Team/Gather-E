@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kosa.gather_e.databinding.HomeCardBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
-import com.kosa.gather_e.model.entity.gather.GatherInfo
 
 class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolder>() {
 
