@@ -13,6 +13,8 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
+    private lateinit var totalList : List<GatherEntity>
+    private lateinit var currList : List<GatherEntity>
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
     }
@@ -28,6 +30,7 @@ class HomeViewModel : ViewModel() {
                 response: Response<List<GatherEntity>>
             ) {
                 Log.d("gather", response.body().toString())
+                totalList = response.body()!!
                 value = response.body()
             }
         })
@@ -36,4 +39,29 @@ class HomeViewModel : ViewModel() {
 
     val text: LiveData<String> = _text
     val list: LiveData<List<GatherEntity>> = _list
+
+    fun listOnlyGathering() {
+        _list.value = currList.filter {
+            it.gatherLimit > it.gatherUserCnt!!
+        }
+    }
+    fun listAll() {
+        _list.value = currList
+    }
+
+    fun listByCategory(category: String, isAll: Boolean) {
+        if (category == "전체" && isAll) {
+            currList = totalList
+        }
+        else {
+            currList = totalList.filter {
+                it.categoryName == category
+            }
+        }
+        if (isAll) {
+            listAll()
+        } else {
+            listOnlyGathering()
+        }
+    }
 }
