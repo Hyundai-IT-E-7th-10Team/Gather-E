@@ -22,5 +22,8 @@ interface SpringInterface {
     @GET("map/currentrecruit")
     fun getCurrentRecruitGather() : Call<List<CurrentRecruitGatherEntity>>
 
+    @GET("gather")
+    fun getGather() : Call<List<GatherEntity>>
+
 }
 

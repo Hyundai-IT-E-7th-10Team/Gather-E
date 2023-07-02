@@ -8,20 +8,10 @@
     tools:context=".ui.map.MapCurrentRecruiteFragment">
 
     <fragment
-        android:id="@+id/map_fragment"
+        android:id="@+id/current_map_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.naver.maps.map.MapFragment" />
-
-    <TextView
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:text="현재 모집중 페이지 입니다."
-        android:layout_marginTop="100dp"
-        android:background="@drawable/edittext_background"/>
-
-
-
 
 
 </FrameLayout>
