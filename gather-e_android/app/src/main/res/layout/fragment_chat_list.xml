@@ -5,34 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/chatListHead"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="5dp"
+        android:layout_height="80dp"
         android:background="@color/light_purple"
-        >
-    <ImageButton
-        android:id="@+id/imgbtn_quit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/btn_quit" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
-    </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/cardview_dark_background"
-        app:layout_constraintTop_toBottomOf="@id/chatListHead"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatListRecyclerView"

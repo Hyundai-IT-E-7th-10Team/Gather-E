@@ -1,11 +1,13 @@
 package com.kosa.gather_e.ui.map
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.UiThread
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapCurrentRecruiteBinding
@@ -25,19 +27,26 @@ import retrofit2.Response
 
 class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var binding : FragmentMapCurrentRecruiteBinding
+    lateinit var binding : FragmentMapCurrentRecruiteBinding
+    private lateinit var frameLayoutMapCurrentRecruite: FrameLayout
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
 
     private lateinit var currentRecruitGatherList : List<CurrentRecruitGatherEntity>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+
+        }
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapCurrentRecruiteBinding.inflate(inflater, container, false)
+        frameLayoutMapCurrentRecruite = binding.root.findViewById(R.id.frameLayout_map_current_recruite)
         return binding.root
     }
 
@@ -48,18 +57,17 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
             NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naverClientId))
 
         val fm = childFragmentManager
-        val currentMapFragment = fm.findFragmentById(R.id.current_map_fragment) as com.naver.maps.map.MapFragment?
+        val mapFragment = fm.findFragmentById(R.id.current_map_fragment) as com.naver.maps.map.MapFragment?
             ?: com.naver.maps.map.MapFragment.newInstance().also {
                 fm.beginTransaction().add(R.id.current_map_fragment, it).commit()
             }
 
         locationSource =
-            FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+            FusedLocationSource(this, MapFragment.LOCATION_PERMISSION_REQUEST_CODE)
 
-        currentMapFragment.getMapAsync(this)
-
-        val callGetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
-        callGetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
+        mapFragment.getMapAsync(this)
+        val callgetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
+        callgetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
             override fun onResponse(
                 call: Call<List<CurrentRecruitGatherEntity>>,
                 response: Response<List<CurrentRecruitGatherEntity>>
@@ -89,8 +97,9 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+    @SuppressLint("ResourceAsColor")
     @UiThread
-    override fun onMapReady(naverMap: NaverMap) {
+    override fun onMapReady(p0: NaverMap) {
         val transaction = parentFragmentManager.beginTransaction()
 
         for (i in currentRecruitGatherList.indices) {
@@ -100,12 +109,14 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
 //
 //            }
 
+
             marker.position = LatLng(
                 currentRecruitGatherList[i].gatherLatitude,
                 currentRecruitGatherList[i].gatherLongitude
             )
             marker.width = 150
             marker.height = 150
+
 
             when (currentRecruitGatherList[i].categorySeq) {
                 1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_1_football)
@@ -129,14 +140,19 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
                 19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
                 20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
             }
+
+            marker.iconTintColor = R.color.purple
+            marker.alpha = 1f
             marker.map = naverMap
         }
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
+
     }
+
     companion object {
-        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
 

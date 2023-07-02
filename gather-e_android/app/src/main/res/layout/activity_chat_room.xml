@@ -13,12 +13,10 @@ android:background="@color/white">
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/chatHead"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:padding="5dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-20dp"
-        android:background="@color/light_purple"
-        >
+        android:background="@color/light_purple">
+
             <ImageButton
             android:id="@+id/imgbtn_quit"
             android:layout_width="wrap_content"
