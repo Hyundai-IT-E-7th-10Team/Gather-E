@@ -6,35 +6,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.navigation.fragment.findNavController
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapCurrentRecruiteBinding
+import com.kosa.gather_e.databinding.FragmentMapPastMeetingBinding
+import com.kosa.gather_e.databinding.ToolbarMapBinding
+import com.naver.maps.map.NaverMapSdk
+import com.naver.maps.map.util.FusedLocationSource
 
-class MapCurrentRecruiteFragment : Fragment() {
+lateinit var binding : FragmentMapPastMeetingBinding
 
-    lateinit var binding : FragmentMapCurrentRecruiteBinding
-    private lateinit var frameLayoutMapCurrentRecruite: FrameLayout
-
+class MapPastMeetingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
 
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMapCurrentRecruiteBinding.inflate(inflater, container, false)
-        frameLayoutMapCurrentRecruite = binding.root.findViewById(R.id.frameLayout_map_current_recruite)
+        binding = FragmentMapPastMeetingBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     companion object {
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            MapCurrentRecruiteFragment().apply {
+            MapPastMeetingFragment().apply {
                 arguments = Bundle().apply {
 
                 }

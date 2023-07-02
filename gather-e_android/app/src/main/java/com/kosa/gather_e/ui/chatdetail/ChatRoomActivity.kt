@@ -106,8 +106,10 @@ class ChatRoomActivity : AppCompatActivity() {
                 chatItem ?: return
 
                 chatList.add(chatItem)
+                adapter.scrollToBottom()
                 adapter.submitList(chatList)
                 adapter.notifyDataSetChanged()
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -128,6 +130,10 @@ class ChatRoomActivity : AppCompatActivity() {
 
         binding.chatRecyclerView.adapter = adapter
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.chatRecyclerView.post {
+            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
+        }
+        adapter.scrollToBottom()
 
         binding.btnSelectImage.setOnClickListener {
             Log.d("Gatherne", "${Build.VERSION.RELEASE}")
@@ -182,13 +188,14 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.sendButton.setOnClickListener {
             val messageEditText = binding.messageEditText
             val message = messageEditText.text.toString()
+            // 이미지 O, 텍스트 X
             if (selectedImageUri != null) {
                 val photoUri = selectedImageUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,
                     successHandler = { uri ->
                         val chatItem =
                             ChatItem(senderId = userName, senderImage = userImage, message = message, image = uri,sendTime = getCurrentTime(), viewType = 0)
-                        Log.d("Gatherne", "photoUri, Mine")
+                        Log.d("Gatherne", "photoUri")
 
                         chatDB?.push()?.setValue(chatItem)
                         selectedImageUri = null
@@ -199,9 +206,10 @@ class ChatRoomActivity : AppCompatActivity() {
                         Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
+            // 이미지 X, 텍스트 O
             } else {
                 val chatItem =
-                    ChatItem(senderId = userName, senderImage = userImage, message = message, image = "", sendTime = getCurrentTime(), viewType = 1)
+                    ChatItem(senderId = userName, senderImage = userImage, message = message, image = "", sendTime = getCurrentTime(), viewType = 0)
                 if (message.isBlank()) {
                     // Show an error message or handle it as desired
                     Toast.makeText(this, "메시지를 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -209,10 +217,11 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
                 chatDB?.push()?.setValue(chatItem)
 //                findViewById<TextView>(R.id.messageTextView).isVisible = false
-                Log.d("Gatherne", "No photoUri, YOur")
+                Log.d("Gatherne", "No photoUri")
 
 
             }
+            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             selectedImageUri = null
             messageEditText.text.clear()
         }
@@ -223,6 +232,7 @@ class ChatRoomActivity : AppCompatActivity() {
             val currentTime = Date()
             return dateFormat.format(currentTime)
         }
+
 
     }
 

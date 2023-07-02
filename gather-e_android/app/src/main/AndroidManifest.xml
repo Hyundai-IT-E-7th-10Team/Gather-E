@@ -46,24 +46,25 @@
         <activity
             android:name=".ui.searchlocation.SearchLocationActivity"
             android:exported="false" />
-      
+
         <activity
             android:name=".ui.searchlocation.LocationDetailActivity"
             android:exported="false" />
-      
+
         <activity
             android:name=".WriteActivity"
             android:exported="true" />
-      
+
         <activity
             android:name=".BottomNavigationVarActivity"
             android:exported="true"
             android:label="@string/title_activity_bottom_navigation_var">
-   
+
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
 
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
