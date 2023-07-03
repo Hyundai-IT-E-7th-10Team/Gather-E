@@ -1,6 +1,7 @@
 package com.kosa.gather_e.model.entity.gather
 
 import com.kosa.gather_e.model.entity.user.UserEntity
+import java.io.Serializable
 
 data class GatherEntity(
     var gatherSeq: Int?,
@@ -17,4 +18,4 @@ data class GatherEntity(
     var gatherLatitude: Double,
     var gatherLongitude: Double,
     var gatherLocationName: String
-)
+) : Serializable

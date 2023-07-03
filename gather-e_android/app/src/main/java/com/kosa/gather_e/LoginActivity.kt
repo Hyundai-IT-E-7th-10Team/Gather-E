@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                         else if (user != null) {
                             CurrUser.setCurrUser(user)
+                            CurrUser.setSeq(response.body()!!.userSeq)
                         }
                     }
                     loadingDialog.dismiss()

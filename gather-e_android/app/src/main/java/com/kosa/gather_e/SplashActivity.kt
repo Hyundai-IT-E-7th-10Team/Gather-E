@@ -45,11 +45,14 @@ class SplashActivity : AppCompatActivity() {
                 } else {
                     intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
         } else {
             intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
+
         }
     }
 
@@ -64,6 +67,8 @@ class SplashActivity : AppCompatActivity() {
                     LoginActivity::class.java
                 )
                 startActivity(intent)
+                finish()
+
             }
             override fun onResponse(call: Call<JwtToken>, response: Response<JwtToken>) {
                 val jwtToken = response.body()!!.accessToken
@@ -75,7 +80,7 @@ class SplashActivity : AppCompatActivity() {
                     }
                     else if (user != null) {
                         CurrUser.setCurrUser(user)
-                        CurrUser.setToken()
+                        CurrUser.setSeq(response.body()!!.userSeq)
                     }
                 }
                 intent = Intent(
@@ -83,6 +88,8 @@ class SplashActivity : AppCompatActivity() {
                     BottomNavigationVarActivity::class.java
                 )
                 startActivity(intent)
+                finish()
+
             }
         })
     }

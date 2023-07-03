@@ -7,7 +7,8 @@ import com.kakao.sdk.user.model.User
 object CurrUser {
     private var name: String = ""
     private var profileImgUrl: String = ""
-    private var token: String =""
+    private var seq: Long = 0
+    private var token:String =""
 
     fun getUserName(): String {
         return name
@@ -33,5 +34,12 @@ object CurrUser {
 
     fun getToken(): String{
         return token
+    }
+
+    fun setSeq(seq: Long){
+        this.seq = seq
+    }
+    fun getSeq() : Long {
+        return seq
     }
 }
