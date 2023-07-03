@@ -1,9 +1,8 @@
 package com.kosa.gather_e.gather.vo;
 
-import com.kosa.gather_e.auth.vo.UserVO;
+
 import lombok.Data;
 
-import java.util.List;
 
 @Data
 public class GatherVO {

@@ -68,7 +68,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 초기화 버튼
         toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
-            val mapFragment = MapFragment()
+            val mapFragment = com.kosa.gather_e.ui.map.MapFragment()
             parentFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
             .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정

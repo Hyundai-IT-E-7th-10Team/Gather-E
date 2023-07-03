@@ -7,7 +7,7 @@ import com.kakao.sdk.user.model.User
 object CurrUser {
     private var name: String = ""
     private var profileImgUrl: String = ""
-    private var token:String =""
+    private var token: String =""
 
     fun getUserName(): String {
         return name
