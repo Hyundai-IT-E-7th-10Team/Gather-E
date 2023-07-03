@@ -2,6 +2,7 @@ package com.kosa.gather_e.ui.chatdetail
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,12 +11,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +45,7 @@ import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.notification.PushNotificationData
 import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
@@ -54,11 +58,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.ArrayList
 import java.util.Date
 import java.util.Locale
 
 class ChatRoomActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityChatRoomBinding
+    private var chatListItem = mutableListOf<ChatListItem>()
     private val chatList = mutableListOf<ChatItem>()
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
@@ -66,6 +73,7 @@ class ChatRoomActivity : AppCompatActivity() {
 
     private var userName = CurrUser.getUserName()
     private var userImage = CurrUser.getProfileImgUrl()
+    lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
 
     private val storage: FirebaseStorage by lazy {
@@ -75,15 +83,19 @@ class ChatRoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = ActivityChatRoomBinding.inflate(layoutInflater)
+        binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val chatKey = intent.getLongExtra("chatKey", -1)
         val gatherTitle = intent.getStringExtra("gatherTitle")
         val gatherDate = intent.getStringExtra("gatherDate")
         val gatherLimit = intent.getIntExtra("gatherLimit",-1)
+        val gatherCategortSeq = intent.getIntExtra("gatherCategorySeq",-1)
+        val participants: List<String> = intent.getStringArrayListExtra("gatherParticipants") ?: emptyList()
+        val participantTokens: List<String> = intent.getStringArrayListExtra("gatherParticipantTokens") ?: emptyList()
         val gatherPlace = intent.getStringExtra("gatherPlace")
         val gatherCategory = intent.getStringExtra("gatherCategory")
+        Log.d("gather","Recieved userTokens :: ${participantTokens}")
 
 
 
@@ -91,10 +103,34 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.chatRoomTitleTextView.text = gatherTitle
         binding.dateTextView.text = gatherDate
         binding.participantsTextView.text = gatherLimit.toString()
-//        Glide.with(this)
-//            .load(userImage)
-//            .apply(RequestOptions().transform(CircleCrop()))
-//            .into(binding.circleImageView)
+        var categoryImage = R.drawable.ic_1_football
+        when (gatherCategortSeq) {
+            1 -> categoryImage = R.drawable.ic_1_football
+            2 -> categoryImage = R.drawable.ic_2_tennis
+            3 -> categoryImage = R.drawable.ic_3_golf
+            4 -> categoryImage = R.drawable.ic_4_basketball
+            5 -> categoryImage = R.drawable.ic_5_hiking
+            6 -> categoryImage = R.drawable.ic_6_shuttlecock
+            7 -> categoryImage = R.drawable.ic_7_volleyball
+            8 -> categoryImage = R.drawable.ic_8_bowling
+            9 -> categoryImage = R.drawable.ic_9_squash
+            10 -> categoryImage = R.drawable.ic_10_pingpong
+            11 -> categoryImage = R.drawable.ic_11_swimmig
+            12 -> categoryImage = R.drawable.ic_12_riding
+            13 -> categoryImage = R.drawable.ic_13_skate
+            14 -> categoryImage = R.drawable.ic_14_cycling
+            15 -> categoryImage = R.drawable.ic_15_yoga
+            16 -> categoryImage = R.drawable.ic_16_pilates
+            17 -> categoryImage = R.drawable.ic_17_climbing
+            18 -> categoryImage = R.drawable.ic_18_billiard
+            19 -> categoryImage = R.drawable.ic_19_dancing
+            20 -> categoryImage = R.drawable.ic_20_boxing
+        }
+        Glide.with(this)
+            .load(categoryImage)
+            .apply(RequestOptions().transform (CircleCrop()))
+            .into(binding.circleImageView)
+
 
         chatDB = Firebase.database.reference.child(CHILD_CHAT).child("$chatKey")
 
@@ -222,37 +258,81 @@ class ChatRoomActivity : AppCompatActivity() {
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             selectedImageUri = null
             messageEditText.text.clear()
+            binding.selectedImage.visibility = View.GONE
 
-            val myToken = CurrUser.getToken()
-            val pushNotificationData = PushNotificationData(
-                type = "NORMAL",
-                title = gatherTitle!!,
-                message = message
-            )
-
-            val pushNotificationEntity = PushNotificationEntity(
-                to = myToken,
-                priority = "high",
-                data = pushNotificationData
-            )
-
-            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
-            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+            // 검색 버튼 눌리면 키보드 숨기도록
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.sendButton.windowToken, 0)
 
 
-                override fun onResponse(
-                    call: Call<PushNotificationResponse>,
-                    response: Response<PushNotificationResponse>
-                ) {
-                    Log.d("gather", "성공 $call, $response")
-                    Log.d("gather", "${pushNotificationEntity}")
-                }
+            // ChatRoomList에 사용자의 토큰(token) 값을 저장하는 작업
+            // 예시: ChatRoomList에 있는 모든 사용자의 토큰을 저장하는 리스트를 생성합니다.
+            val userTokens = participantTokens
+            Log.d("gather","userTokens :: ${userTokens}")
 
-                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
-                    Log.d("gather", "실패 $t")
-                    Log.d("gather", "실패 $call")                }
-            })
+            // 각 사용자에게 알림을 보내는 작업
+            for (token in userTokens) {
+                val pushNotificationData = PushNotificationData(
+                    type = "NORMAL",
+                    title = gatherTitle!!,
+                    message = message
+                )
+
+                val pushNotificationEntity = PushNotificationEntity(
+                    to = token,
+                    priority = "high",
+                    data = pushNotificationData
+                )
+
+                val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+                callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+                    override fun onResponse(
+                        call: Call<PushNotificationResponse>,
+                        response: Response<PushNotificationResponse>
+                    ) {
+                        Log.d("gather", "성공 $call, $response")
+                        Log.d("gather", "$pushNotificationEntity")
+                    }
+
+                    override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+                        Log.d("gather", "실패 $t")
+                        Log.d("gather", "실패 $call")
+                    }
+                })
+            }
+//
+//
+//            val myToken = CurrUser.getToken()
+//            val pushNotificationData = PushNotificationData(
+//                type = "NORMAL",
+//                title = gatherTitle!!,
+//                message = message
+//            )
+//
+//            val pushNotificationEntity = PushNotificationEntity(
+//                to = myToken,
+//                priority = "high",
+//                data = pushNotificationData
+//            )
+//
+//            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+//            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+//
+//
+//                override fun onResponse(
+//                    call: Call<PushNotificationResponse>,
+//                    response: Response<PushNotificationResponse>
+//                ) {
+//                    Log.d("gather", "성공 $call, $response")
+//                    Log.d("gather", "${pushNotificationEntity}")
+//                }
+//
+//                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+//                    Log.d("gather", "실패 $t")
+//                    Log.d("gather", "실패 $call")                }
+//            })
         }
+
 
     }
 
@@ -304,7 +384,6 @@ class ChatRoomActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var binding = ActivityChatRoomBinding.inflate(layoutInflater)
         if (resultCode != Activity.RESULT_OK) {
             return
         }
@@ -312,10 +391,12 @@ class ChatRoomActivity : AppCompatActivity() {
             2020 -> {
                 val uri = data?.data
                 if (uri != null) {
+                    Log.d("gather","사진 가져와서 띄워주기 ${uri}")
                     selectedImageUri = uri
                     Glide.with(this)
                         .load(uri)
                         .into(binding.selectedImage)
+                    binding.selectedImage.visibility = View.VISIBLE
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
