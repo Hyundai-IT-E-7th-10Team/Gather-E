@@ -53,6 +53,11 @@ import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
 import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +70,6 @@ import java.util.Locale
 class ChatRoomActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatRoomBinding
-    private var chatListItem = mutableListOf<ChatListItem>()
     private val chatList = mutableListOf<ChatItem>()
     private val adapter = ChatItemAdapter()
     private var chatDB: DatabaseReference? = null
@@ -73,7 +77,6 @@ class ChatRoomActivity : AppCompatActivity() {
 
     private var userName = CurrUser.getUserName()
     private var userImage = CurrUser.getProfileImgUrl()
-    lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
 
     private val storage: FirebaseStorage by lazy {
@@ -140,9 +143,9 @@ class ChatRoomActivity : AppCompatActivity() {
                 chatItem ?: return
 
                 chatList.add(chatItem)
-                adapter.scrollToBottom()
                 adapter.submitList(chatList)
                 adapter.notifyDataSetChanged()
+                binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
 
             }
 
@@ -164,10 +167,11 @@ class ChatRoomActivity : AppCompatActivity() {
 
         binding.chatRecyclerView.adapter = adapter
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.chatRecyclerView.post {
-            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
-        }
-        adapter.scrollToBottom()
+        binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
+//        binding.chatRecyclerView.post {
+//            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
+//        }
+//        adapter.scrollToBottom()
 
         binding.btnSelectImage.setOnClickListener {
             Log.d("Gatherne", "${Build.VERSION.RELEASE}")
@@ -219,27 +223,28 @@ class ChatRoomActivity : AppCompatActivity() {
 
         }
 
+
         binding.sendButton.setOnClickListener {
             val messageEditText = binding.messageEditText
             val message = messageEditText.text.toString()
             // 이미지 O, 텍스트 X
             if (selectedImageUri != null) {
+                showProgressBar()
                 val photoUri = selectedImageUri ?: return@setOnClickListener
-                uploadPhoto(photoUri,
-                    successHandler = { uri ->
-                        val chatItem =
-                            ChatItem(senderId = userName, senderImage = userImage, message = message, image = uri,sendTime = getCurrentTime(), viewType = 0)
-                        Log.d("Gatherne", "photoUri")
 
-                        chatDB?.push()?.setValue(chatItem)
-                        selectedImageUri = null
-
-//                        binding.progressBar.isVisible = false
-                    },
-                    errorHandler = {
-                        Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                // 코루틴 시작
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val uri = withContext(Dispatchers.IO) {
+                            uploadPhoto(photoUri)
+                        }
+                        sendMessageWithImage(uri, message)
+                    } catch (e: Exception) {
+                        Toast.makeText(this@ChatRoomActivity, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    } finally {
+                        hideProgressBar()
                     }
-                )
+                }
             // 이미지 X, 텍스트 O
             } else {
                 val chatItem =
@@ -250,20 +255,19 @@ class ChatRoomActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
                 chatDB?.push()?.setValue(chatItem)
-//                findViewById<TextView>(R.id.messageTextView).isVisible = false
                 Log.d("Gatherne", "No photoUri")
 
-
             }
-            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             selectedImageUri = null
             messageEditText.text.clear()
             binding.selectedImage.visibility = View.GONE
+
 
             // 검색 버튼 눌리면 키보드 숨기도록
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.sendButton.windowToken, 0)
 
+            binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
 
             // ChatRoomList에 사용자의 토큰(token) 값을 저장하는 작업
             // 예시: ChatRoomList에 있는 모든 사용자의 토큰을 저장하는 리스트를 생성합니다.
@@ -300,87 +304,24 @@ class ChatRoomActivity : AppCompatActivity() {
                     }
                 })
             }
-//
-//
-//            val myToken = CurrUser.getToken()
-//            val pushNotificationData = PushNotificationData(
-//                type = "NORMAL",
-//                title = gatherTitle!!,
-//                message = message
-//            )
-//
-//            val pushNotificationEntity = PushNotificationEntity(
-//                to = myToken,
-//                priority = "high",
-//                data = pushNotificationData
-//            )
-//
-//            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
-//            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
-//
-//
-//                override fun onResponse(
-//                    call: Call<PushNotificationResponse>,
-//                    response: Response<PushNotificationResponse>
-//                ) {
-//                    Log.d("gather", "성공 $call, $response")
-//                    Log.d("gather", "${pushNotificationEntity}")
-//                }
-//
-//                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
-//                    Log.d("gather", "실패 $t")
-//                    Log.d("gather", "실패 $call")                }
-//            })
         }
 
 
     }
 
-    private fun uploadPhoto(uri: Uri, successHandler: (String) -> Unit, errorHandler: () -> Unit) {
-//        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
-
-        val fileName = "${System.currentTimeMillis()}.png"
-        storage.reference.child("chat").child(fileName)
-            .putFile(uri)
-            .addOnSuccessListener { uploadTask ->
-                uploadTask.storage.downloadUrl
-                    .addOnSuccessListener { uri ->
-                        successHandler(uri.toString())
-                    }
-                    .addOnFailureListener {
-                        errorHandler()
-                    }
-            }
-            .addOnFailureListener {
-                errorHandler()
-            }
-
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            1010 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startContentProvider()
-                } else {
-                    Toast.makeText(this, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
+    private suspend fun uploadPhoto(uri: Uri): String {
+        return withContext(Dispatchers.IO) {
+            val fileName = "${System.currentTimeMillis()}.png"
+            storage.reference.child("chat").child(fileName)
+                .putFile(uri)
+                .await()
+                .storage
+                .downloadUrl
+                .await()
+                .toString()
         }
     }
 
-    private fun startContentProvider() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(intent, 2020)
-
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -408,6 +349,65 @@ class ChatRoomActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun sendMessageWithImage(imageUri: String, message: String) {
+        val chatItem = ChatItem(
+            senderId = userName,
+            senderImage = userImage,
+            message = message,
+            image = imageUri,
+            sendTime = getCurrentTime(),
+            viewType = 0
+        )
+        chatDB?.push()?.setValue(chatItem)
+        selectedImageUri = null
+    }
+
+    private suspend fun sendMessageWithoutImage(message: String) {
+        if (message.isBlank()) {
+            // Show an error message or handle it as desired
+            Toast.makeText(this@ChatRoomActivity, "메시지를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val chatItem = ChatItem(
+            senderId = userName,
+            senderImage = userImage,
+            message = message,
+            image = "",
+            sendTime = getCurrentTime(),
+            viewType = 0
+        )
+        chatDB?.push()?.setValue(chatItem)
+        // 나머지 코드 작성
+    }
+
+
+
+    private fun startContentProvider() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, 2020)
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            1010 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startContentProvider()
+                } else {
+                    Toast.makeText(this, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     private fun showPermissionContextPopup() {
         AlertDialog.Builder(this)
             .setTitle("권한이 필요합니다.")
@@ -426,5 +426,12 @@ class ChatRoomActivity : AppCompatActivity() {
         return dateFormat.format(currentTime)
     }
 
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
+    }
 
 }
