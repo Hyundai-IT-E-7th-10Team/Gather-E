@@ -14,6 +14,7 @@ import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.FragmentChatListBinding
+import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 
 
@@ -43,6 +44,9 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
                 intent.putExtra("gatherDate", chatRoom.gatherDate)
                 intent.putExtra("gatherLimit", chatRoom.gatherLimit)
                 intent.putExtra("gatherCategory", chatRoom.gatherCategory)
+                intent.putExtra("gatherCategorySeq", chatRoom.gatherCategorySeq)
+                intent.putExtra("gatherParticipants", ArrayList(chatRoom.participants))
+                intent.putExtra("gatherParticipantTokens", ArrayList(chatRoom.participantTokens))
                 intent.putExtra("gatherPlace", chatRoom.gatherPlace)
                 startActivity(intent)
             }
@@ -65,8 +69,11 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
                 snapshot.children.forEach {
                     val model = it.getValue(ChatListItem::class.java)
                     model ?: return
+                    if (model.participants.contains(CurrUser.getUserName())) {
+                        chatRoomList.add(model)
+                    }
 
-                    chatRoomList.add(model)
+//                    chatRoomList.add(model)
                     Log.d("Gahter_E",chatRoomList.toString())
                 }
 
