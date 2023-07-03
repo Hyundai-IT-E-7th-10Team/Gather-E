@@ -41,7 +41,7 @@ class WriteActivity : AppCompatActivity() {
     lateinit var chatRoom : ChatListItem
     lateinit var userName : String
     lateinit var userImage : String
-
+    lateinit var myToken : String
 
     var date: String? = null
     var time: String? = null
@@ -80,6 +80,7 @@ class WriteActivity : AppCompatActivity() {
             categoryName = ""
         )
         chatRoom = ChatListItem()
+        myToken = CurrUser.getToken()
         // toolbar의 X(취소) 버튼
         binding.cancelBtn.setOnClickListener {
             finish()
@@ -103,7 +104,6 @@ class WriteActivity : AppCompatActivity() {
 //            }
 
             // 완료 버튼 누르면 채팅방 생성
-            val myToken = CurrUser.getToken()
 
             chatRoom.userId = userName
             chatRoom.gatherTitle = binding.titleEditText.text.toString()
@@ -132,11 +132,13 @@ class WriteActivity : AppCompatActivity() {
                     call: Call<GatherEntity>,
                     response: Response<GatherEntity>
                 ) {
+                    Toast.makeText(this@WriteActivity, "${gather.gatherTitle} 모임이 생성되었습니다.", Toast.LENGTH_SHORT).show()
                     Log.d("gather", "성공 $call, $response")
                     Log.d("gather", "$gather")
                 }
 
                 override fun onFailure(call: Call<GatherEntity>, t: Throwable) {
+                    Toast.makeText(this@WriteActivity, "${gather.gatherTitle} 모임에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     Log.d("gather", "실패 $t")
                     Log.d("gather", "실패 $call")
                 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.kakao.sdk.user.UserApiClient
@@ -23,14 +24,6 @@ import com.kosa.gather_e.model.entity.user.CurrUser
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
     private var userName = CurrUser.getUserName()
-    private var userImage = CurrUser.getProfileImgUrl()
-    private var scrollToBottom = false
-
-    fun scrollToBottom() {
-        if (!scrollToBottom) {
-            scrollToBottom = true
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -50,20 +43,13 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             is MyChatViewHolder -> holder.bind(chatItem)
             is YourChatViewHolder -> holder.bind(chatItem)
         }
-        if (scrollToBottom) {
-            holder.itemView.post {
-                holder.itemView.scrollTo(0, holder.itemView.bottom)
-            }
-            scrollToBottom = false
-        }
-    }
 
+    }
 
     override fun getItemViewType(position: Int): Int {
         val chatItem = getItem(position)
         return getItemViewTypeBySenderId(chatItem.senderId)
     }
-
 
     private fun getItemViewTypeBySenderId(senderId: String): Int {
         return if (senderId == userName) {
@@ -107,7 +93,14 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                 binding.messageTextView.visibility = View.GONE
                 Glide.with(binding.imagePreview)
                     .load(chatItem.image)
+                    .placeholder(R.drawable.loading_spinner)
+                    .thumbnail(0.1f)
+                    .apply(RequestOptions().override(300, 300)) // 이미지 크기 제한
+//                    .override(300, 300) // 원하는 크기로 조정
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
+                    .centerCrop()
                     .into(binding.imagePreview)
+
             } else {
                 binding.imagePreview.visibility = View.GONE
                 binding.messageTextView.visibility = View.VISIBLE
