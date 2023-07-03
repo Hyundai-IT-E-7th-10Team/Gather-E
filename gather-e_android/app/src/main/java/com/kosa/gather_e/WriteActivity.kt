@@ -23,6 +23,7 @@ import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
+import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 import com.kosa.gather_e.ui.chatlist.ChatListFragment
@@ -102,21 +103,17 @@ class WriteActivity : AppCompatActivity() {
 //            }
 
             // 완료 버튼 누르면 채팅방 생성
+            val myToken = CurrUser.getToken()
+
             chatRoom.userId = userName
             chatRoom.gatherTitle = binding.titleEditText.text.toString()
             chatRoom.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
             chatRoom.gatherLimit = binding.personnelNumberPicker.value
             chatRoom.key = System.currentTimeMillis()
+            chatRoom.participants = listOf(userName)
+            chatRoom.participantTokens = listOf(myToken)
 
-//            chatRoom = ChatListItem(
-//                userId = userName,
-//                gatherTitle = binding.titleEditText.text.toString(),
-//                gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString(),
-//                gatherLimit = binding.personnelNumberPicker.value,
-//                gatherCategory = "",
-//                gatherPlace="",
-//                key = System.currentTimeMillis()
-//            )
+
             val chatDB = Firebase.database.reference.child(DB_CHATS)
             val newChatRoomRef = chatDB.push()
 
@@ -170,6 +167,7 @@ class WriteActivity : AppCompatActivity() {
                             button.setOnClickListener {
                                 gather.categorySeq = category.categorySeq
                                 chatRoom.gatherCategory = category.categoryName
+                                chatRoom.gatherCategorySeq = category.categorySeq
                                 Log.d("Button Clicked", "Category ID: ${category.categoryName}")
                                 Log.d("Button Clicked", "Category ID: ${category.categorySeq}")
                             }

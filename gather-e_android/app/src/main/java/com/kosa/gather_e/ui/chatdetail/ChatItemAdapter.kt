@@ -24,10 +24,12 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
     private var userName = CurrUser.getUserName()
     private var userImage = CurrUser.getProfileImgUrl()
-    private var scrollToBottom = true
+    private var scrollToBottom = false
 
     fun scrollToBottom() {
-        scrollToBottom = true
+        if (!scrollToBottom) {
+            scrollToBottom = true
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -113,7 +115,6 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             }
         }
         init {
-            // 초기화 작업을 수행합니다.
             binding.imagePreview.visibility = View.GONE
             binding.messageTextView.visibility = View.VISIBLE
         }
@@ -148,7 +149,6 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             }
         }
         init {
-            // 초기화 작업을 수행합니다.
             binding.imagePreview.visibility = View.GONE
             binding.messageTextView.visibility = View.VISIBLE
         }

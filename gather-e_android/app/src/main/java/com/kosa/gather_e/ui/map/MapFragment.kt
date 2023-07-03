@@ -2,19 +2,16 @@ package com.kosa.gather_e.ui.map
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
-import com.kosa.gather_e.model.entity.map.CurrentRecruitGatherEntity
+import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
@@ -37,7 +34,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
 
-    private lateinit var currentRecruitGatherList : List<CurrentRecruitGatherEntity>
+    private lateinit var currentRecruitGatherList : List<GatherEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +65,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 초기화 버튼
         toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
-            val mapFragment = MapFragment()
+            val mapFragment = com.kosa.gather_e.ui.map.MapFragment()
             parentFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
             .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
@@ -106,11 +103,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .commit()
         }
 
-        val callGetCurrentRecruitGather: Call<List<CurrentRecruitGatherEntity>> = SpringRetrofitProvider.getRetrofit().getCurrentRecruitGather()
-        callGetCurrentRecruitGather.enqueue(object : Callback<List<CurrentRecruitGatherEntity>> {
+        val callGetCurrentRecruitGather: Call<List<GatherEntity>> = SpringRetrofitProvider.getRetrofit().getGather()
+        callGetCurrentRecruitGather.enqueue(object : Callback<List<GatherEntity>> {
             override fun onResponse(
-                call: Call<List<CurrentRecruitGatherEntity>>,
-                response: Response<List<CurrentRecruitGatherEntity>>
+                call: Call<List<GatherEntity>>,
+                response: Response<List<GatherEntity>>
             ) {
                 Log.d("gather", "$call, $response")
                 if (response.isSuccessful) {
@@ -120,7 +117,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-            override fun onFailure(call: Call<List<CurrentRecruitGatherEntity>>, t: Throwable) {
+            override fun onFailure(call: Call<List<GatherEntity>>, t: Throwable) {
                 Log.d("gather", "callgetCurrentRecruitGather 실패")
             }
         })
