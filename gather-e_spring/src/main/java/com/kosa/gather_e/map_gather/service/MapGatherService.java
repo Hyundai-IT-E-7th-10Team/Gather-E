@@ -1,22 +1,17 @@
+
+
 package com.kosa.gather_e.map_gather.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.kosa.gather_e.map_gather.dao.MapGatherDAO;
+import com.kosa.gather_e.gather.vo.GatherVO;
 import com.kosa.gather_e.map_gather.vo.CurrentRecruitGatherVO;
+import com.kosa.gather_e.map_gather.vo.PastMeetingGatherVO;
 
-import lombok.RequiredArgsConstructor;
-
-@Service
-@RequiredArgsConstructor
-public class MapGatherService implements MapGatherServiceImpl {
+public interface MapGatherService {
 	
-	private final MapGatherDAO mapGatherDAO;
+	List<CurrentRecruitGatherVO> getAllCurrentRecruitGatherVO();
 	
-	public List<CurrentRecruitGatherVO> getAllCurrentRecruitGatherVO() {
-		return mapGatherDAO.selectAllCurrentRecruitGather();
-	}
+	List<PastMeetingGatherVO> getAllPastMeetingGatherVO(long userSeq);
 
 }

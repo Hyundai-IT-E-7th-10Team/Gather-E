@@ -1,6 +1,7 @@
 package com.kosa.gather_e.model.entity.map
 
-data class CurrentRecruitGatherEntity(
+data class PastMeetingGatherEntity(
+
     var categorySeq: Int,
     var gatherTitle: String,
     var gatherDate: String,
@@ -10,5 +11,5 @@ data class CurrentRecruitGatherEntity(
     var gatherLongitude: Double,
     var gatherLocationName: String,
 
-    var cnt: Int
+    var userSeq : Long
 )
