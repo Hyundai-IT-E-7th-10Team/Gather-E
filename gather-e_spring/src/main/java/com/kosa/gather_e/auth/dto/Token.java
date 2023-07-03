@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class Token {
     String accessToken;
+    long userSeq;
 }

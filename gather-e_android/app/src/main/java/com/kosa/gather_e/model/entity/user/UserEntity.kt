@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class UserEntity(
     @SerializedName("userSeq")
-    val userSeq: Int,
+    val userSeq: Long,
     @SerializedName("userName")
     val userName: String,
     @SerializedName("userProfileImg")
