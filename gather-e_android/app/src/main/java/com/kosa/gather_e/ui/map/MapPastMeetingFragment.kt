@@ -79,6 +79,7 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+    
     @SuppressLint("ResourceAsColor")
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
