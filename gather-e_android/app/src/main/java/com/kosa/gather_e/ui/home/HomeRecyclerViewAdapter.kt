@@ -1,9 +1,11 @@
 package com.kosa.gather_e.ui.home
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kosa.gather_e.databinding.FragmentHomeBinding
 import com.kosa.gather_e.databinding.HomeCardBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 
@@ -21,6 +23,11 @@ class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.View
             binding.cardPlace.text = gather.gatherLocationName
             binding.cardCategory.text = gather.categoryName
             Glide.with(binding.root).load(gather.creatorImgUrl).into(binding.writerImg)
+            itemView.setOnClickListener{
+                Intent(it.context, PostDetailActivity::class.java).apply {
+                    putExtra("gather", gather)
+                }.run { it.context.startActivity(this) }
+            }
         }
     }
 

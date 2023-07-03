@@ -80,7 +80,7 @@ class SplashActivity : AppCompatActivity() {
                     }
                     else if (user != null) {
                         CurrUser.setCurrUser(user)
-                        CurrUser.setToken()
+                        CurrUser.setSeq(response.body()!!.userSeq)
                     }
                 }
                 intent = Intent(
