@@ -11,8 +11,8 @@ import android.widget.FrameLayout
 import androidx.annotation.UiThread
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapCurrentRecruiteBinding
-import com.kosa.gather_e.model.entity.gather.GatherEntity
-import com.kosa.gather_e.model.entity.map.CurrentRecruitGatherEntity
+import com.kosa.gather_e.databinding.FragmentMapPastMeetingBinding
+import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
@@ -28,19 +28,19 @@ import retrofit2.Response
 
 class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
 
-    lateinit var binding : FragmentMapCurrentRecruiteBinding
+    lateinit var binding : FragmentMapPastMeetingBinding
     private lateinit var frameLayoutMapPastMeetingFragment: FrameLayout
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
 
-    private lateinit var pastMeetingGatherList : List<GatherEntity>
+    private lateinit var pastMeetingGatherList : List<PastMeetingGatherEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMapCurrentRecruiteBinding.inflate(inflater, container, false)
+        binding = FragmentMapPastMeetingBinding.inflate(inflater, container, false)
         frameLayoutMapPastMeetingFragment = binding.root.findViewById(R.id.frameLayout_map_past_meeting)
         return binding.root
     }
@@ -79,6 +79,7 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+    
     @SuppressLint("ResourceAsColor")
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
@@ -98,11 +99,11 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isZoomControlEnabled = false
 
         // 내가 참여했던 모임 불러와서 마커 찍기
-        val callGetPastMeetingGather: Call<List<GatherEntity>> = SpringRetrofitProvider.getRetrofit().getGather()
-        callGetPastMeetingGather.enqueue(object : Callback<List<GatherEntity>> {
+        val callGetPastMeetingGather: Call<List<PastMeetingGatherEntity>> = SpringRetrofitProvider.getRetrofit().getPastMeetingGather()
+        callGetPastMeetingGather.enqueue(object : Callback<List<PastMeetingGatherEntity>> {
             override fun onResponse(
-                call: Call<List<GatherEntity>>,
-                response: Response<List<GatherEntity>>
+                call: Call<List<PastMeetingGatherEntity>>,
+                response: Response<List<PastMeetingGatherEntity>>
             ) {
                 Log.d("gather", "$call, $response")
                 if (response.isSuccessful) {
@@ -153,7 +154,7 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-            override fun onFailure(call: Call<List<GatherEntity>>, t: Throwable) {
+            override fun onFailure(call: Call<List<PastMeetingGatherEntity>>, t: Throwable) {
                 Log.d("gather", "callGetPastMeetingGather 실패")
             }
         })

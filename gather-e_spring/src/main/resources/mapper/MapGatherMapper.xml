@@ -24,9 +24,19 @@
 		ON
 		   tg.GATHER_SEQ = tug.gather_seq
 		WHERE
-		   TO_DATE(GATHER_DATE , 'YYYY/MM/DD HH24:MI') > SYSDATE
+		   TO_DATE(GATHER_DATE , 'YYYY/MM/DD HH24:MI') > SYSDATE 
+		   AND
+		   tg.
 	]]>
     </select>
-
-
-</mapper>
+    
+    <select id="selectAllPastMeetingGather" resultType="PastMeetingGatherVO">
+	<![CDATA[
+	    SELECT tg.*, tug.user_seq
+		FROM tb_gather tg
+		JOIN tb_user_gather tug
+		ON tg.gather_seq = tug.gather_seq AND tug.user_seq = #{userSeq}
+		
+	]]>
+	</select>
+	</mapper>
