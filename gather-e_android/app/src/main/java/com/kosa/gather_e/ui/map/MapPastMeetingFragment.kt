@@ -79,7 +79,7 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-    
+
     @SuppressLint("ResourceAsColor")
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
@@ -127,26 +127,26 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
 
 
                             when (pastMeetingGatherList[i].categorySeq) {
-                                1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_1_football)
-                                2 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_2_tennis)
-                                3 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_3_golf)
-                                4 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_4_basketball)
-                                5 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_5_hiking)
-                                6 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_6_shuttlecock)
-                                7 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_7_volleyball)
-                                8 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_8_bowling)
-                                9 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_9_squash)
-                                10 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_10_pingpong)
-                                11 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_11_swimmig)
-                                12 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_12_riding)
-                                13 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_13_skate)
-                                14 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_14_cycling)
-                                15 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_15_yoga)
-                                16 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_16_pilates)
-                                17 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_17_climbing)
-                                18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_18_billiard)
-                                19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
-                                20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
+                                1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p1_football)
+                                2 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p2_tennis)
+                                3 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p3_golf)
+                                4 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p4_basketball)
+                                5 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p5_hiking)
+                                6 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p6_shuttlecock)
+                                7 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p7_volleyball)
+                                8 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p8_bowling)
+                                9 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p9_squash)
+                                10 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p10_pingpong)
+                                11 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p11_swimmig)
+                                12 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p12_riding)
+                                13 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p13_skate)
+                                14 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p14_cycling)
+                                15 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p15_yoga)
+                                16 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p16_pilates)
+                                17 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p17_climbing)
+                                18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p18_billiard)
+                                19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p19_dancing)
+                                20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p20_boxing)
                             }
                             marker.map = naverMap
                         }
