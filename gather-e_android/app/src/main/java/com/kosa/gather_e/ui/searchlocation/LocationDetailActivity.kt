@@ -17,6 +17,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 
 class LocationDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +61,8 @@ class LocationDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         if (selectedLocation != null) {
 
         val marker = Marker()
+        //marker.icon = OverlayImage.fromResource(R.drawable.ic_map_mar)
+
         val locationLongStr = selectedLocation.x
         val locationLatStr = selectedLocation.y
         val locationLong = locationLongStr.toDoubleOrNull() ?: 0.0
