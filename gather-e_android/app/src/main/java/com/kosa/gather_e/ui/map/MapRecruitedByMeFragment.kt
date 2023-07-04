@@ -13,8 +13,8 @@ import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapPastMeetingBinding
 import com.kosa.gather_e.databinding.FragmentMapRecruitedByMeBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
-import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import com.kosa.gather_e.util.CurrUser
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate

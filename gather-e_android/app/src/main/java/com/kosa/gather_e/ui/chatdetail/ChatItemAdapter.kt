@@ -8,13 +8,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
 import com.kosa.gather_e.databinding.ItemChatYourBinding
 import com.kosa.gather_e.util.CurrUser
+import java.io.File
 
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
@@ -80,18 +87,20 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
             Glide.with(itemView)
                 .load(chatItem.senderImage)
+//                .override(30, 40) // 원하는 크기로 조정
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.userImage)
 
             if (!chatItem.image.isBlank()) {
                 binding.imagePreview.visibility = View.VISIBLE
                 binding.messageTextView.visibility = View.GONE
+                binding.imageDownload.visibility = View.VISIBLE
                 Glide.with(binding.imagePreview)
                     .load(chatItem.image)
                     .placeholder(R.drawable.loading_spinner)
                     .thumbnail(0.1f)
-                    .apply(RequestOptions().override(300, 300)) // 이미지 크기 제한
-//                    .override(300, 300) // 원하는 크기로 조정
+                    .override(300, 400) // 원하는 크기로 조정
+                    .transform(CenterCrop(),RoundedCorners(30))
                     .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
                     .centerCrop()
                     .into(binding.imagePreview)
@@ -99,10 +108,17 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             } else {
                 binding.imagePreview.visibility = View.GONE
                 binding.messageTextView.visibility = View.VISIBLE
+                binding.imageDownload.visibility = View.GONE
 
+            }
+
+            binding.imageDownload.setOnClickListener {
+                // 이미지 다운로드
+//                downloadImage(chatItem.image)
             }
         }
         init {
+            binding.imageDownload.visibility = View.GONE
             binding.imagePreview.visibility = View.GONE
             binding.messageTextView.visibility = View.VISIBLE
         }
@@ -121,6 +137,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
             Glide.with(itemView)
                 .load(chatItem.senderImage)
+//                .override(90, 120) // 원하는 크기로 조정
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.userImage)
 
@@ -129,6 +146,12 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                 binding.messageTextView.visibility = View.GONE
                 Glide.with(binding.imagePreview)
                     .load(chatItem.image)
+                    .placeholder(R.drawable.loading_spinner)
+                    .thumbnail(0.1f)
+                    .override(300, 400) // 원하는 크기로 조정
+                    .transform(CenterCrop(),RoundedCorners(30))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
+                    .centerCrop()
                     .into(binding.imagePreview)
             } else {
                 binding.imagePreview.visibility = View.GONE
@@ -143,4 +166,6 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
     }
 
 }
+
+
 

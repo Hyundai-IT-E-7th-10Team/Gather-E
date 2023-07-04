@@ -77,8 +77,8 @@ class ChatRoomActivity : AppCompatActivity() {
         val gatherDate = intent.getStringExtra("gatherDate")
         val gatherLimit = intent.getIntExtra("gatherLimit",-1)
         val gatherCategortSeq = intent.getIntExtra("gatherCategorySeq",-1)
-        val participants: List<String> = intent.getStringArrayListExtra("gatherParticipants") ?: emptyList()
-        val participantTokens: List<String> = intent.getStringArrayListExtra("gatherParticipantTokens") ?: emptyList()
+        val participants: MutableList<String> = intent.getStringArrayListExtra("gatherParticipants") ?: mutableListOf()
+        val participantTokens: MutableList<String> = intent.getStringArrayListExtra("gatherParticipantTokens") ?: mutableListOf()
         val gatherPlace = intent.getStringExtra("gatherPlace")
         val gatherCategory = intent.getStringExtra("gatherCategory")
         Log.d("gather","Recieved userTokens :: ${participantTokens}")
@@ -218,9 +218,11 @@ class ChatRoomActivity : AppCompatActivity() {
 
             binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
 
-            var userTokens: MutableList<String> = participantTokens.toMutableList()
-            userTokens.remove(CurrUser.getToken())
+            var userTokens: MutableList<String> = participantTokens
+            Log.d("gather","삭제 전 userTOkens : ${userTokens}")
 
+            userTokens.remove(CurrUser.getToken())
+            Log.d("gather","삭제 후 userTOkens : ${userTokens}")
             // 알림 데이터 생성
             val pushNotificationData = PushNotificationData(
                 type = "NORMAL",

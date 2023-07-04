@@ -17,7 +17,6 @@ import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
-import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
