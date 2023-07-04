@@ -15,5 +15,4 @@ public class PastMeetingGatherVO {
     private double gatherLatitude;
     private double gatherLongitude;
     private String gatherLocationName;
-    
 }
