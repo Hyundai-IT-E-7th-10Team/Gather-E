@@ -11,7 +11,7 @@
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
-      android:background="@color/light_gray"
+      android:background="@color/light_purple"
       android:elevation="10dp"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +26,7 @@
       android:contentDescription="Cancel Button"
       android:padding="10dp"
       android:src="@drawable/ic_before"
-      android:tint="@color/purple"
+      android:tint="@color/white"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@id/toolbar" />
 
@@ -37,40 +37,120 @@
       android:layout_width="match_parent"
       android:layout_height="0dp"
       app:layout_constraintTop_toBottomOf="@id/toolbar"
-      app:layout_constraintBottom_toTopOf="@id/textContainer" />
+      app:layout_constraintBottom_toTopOf="@id/detailContainer" />
+
 
   <LinearLayout
-      android:id="@+id/textContainer"
+      android:id="@+id/detailContainer"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="220dp"
       android:orientation="vertical"
-      android:background="@color/white"
-      android:elevation="10dp"
-      android:padding="16dp"
+      android:padding="8dp"
       app:layout_constraintBottom_toBottomOf="parent">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/category_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Text 1"
-        android:textSize="16sp" />
+        android:hint="스포츠, 레저>스포츠시설>헬스클럽"
+        android:textSize="12dp"
+        android:layout_marginStart="35dp"/>
 
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Text 2"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        android:orientation="horizontal"
+        android:paddingVertical="5dp">
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="10dp"
+          android:src="@drawable/ic_map_marker"
+          android:tint="@color/light_purple" />
+
+      <TextView
+          android:id="@+id/place_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="20dp"
+          android:hint="광화문 운동장"
+          android:textSize="15dp"
+          android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_map"
+          android:tint="@color/light_purple"
+          android:layout_marginEnd="10dp"
+          />
+
+      <TextView
+          android:id="@+id/road_address_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="서울 종로구 새문안로 3길 23"
+          android:textSize="13dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+      <ImageButton
+          android:id="@+id/phone_call_button"
+          android:src="@drawable/ic_phone"
+          android:tint="@color/light_purple"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginTop="10dp"
+          android:layout_marginBottom="5dp"
+          android:background="@drawable/edittext_background"/>
+
+      <ImageButton
+          android:id="@+id/place_url_button"
+          android:src="@drawable/ic_internet"
+          android:tint="@color/light_purple"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginTop="10dp"
+          android:layout_marginBottom="5dp"
+          android:background="@drawable/edittext_background"/>
+
+    </LinearLayout>
+
+
+
+
 
     <Button
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="이곳으로 정하기"
-        android:layout_marginTop="16dp" />
+        android:background="@drawable/purple_write_button"/>
 
   </LinearLayout>
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

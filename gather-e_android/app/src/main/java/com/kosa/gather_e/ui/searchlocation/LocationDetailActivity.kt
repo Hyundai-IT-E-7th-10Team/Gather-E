@@ -65,6 +65,7 @@ class LocationDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val locationLong = locationLongStr.toDoubleOrNull() ?: 0.0
         val locationLat = locationLatStr.toDoubleOrNull() ?: 0.0
 
+
         // 마커 찍은 곳으로 이동
         val cameraUpdate = CameraUpdate.scrollTo(LatLng(locationLat, locationLong))
             .animate(CameraAnimation.Fly, 1000)

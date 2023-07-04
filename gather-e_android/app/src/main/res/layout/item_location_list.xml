@@ -5,31 +5,73 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    app:cardElevation="5dp"
+    app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="5dp">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
-
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/category_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="스포츠, 레저>스포츠시설>헬스클럽"
+            android:textSize="12dp"
+            android:layout_marginStart="35dp"/>
 
-        <TextView
-            android:id="@+id/place_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="5dp">
 
-        <TextView
-            android:id="@+id/road_address_name"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_map_marker"
+                android:tint="@color/light_purple" />
+
+            <TextView
+                android:id="@+id/place_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:hint="광화문 운동장"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_map"
+                android:tint="@color/light_purple"
+                android:layout_marginEnd="10dp"
+                />
+
+            <TextView
+                android:id="@+id/road_address_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="서울 종로구 새문안로 3길 23"
+                android:textSize="13dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

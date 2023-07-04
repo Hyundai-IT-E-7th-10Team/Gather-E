@@ -28,7 +28,7 @@ class SearchLocationActivity : AppCompatActivity(), OnLocationSelectedListener {
     private lateinit var binding: ActivitySearchLocationBinding
     private lateinit var apiKey: String
     private lateinit var query: String
-    private var radius: Int = 500
+    private var radius: Int = 20000
     private var sort: String = "distance"
 
     override fun onCreate(savedInstanceState: Bundle?) {
