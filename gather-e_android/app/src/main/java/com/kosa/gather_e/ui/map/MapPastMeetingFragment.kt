@@ -1,5 +1,6 @@
 package com.kosa.gather_e.ui.map
 
+import GatherInfoDialogFragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,8 @@ import com.kosa.gather_e.databinding.FragmentMapPastMeetingBinding
 import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
@@ -80,7 +83,6 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    @SuppressLint("ResourceAsColor")
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
 
@@ -115,9 +117,6 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
                         for (i in pastMeetingGatherList.indices) {
                             val marker = Marker()
 
-                            //           marker.setOnClickListener { overlay ->
-                            //
-                            //            }
                             marker.position = LatLng(
                                 pastMeetingGatherList[i].gatherLatitude,
                                 pastMeetingGatherList[i].gatherLongitude
@@ -147,6 +146,15 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
                                 18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p18_billiard)
                                 19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p19_dancing)
                                 20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p20_boxing)
+                            }
+
+                            marker.setOnClickListener { it ->
+                                naverMap.moveCamera(
+                                    CameraUpdate.scrollTo(marker.position).animate(
+                                        CameraAnimation.Easing))
+//                                val dialog = GatherInfoDialogFragment(pastMeetingGatherList[i])
+//                                dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+                                true
                             }
                             marker.map = naverMap
                         }

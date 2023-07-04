@@ -1,5 +1,8 @@
 package com.kosa.gather_e.map_gather.vo;
 
+import lombok.Data;
+
+@Data
 public class PastMeetingGatherVO {
 	// TB_GATHER
     private long gatherSeq;
@@ -13,6 +16,4 @@ public class PastMeetingGatherVO {
     private double gatherLongitude;
     private String gatherLocationName;
     
-    // TB_USER_GATHER
-    private long userSeq;
 }
