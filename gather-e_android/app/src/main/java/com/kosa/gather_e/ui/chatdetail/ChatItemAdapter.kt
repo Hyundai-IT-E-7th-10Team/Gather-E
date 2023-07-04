@@ -1,27 +1,34 @@
 package com.kosa.gather_e.ui.chatdetail
 
+import android.content.ContentValues
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.kosa.gather_e.R
-import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.databinding.ItemChatMineBinding
 import com.kosa.gather_e.databinding.ItemChatYourBinding
+import com.kosa.gather_e.model.entity.chat.ChatItem
 import com.kosa.gather_e.util.CurrUser
-import java.io.File
+import java.io.IOException
 
 class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil) {
 
@@ -114,9 +121,10 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
             binding.imageDownload.setOnClickListener {
                 // 이미지 다운로드
-//                downloadImage(chatItem.image)
+                saveImageToGallery(itemView.context,chatItem.image,chatItem.image)
             }
         }
+
         init {
             binding.imageDownload.visibility = View.GONE
             binding.imagePreview.visibility = View.GONE
@@ -144,6 +152,7 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             if (!chatItem.image.isBlank()) {
                 binding.imagePreview.visibility = View.VISIBLE
                 binding.messageTextView.visibility = View.GONE
+                binding.imageDownload.visibility = View.VISIBLE
                 Glide.with(binding.imagePreview)
                     .load(chatItem.image)
                     .placeholder(R.drawable.loading_spinner)
@@ -156,15 +165,64 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             } else {
                 binding.imagePreview.visibility = View.GONE
                 binding.messageTextView.visibility = View.VISIBLE
+                binding.imageDownload.visibility = View.GONE
 
+            }
+            binding.imageDownload.setOnClickListener {
+                // 이미지 다운로드
+                saveImageToGallery(itemView.context,chatItem.image,chatItem.image)
             }
         }
         init {
+            binding.imageDownload.visibility = View.GONE
             binding.imagePreview.visibility = View.GONE
             binding.messageTextView.visibility = View.VISIBLE
         }
     }
 
+    private fun saveImageToGallery(context: Context, imageUrl: String, title: String) {
+        Glide.with(context)
+            .asBitmap()
+            .load(imageUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    // Bitmap 이미지가 준비되면 갤러리에 저장
+                    saveBitmapToGallery(context, resource, title)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+            })
+    }
+
+    // Bitmap 이미지를 갤러리에 저장하는 함수
+    private fun saveBitmapToGallery(context: Context, bitmap: Bitmap, title: String) {
+        val displayName = "$title.jpg"
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, displayName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
+            }
+        }
+
+        val resolver = context.contentResolver
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        uri?.let { imageUri ->
+            try {
+                resolver.openOutputStream(imageUri)?.use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    outputStream.flush()
+                }
+                Toast.makeText(context, "이미지가 갤러리에 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                Toast.makeText(context, "이미지 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+    }
 }
 
 
