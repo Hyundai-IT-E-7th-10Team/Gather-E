@@ -8,24 +8,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -36,23 +25,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.DBKey.Companion.CHILD_CHAT
-import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
-import com.kosa.gather_e.model.entity.chat.ChatListItem
-import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.notification.PushNotificationData
 import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
 import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
 import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
-import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,8 +45,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.ArrayList
 import java.util.Date
 import java.util.Locale
 
@@ -99,13 +80,15 @@ class ChatRoomActivity : AppCompatActivity() {
         val gatherPlace = intent.getStringExtra("gatherPlace")
         val gatherCategory = intent.getStringExtra("gatherCategory")
         Log.d("gather","Recieved userTokens :: ${participantTokens}")
-
+        var participantsCnt:Int = participants.size
 
 
 
         binding.chatRoomTitleTextView.text = gatherTitle
         binding.dateTextView.text = gatherDate
-        binding.participantsTextView.text = gatherLimit.toString()
+        binding.participants.text = gatherLimit.toString()
+        binding.currentParticipants.text = participantsCnt.toString()
+
         var categoryImage = R.drawable.ic_1_football
         when (gatherCategortSeq) {
             1 -> categoryImage = R.drawable.ic_1_football
@@ -168,59 +151,28 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.chatRecyclerView.adapter = adapter
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
-//        binding.chatRecyclerView.post {
-//            binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
-//        }
-//        adapter.scrollToBottom()
 
         binding.btnSelectImage.setOnClickListener {
             Log.d("Gatherne", "${Build.VERSION.RELEASE}")
 
-            // 안드로이드 버전 13 미만의 코드를 작성해야함
-            // READ_EXTERNAL_STORAGE
-            if (Build.VERSION.SDK_INT < 33) {
-                when {
-                    ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                        startContentProvider()
-                    }
-
-                    shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                        showPermissionContextPopup()
-                    }
-
-                    else -> {
-                        requestPermissions(
-                            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                            1010
-                        )
-                    }
+            val permission =
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                } else {
+                    android.Manifest.permission.READ_MEDIA_IMAGES
                 }
-            } else {
-                when {
-                    ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.READ_MEDIA_IMAGES
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                        startContentProvider()
-                    }
 
-                    shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
-                        showPermissionContextPopup()
-                    }
-
-                    else -> {
-                        requestPermissions(
-                            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
-                            1010
-                        )
-                    }
-
+            when {
+                ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED -> {
+                    startContentProvider()
+                }
+                shouldShowRequestPermissionRationale(permission) -> {
+                    showPermissionContextPopup()
+                }
+                else -> {
+                    requestPermissions(arrayOf(permission), 1010)
                 }
             }
-
         }
 
 
@@ -231,7 +183,6 @@ class ChatRoomActivity : AppCompatActivity() {
             if (selectedImageUri != null) {
                 showProgressBar()
                 val photoUri = selectedImageUri ?: return@setOnClickListener
-
                 // 코루틴 시작
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
@@ -247,15 +198,11 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
             // 이미지 X, 텍스트 O
             } else {
-                val chatItem =
-                    ChatItem(senderId = userName, senderImage = userImage, message = message, image = "", sendTime = getCurrentTime(), viewType = 0)
-                if (message.isBlank()) {
-                    // Show an error message or handle it as desired
-                    Toast.makeText(this, "메시지를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
+                // 코루틴 시작
+                CoroutineScope(Dispatchers.Main).launch {
+                    sendMessageWithoutImage(message)
+                    Log.d("Gatherne", "No photoUri")
                 }
-                chatDB?.push()?.setValue(chatItem)
-                Log.d("Gatherne", "No photoUri")
 
             }
             selectedImageUri = null
@@ -269,43 +216,38 @@ class ChatRoomActivity : AppCompatActivity() {
 
             binding.chatRecyclerView.smoothScrollToPosition(adapter.itemCount)
 
-            // ChatRoomList에 사용자의 토큰(token) 값을 저장하는 작업
-            // 예시: ChatRoomList에 있는 모든 사용자의 토큰을 저장하는 리스트를 생성합니다.
-            val userTokens = participantTokens
-            Log.d("gather","userTokens :: ${userTokens}")
+            var userTokens: MutableList<String> = participantTokens.toMutableList()
+            userTokens.remove(CurrUser.getToken())
 
-            // 각 사용자에게 알림을 보내는 작업
-            for (token in userTokens) {
-                val pushNotificationData = PushNotificationData(
-                    type = "NORMAL",
-                    title = gatherTitle!!,
-                    message = message
-                )
+            // 알림 데이터 생성
+            val pushNotificationData = PushNotificationData(
+                type = "NORMAL",
+                title = gatherTitle!!,
+                message = message
+            )
 
-                val pushNotificationEntity = PushNotificationEntity(
-                    to = token,
-                    priority = "high",
-                    data = pushNotificationData
-                )
+            // 알림 요청 데이터 생성
+            val pushNotificationEntity = PushNotificationEntity(
+                registration_ids = userTokens,
+                priority = "high",
+                data = pushNotificationData
+            )
 
-                val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
-                callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
-                    override fun onResponse(
-                        call: Call<PushNotificationResponse>,
-                        response: Response<PushNotificationResponse>
-                    ) {
-                        Log.d("gather", "성공 $call, $response")
-                        Log.d("gather", "$pushNotificationEntity")
-                    }
+            // 알림 요청 전송
+            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+                override fun onResponse(call: Call<PushNotificationResponse>, response: Response<PushNotificationResponse>) {
+                    Log.d("gather", "성공 $call, $response")
+                    Log.d("gather", "$pushNotificationEntity")
+                }
 
-                    override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
-                        Log.d("gather", "실패 $t")
-                        Log.d("gather", "실패 $call")
-                    }
-                })
-            }
+                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+                    Log.d("gather", "실패 $t")
+                    Log.d("gather", "실패 $call")
+                }
+            })
+
         }
-
 
     }
 
@@ -378,7 +320,6 @@ class ChatRoomActivity : AppCompatActivity() {
             viewType = 0
         )
         chatDB?.push()?.setValue(chatItem)
-        // 나머지 코드 작성
     }
 
 
