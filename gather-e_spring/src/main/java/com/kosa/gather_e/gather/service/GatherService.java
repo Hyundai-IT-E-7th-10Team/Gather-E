@@ -48,4 +48,7 @@ public class GatherService implements GatherServiceImpl{
         return gatherVO;
     }
 
+    public List<GatherVO> getGatherByCategory(long categorySeq) {
+        return gatherDAO.selectAllGatherByCategorySeq(categorySeq);
+    }
 }

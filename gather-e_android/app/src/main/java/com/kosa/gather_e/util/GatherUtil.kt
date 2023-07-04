@@ -10,6 +10,9 @@ object GatherUtil {
         val format = SimpleDateFormat("yyyy/MM/dd HH:mm")
         val dateTime = format.parse(gather.gatherDate)
         val now = Date()
-        return gather.gatherUserCnt!! < gather.gatherLimit && now.before(dateTime)
+        return now.before(dateTime)
+    }
+    fun isFull(gather: GatherEntity): Boolean {
+        return gather.gatherUserCnt!! >= gather.gatherLimit
     }
 }

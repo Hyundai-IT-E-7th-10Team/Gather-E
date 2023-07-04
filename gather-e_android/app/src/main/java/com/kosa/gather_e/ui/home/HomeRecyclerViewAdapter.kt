@@ -17,7 +17,7 @@ class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.View
     inner class ViewHolder(private val binding: HomeCardBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(gather: GatherEntity) {
             binding.cardCnt.text = gather.gatherUserCnt.toString().plus("/").plus(gather.gatherLimit.toString())
-            binding.cardStatus.text = if (GatherUtil.isGathering(gather)) {"모집중"}else{"모집 종료"}
+            binding.cardStatus.text = if (GatherUtil.isGathering(gather) && !GatherUtil.isFull(gather)) {"모집중"}else{"모집 종료"}
             binding.cardTitle.text = gather.gatherTitle
             binding.writer.text = gather.creatorName
             binding.itemTime.text = gather.gatherDate

@@ -21,3 +21,8 @@ mybatis:
 
 jwt:
   secret: thisSecretCodeisGoingToBeUsedOnlyForDevButthisIsTooShort
+
+logging:
+  level:
+    root: info
+    com.kosa.gather_e: debug

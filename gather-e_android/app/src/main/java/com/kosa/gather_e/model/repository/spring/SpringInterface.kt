@@ -25,6 +25,8 @@ interface SpringInterface {
     fun createGather(@Body gather: GatherEntity) : Call<GatherEntity>
     @GET("gather/{gatherSeq}")
     fun getGatherDetail(@Path("gatherSeq") gatherSeq: Int) : Call<GatherEntity>
+    @GET("gather/{categorySeq}/category")
+    fun getGatherByCategory(@Path("categorySeq") categorySeq: Long): Call<List<GatherEntity>>
     @GET("user_gather/{gatherSeq}")
     fun getGatherUsers(@Path("gatherSeq") gatherSeq: Int) : Call<List<UserEntity>>
     @GET("gather")
