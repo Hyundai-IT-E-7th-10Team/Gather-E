@@ -30,6 +30,11 @@
             android:src="@drawable/ic_locationbutton"
             android:background="@drawable/circle_background"/>
 
+        <FrameLayout
+            android:id="@+id/map_fragment"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

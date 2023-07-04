@@ -5,14 +5,22 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.user.UserApiClient
@@ -25,6 +33,7 @@ import com.kosa.gather_e.model.entity.location.SearchLocationEntity
 import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
+import com.naver.maps.map.overlay.OverlayImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -154,18 +163,56 @@ class WriteActivity : AppCompatActivity() {
                         val buttonContainer: LinearLayout = findViewById(R.id.buttonContainer)
 
                         for (category in categories) {
-                            val button = Button(this@WriteActivity)
-                            button.text = category.categoryName
-                            button.id = category.categorySeq
+                            val layout = LinearLayout(this@WriteActivity)
+                            layout.orientation = LinearLayout.VERTICAL
+                            layout.id = category.categorySeq
+                            layout.gravity = Gravity.CENTER_HORIZONTAL
 
-                            buttonContainer.addView(button)
+                            val imageView = ImageView(this@WriteActivity)
+                            val imageLayoutParams = LinearLayout.LayoutParams(150, 150)  // Adjust width and height
+                            imageView.layoutParams = imageLayoutParams
+                            when (category.categorySeq) {
+                                1 -> imageView.setImageResource(R.drawable.ic_1_football)
+                                2 -> imageView.setImageResource(R.drawable.ic_2_tennis)
+                                3 -> imageView.setImageResource(R.drawable.ic_3_golf)
+                                4 -> imageView.setImageResource(R.drawable.ic_4_basketball)
+                                5 -> imageView.setImageResource(R.drawable.ic_5_hiking)
+                                6 -> imageView.setImageResource(R.drawable.ic_6_shuttlecock)
+                                7 -> imageView.setImageResource(R.drawable.ic_7_volleyball)
+                                8 -> imageView.setImageResource(R.drawable.ic_8_bowling)
+                                9 -> imageView.setImageResource(R.drawable.ic_9_squash)
+                                10 -> imageView.setImageResource(R.drawable.ic_10_pingpong)
+                                11 -> imageView.setImageResource(R.drawable.ic_11_swimmig)
+                                12 -> imageView.setImageResource(R.drawable.ic_12_riding)
+                                13 -> imageView.setImageResource(R.drawable.ic_13_skate)
+                                14 -> imageView.setImageResource(R.drawable.ic_14_cycling)
+                                15 -> imageView.setImageResource(R.drawable.ic_15_yoga)
+                                16 -> imageView.setImageResource(R.drawable.ic_16_pilates)
+                                17 -> imageView.setImageResource(R.drawable.ic_17_climbing)
+                                18 -> imageView.setImageResource(R.drawable.ic_18_billiard)
+                                19 -> imageView.setImageResource(R.drawable.ic_19_dancing)
+                                20 -> imageView.setImageResource(R.drawable.ic_20_boxing)
 
-                            button.setOnClickListener {
+                            }
+
+                            val textView = TextView(this@WriteActivity)
+                            textView.text = category.categoryName
+                            textView.setTextColor(Color.GRAY)
+                            textView.textSize = 13f
+                            textView.gravity = Gravity.CENTER
+
+                            layout.addView(imageView)
+                            layout.addView(textView)
+
+                            buttonContainer.addView(layout)
+
+                            layout.setOnClickListener {
                                 gather.categorySeq = category.categorySeq
                                 chatRoom.gatherCategory = category.categoryName
                                 chatRoom.gatherCategorySeq = category.categorySeq
                                 Log.d("Button Clicked", "Category ID: ${category.categoryName}")
                                 Log.d("Button Clicked", "Category ID: ${category.categorySeq}")
+                                layout.setBackgroundColor(Color.GREEN)
                             }
                         }
                     }

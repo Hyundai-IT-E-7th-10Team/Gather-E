@@ -9,7 +9,8 @@ data class SearchLocationEntity(
     val y: String,
     val distance: String,
     val phone: String,
-    val place_url: String
+    val place_url: String,
+    val category_name: String
 ) : Serializable // 객체를 직렬화 하여 Intent로 전달할 수 있게 함!
 
 data class LocationApiResponse(
