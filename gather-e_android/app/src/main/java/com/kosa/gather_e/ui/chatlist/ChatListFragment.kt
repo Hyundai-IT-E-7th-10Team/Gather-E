@@ -14,7 +14,7 @@ import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.FragmentChatListBinding
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 
 
@@ -23,8 +23,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     private var binding: FragmentChatListBinding? = null
     private lateinit var chatListAdapter: ChatListAdapter
     private val chatRoomList = mutableListOf<ChatListItem>()
-
-    private val user: String = "user01"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,11 +54,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
         fragmentChatlistBinding.chatListRecyclerView.adapter = chatListAdapter
         fragmentChatlistBinding.chatListRecyclerView.layoutManager = LinearLayoutManager(context)
-
-
-        if (user == null) {
-            return
-        }
 
         val chatDB = Firebase.database.reference.child(DB_CHATS)
 

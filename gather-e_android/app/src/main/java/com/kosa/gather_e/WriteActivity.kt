@@ -30,10 +30,8 @@ import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
-import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
-import com.kosa.gather_e.ui.chatlist.ChatListFragment
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import com.naver.maps.map.overlay.OverlayImage
 import retrofit2.Call
@@ -118,8 +116,8 @@ class WriteActivity : AppCompatActivity() {
             chatRoom.gatherDate = binding.dateText.text.toString() + " " + binding.timeText.text.toString()
             chatRoom.gatherLimit = binding.personnelNumberPicker.value
             chatRoom.key = System.currentTimeMillis()
-            chatRoom.participants = listOf(userName)
-            chatRoom.participantTokens = listOf(myToken)
+            chatRoom.participants = mutableListOf(userName)
+            chatRoom.participantTokens = mutableListOf(myToken)
 
 
             val chatDB = Firebase.database.reference.child(DB_CHATS)
@@ -130,9 +128,6 @@ class WriteActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { error ->
                 }
-//            val intent = Intent(this, ChatRoomActivity::class.java)
-//            intent.putExtra("chatKey", chatRoom.key)
-//            startActivity(intent)
 
             val callCreateGather: Call<GatherEntity> = SpringRetrofitProvider.getRetrofit().createGather(gather = gather)
             callCreateGather.enqueue(object : Callback<GatherEntity> {

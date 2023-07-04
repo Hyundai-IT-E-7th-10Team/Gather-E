@@ -24,4 +24,6 @@ public interface GatherDAO {
     void insertGatherImg(GatherImgVO gatherImgVO);
 
     void deleteGatherImageByGatherSeq(long gatherSeq);
+
+    List<GatherVO> selectAllGatherByCategorySeq(long categorySeq);
 }

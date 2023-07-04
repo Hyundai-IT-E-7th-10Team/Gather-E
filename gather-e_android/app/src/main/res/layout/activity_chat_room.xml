@@ -16,7 +16,11 @@ android:background="@color/white">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/purple"
+        android:indeterminateTintMode="src_in"
+        />
 
     <LinearLayout
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +36,6 @@ android:background="@color/white">
             android:id="@+id/imgbtn_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
             app:tint="@color/white"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/btn_quit" />
@@ -47,7 +49,7 @@ android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:orientation="vertical">
 
@@ -57,7 +59,8 @@ android:background="@color/white">
                     android:layout_height="wrap_content"
                     android:text="Chat Room Title"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
+                    android:layout_weight="1"
                     android:textStyle="bold" />
 
                 <TextView
@@ -67,7 +70,8 @@ android:background="@color/white">
                     android:text="June 26, 2023"
                     android:layout_marginTop="10dp"
                     android:textColor="@android:color/black"
-                    android:textSize="12sp" />
+                    android:textSize="14sp"
+                    />
 
             </LinearLayout>
 
@@ -76,15 +80,46 @@ android:background="@color/white">
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_people"
+            android:layout_marginEnd="5dp"
+            >
+        </ImageView>
             <TextView
-                android:id="@+id/participantsTextView"
+                android:id="@+id/currentParticipants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="3"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="/"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/participants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 android:layout_gravity="bottom|end"
-                android:text="3 Participants"
+                android:text="3"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="명"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"/>
 
         </LinearLayout>
     <EditText
@@ -97,6 +132,7 @@ android:background="@color/white">
         android:paddingRight="20dp"
         android:textColor="@color/black"
         android:textSize="18dp"
+
         app:layout_constraintStart_toEndOf="@+id/btnSelectImage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
@@ -105,7 +141,7 @@ android:background="@color/white">
 
         <ImageView
             android:id="@+id/btnSelectImage"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,6 +149,8 @@ android:background="@color/white">
             app:layout_constraintEnd_toStartOf="@id/messageEditText"
             app:layout_constraintTop_toTopOf="@id/messageEditText"
             app:srcCompat="@drawable/baseline_image_24"
+
+            android:layout_marginStart="10dp"
             />
         <ImageView
             android:id="@+id/selectedImage"
@@ -135,12 +173,14 @@ android:background="@color/white">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:text="전송"
+        android:src="@drawable/send"
         android:textColor="@color/black"
+        android:layout_marginEnd="20dp"
         app:backgroundTint="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -162,4 +202,18 @@ android:background="@color/white">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatHead"
         app:layout_constraintVertical_bias="1.0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/purple"
+        android:indeterminateTintMode="src_in"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

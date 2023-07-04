@@ -25,7 +25,9 @@ class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) : ListAdapter<C
 
             binding.chatRoomTitleTextView.text = chatListItem.gatherTitle
             binding.dateTextView.text = chatListItem.gatherDate
-            binding.participantsTextView.text = chatListItem.gatherLimit.toString()
+            binding.participants.text = chatListItem.gatherLimit.toString()
+            binding.currentParticipants.text = chatListItem.participants.size.toString()
+
             Log.d("gather","카테고리 ${chatListItem.gatherCategory}")
             Log.d("gather","카테고리 Seq : ${chatListItem.gatherCategorySeq}")
             var categoryImage = R.drawable.ic_1_football

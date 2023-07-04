@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 
 data class PushNotificationEntity(
-    @SerializedName("to")
-    val to: String,
+    @SerializedName("registration_ids")
+    val registration_ids: List<String>,
     @SerializedName("priority")
     val priority: String,
     @SerializedName("data")

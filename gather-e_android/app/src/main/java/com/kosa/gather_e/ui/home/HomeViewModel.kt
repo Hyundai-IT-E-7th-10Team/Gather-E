@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import com.kosa.gather_e.util.GatherUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,14 +14,16 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-    private lateinit var totalList : List<GatherEntity>
-    private lateinit var currList : List<GatherEntity>
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
+    private lateinit var totalList: List<GatherEntity>
 
+    private var _isALL = MutableLiveData<Boolean>().apply {
+        value = true
+    }
+    private var _category = MutableLiveData<Long>().apply {
+        value = 1
+    }
     private var _list = MutableLiveData<List<GatherEntity>>().apply {
-        val call = SpringRetrofitProvider.getRetrofit().getGather()
+        val call = SpringRetrofitProvider.getRetrofit().getGatherByCategory(1)
         call.enqueue(object : Callback<List<GatherEntity>> {
             override fun onFailure(call: Call<List<GatherEntity>>, t: Throwable) {
             }
@@ -34,34 +37,44 @@ class HomeViewModel : ViewModel() {
                 value = response.body()
             }
         })
-
     }
 
-    val text: LiveData<String> = _text
     val list: LiveData<List<GatherEntity>> = _list
+    val isALL: LiveData<Boolean> = _isALL
+    val category: LiveData<Long> = _category
 
-    fun listOnlyGathering() {
-        _list.value = currList.filter {
-            it.gatherLimit > it.gatherUserCnt!!
-        }
-    }
-    fun listAll() {
-        _list.value = currList
+    fun listByCategory(categorySeq: Long) {
+        _category.value = categorySeq
+        refreshView()
     }
 
-    fun listByCategory(category: String, isAll: Boolean) {
-        if (category == "전체" && isAll) {
-            currList = totalList
-        }
-        else {
-            currList = totalList.filter {
-                it.categoryName == category
+    fun togleIsAll() {
+        _isALL.value = !isALL.value!!
+        changeListView()
+    }
+    fun refreshView() {
+        SpringRetrofitProvider.getRetrofit().getGatherByCategory(category.value!!).enqueue(
+            object : Callback<List<GatherEntity>> {
+                override fun onResponse(
+                    call: Call<List<GatherEntity>>,
+                    response: Response<List<GatherEntity>>
+                ) {
+                    totalList = response.body()!!
+                    changeListView()
+                }
+                override fun onFailure(call: Call<List<GatherEntity>>, t: Throwable) {
+                }
+
             }
-        }
-        if (isAll) {
-            listAll()
+        )
+    }
+    fun changeListView() {
+        if (isALL.value!!) {
+            _list.value = totalList
         } else {
-            listOnlyGathering()
+            _list.value = totalList.filter {
+                GatherUtil.isGathering(it) && !GatherUtil.isFull(it)
+            }
         }
     }
 }

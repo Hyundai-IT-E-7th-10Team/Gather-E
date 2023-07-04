@@ -12,6 +12,7 @@ import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentMapBinding

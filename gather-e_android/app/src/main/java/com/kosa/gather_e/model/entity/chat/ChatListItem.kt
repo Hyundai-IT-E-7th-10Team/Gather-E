@@ -9,10 +9,10 @@ data class ChatListItem(
     var gatherCategorySeq: Int,
     var gatherPlace: String,
     var key: Long,
-    var participants: List<String>, // 사용자 ID 리스트
-    var participantTokens: List<String> // 사용자 토큰(token) 리스트
+    var participants: MutableList<String>, // 사용자 ID 리스트
+    var participantTokens: MutableList<String> // 사용자 토큰(token) 리스트
 
 ) {
 
-    constructor(): this("", "","",0,"",0,"",0, emptyList(), emptyList())
+    constructor(): this("", "","",0,"",0,"",0, mutableListOf(), mutableListOf())
 }

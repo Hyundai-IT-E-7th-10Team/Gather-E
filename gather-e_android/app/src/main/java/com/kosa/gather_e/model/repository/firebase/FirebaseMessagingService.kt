@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
@@ -63,6 +64,11 @@ class FirebaseMessagingService: FirebaseMessagingService() {
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.description = CHANNEL_DESCRIPTION
+            // 설정
+            channel.enableLights(true)  // 빛
+            channel.enableVibration(true)   // 진동
+            channel.lightColor = Color.RED
+            channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                 .createNotificationChannel(channel)
@@ -92,19 +98,19 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         when (type) {
             NotificationType.NORMAL -> Unit
             NotificationType.EXPANDABLE -> {
-                notificationBuilder.setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(
-                            "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
-                                    "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
-                                    "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
-                                    "😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 " +
-                                    "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
-                                    "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
-                                    "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
-                                    "🤢 🤮 🤧 😷 🤒 🤕"
-                        )
-                )
+//                notificationBuilder.setStyle(
+//                    NotificationCompat.BigTextStyle()
+//                        .bigText(
+//                            "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
+//                                    "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
+//                                    "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
+//                                    "😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 " +
+//                                    "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
+//                                    "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
+//                                    "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
+//                                    "🤢 🤮 🤧 😷 🤒 🤕"
+//                        )
+//                )
             }
             NotificationType.CUSTOM -> {
 //                notificationBuilder

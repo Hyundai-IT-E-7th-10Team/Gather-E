@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.kosa.gather_e.databinding.FragmentHomeBinding
 import com.kosa.gather_e.databinding.HomeCardBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
+import com.kosa.gather_e.util.GatherUtil
 
 class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolder>() {
 
@@ -16,7 +17,7 @@ class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.View
     inner class ViewHolder(private val binding: HomeCardBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(gather: GatherEntity) {
             binding.cardCnt.text = gather.gatherUserCnt.toString().plus("/").plus(gather.gatherLimit.toString())
-            binding.cardStatus.text = if (gather.gatherUserCnt!! < gather.gatherLimit) {"모집중"}else{"모집 종료"}
+            binding.cardStatus.text = if (GatherUtil.isGathering(gather) && !GatherUtil.isFull(gather)) {"모집중"}else{"모집 종료"}
             binding.cardTitle.text = gather.gatherTitle
             binding.writer.text = gather.creatorName
             binding.itemTime.text = gather.gatherDate
