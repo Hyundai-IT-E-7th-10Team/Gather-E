@@ -31,11 +31,9 @@ class SearchLocationAdapter(
 
     inner class SearchLocationViewHolder(private val binding: ItemLocationListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(location: SearchLocationEntity) {
+            binding.categoryName.text = location.category_name
             binding.placeName.text = location.place_name
             binding.roadAddressName.text = location.road_address_name
-            binding.x.text = location.x
-            binding.y.text = location.y
-            binding.distance.text = location.distance
 
             binding.root.setOnClickListener {
                 listener.onLocationSelected(location)
