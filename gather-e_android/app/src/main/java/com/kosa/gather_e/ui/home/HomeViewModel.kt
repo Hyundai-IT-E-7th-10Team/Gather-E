@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
+import com.kosa.gather_e.util.GatherUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,7 +43,7 @@ class HomeViewModel : ViewModel() {
 
     fun listOnlyGathering() {
         _list.value = currList.filter {
-            it.gatherLimit > it.gatherUserCnt!!
+            GatherUtil.isGathering(it)
         }
     }
     fun listAll() {

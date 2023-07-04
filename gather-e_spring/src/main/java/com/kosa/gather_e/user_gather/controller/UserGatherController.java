@@ -23,16 +23,16 @@ public class UserGatherController {
     }
 
     @PostMapping
-    public ResponseEntity<String> join(UserGatherVO vo) {
+    public ResponseEntity<UserGatherVO> join(@RequestBody UserGatherVO vo) {
         userGatherService.joinGather(vo);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(vo, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> leave(@RequestParam long gatherSeq) {
+    public ResponseEntity<UserGatherVO> leave(@RequestParam long gatherSeq) {
         UserGatherVO vo = new UserGatherVO();
         vo.setGatherSeq(gatherSeq);
         userGatherService.leaveGather(vo);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(vo, HttpStatus.ACCEPTED);
     }
 }
