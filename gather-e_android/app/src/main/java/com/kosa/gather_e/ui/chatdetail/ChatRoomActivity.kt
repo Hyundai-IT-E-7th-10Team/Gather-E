@@ -87,7 +87,8 @@ class ChatRoomActivity : AppCompatActivity() {
 
 
         binding.chatRoomTitleTextView.text = gatherTitle
-        binding.dateTextView.text = gatherDate
+//        binding.dateTextView.text = gatherDate
+        binding.dateTextView.text = gatherPlace
         binding.participants.text = gatherLimit.toString()
         binding.currentParticipants.text = participantsCnt.toString()
 
@@ -284,6 +285,7 @@ class ChatRoomActivity : AppCompatActivity() {
                         .load(uri)
                         .into(binding.selectedImage)
                     binding.selectedImage.visibility = View.VISIBLE
+//                    binding.messageEditText.
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
