@@ -1,6 +1,5 @@
-package com.kosa.gather_e.model.entity.user
+package com.kosa.gather_e.util
 
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.model.User
 
@@ -19,15 +18,15 @@ object CurrUser {
     }
 
     fun setCurrUser(user: User) {
-        this.name = user.kakaoAccount?.profile?.nickname.toString()
-        this.profileImgUrl = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+        name = user.kakaoAccount?.profile?.nickname.toString()
+        profileImgUrl = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
     }
 
     fun setToken(){
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    this.token = task.result
+                    token = task.result
                 }
             }
     }
@@ -37,7 +36,7 @@ object CurrUser {
     }
 
     fun setSeq(seq: Long){
-        this.seq = seq
+        CurrUser.seq = seq
     }
     fun getSeq() : Long {
         return seq

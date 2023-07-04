@@ -5,8 +5,10 @@ import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.user.UserEntity
 import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
+import com.kosa.gather_e.model.entity.user_gather.UserGather
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -29,5 +31,9 @@ interface SpringInterface {
     fun getGather() : Call<List<GatherEntity>>
     @GET("map/past-meeting")
     fun getPastMeetingGather() : Call<List<PastMeetingGatherEntity>>
+    @POST("user_gather")
+    fun joinGather(@Body gather: UserGather) : Call<UserGather>;
+    @DELETE("user_gather")
+    fun leaveGather(@Query("gatherSeq") gatherSeq: Long) : Call<UserGather>;
 }
 
