@@ -1,12 +1,7 @@
 package com.kosa.gather_e.ui.map
 
-import GatherInfoDialogFragment
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,30 +10,12 @@ import androidx.fragment.app.Fragment
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
-import com.kosa.gather_e.model.entity.gather.GatherEntity
-import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
-import com.kosa.gather_e.model.entity.user.CurrUser
-import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraAnimation
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
-import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
-import com.naver.maps.map.util.FusedLocationSource
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var toolbarBinding: ToolbarMapBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,8 +40,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 초기화 버튼
         toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
-
-
             val mapAllGatherFragment = MapAllGatherFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
