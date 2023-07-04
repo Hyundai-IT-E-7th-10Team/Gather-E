@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frameLayout_map_recruited_by_me"
-    tools:context=".ui.map.MapRecruitedByMeFragment">
-
+    android:id="@+id/frameLayout_map_all"
+    tools:context=".ui.map.MapAllGatherFragment">
 
     <fragment
-        android:id="@+id/by_me_map_fragment"
+        android:id="@+id/all_map_fragment"
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

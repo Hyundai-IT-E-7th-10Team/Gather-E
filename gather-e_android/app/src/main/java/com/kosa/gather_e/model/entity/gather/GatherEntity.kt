@@ -7,7 +7,7 @@ data class GatherEntity(
     var gatherSeq: Int?,
     var categorySeq: Int,
     var categoryName: String,
-    var gatherCreator: Int,
+    var gatherCreator: Long,
     var creatorName: String?,
     var creatorImgUrl: String?,
     var gatherTitle: String,

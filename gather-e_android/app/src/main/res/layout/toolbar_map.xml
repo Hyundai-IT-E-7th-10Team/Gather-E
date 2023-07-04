@@ -20,25 +20,32 @@
                 android:id="@+id/action_navigation_map_to_map_button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="초기화" />
+                android:text="초기화"
+                android:drawableLeft="@drawable/ic_plus"
+                 />
 
             <Button
                 android:id="@+id/action_navigation_map_to_map_button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="현재 모집 중" />
+                android:text="현재 모집 중"
+                android:drawableLeft="@drawable/ic_calendar"
+                />
 
             <Button
                 android:id="@+id/action_navigation_map_to_map_button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="참여했던 모임 추억" />
+                android:drawableLeft="@drawable/ic_list"
+                android:text="내가 참여한 모임" />
 
             <Button
                 android:id="@+id/action_navigation_map_to_map_button4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="내가 주최한 모임" />
+                android:text="내가 주최한 모임"
+                android:drawableLeft="@drawable/ic_people"
+                />
 
         </LinearLayout>
 
