@@ -24,8 +24,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     private lateinit var chatListAdapter: ChatListAdapter
     private val chatRoomList = mutableListOf<ChatListItem>()
 
-    private val user: String = "user01"
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,11 +54,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
         fragmentChatlistBinding.chatListRecyclerView.adapter = chatListAdapter
         fragmentChatlistBinding.chatListRecyclerView.layoutManager = LinearLayoutManager(context)
-
-
-        if (user == null) {
-            return
-        }
 
         val chatDB = Firebase.database.reference.child(DB_CHATS)
 
