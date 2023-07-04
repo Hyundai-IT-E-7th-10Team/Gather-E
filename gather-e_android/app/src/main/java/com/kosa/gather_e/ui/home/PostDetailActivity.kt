@@ -9,9 +9,16 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.DBKey
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityPostDetailBinding
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.entity.user.UserEntity
@@ -25,7 +32,7 @@ import retrofit2.Response
 class PostDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostDetailBinding
     private lateinit var gatherEntity: GatherEntity
-
+    val chatDB = Firebase.database.reference.child(DBKey.DB_CHATS)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostDetailBinding.inflate(layoutInflater)
@@ -88,6 +95,16 @@ class PostDetailActivity : AppCompatActivity() {
             }
         })
 
+
+        binding.shareSNS.setOnClickListener {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.setType("image/*")
+                intent.putExtra(Intent.EXTRA_STREAM, R.drawable.logo)
+                val chooser = Intent.createChooser(intent, "친구에게 공유하기")
+                startActivity(chooser)
+        }
+
+
         setContentView(binding.root)
     }
 
@@ -113,6 +130,26 @@ class PostDetailActivity : AppCompatActivity() {
                     t.printStackTrace()
                 }
             })
+            // 석현 작업
+            // 채팅방 참여하기
+            val query = chatDB.orderByChild("gatherTitle").equalTo(gatherEntity.gatherTitle)
+            Log.d("gather","detail 채팅방 가져오기 : ${query}")
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (snapshot in dataSnapshot.children) {
+                        val chatListItem = snapshot.getValue(ChatListItem::class.java)
+                        Log.d("gather","detail 채팅방 가져오기 each : ${chatListItem}")
+
+                        chatListItem?.participants?.add(CurrUser.getUserName())
+                        chatListItem?.participantTokens?.add(CurrUser.getToken())
+
+                        snapshot.ref.setValue(chatListItem)
+
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                }
+            })
         }
     }
 
@@ -135,6 +172,25 @@ class PostDetailActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<UserGather>, t: Throwable) {
+                }
+            })
+            // 채팅방 나가기
+            val query = chatDB.orderByChild("gatherTitle").equalTo(gatherEntity.gatherTitle)
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (snapshot in dataSnapshot.children) {
+                        // 원하는 작업 수행
+                        val chatListItem = snapshot.getValue(ChatListItem::class.java)
+                        Log.d("gather","detail 채팅방 가져오기 each : ${chatListItem}")
+
+                        chatListItem?.participants?.remove(CurrUser.getUserName())
+                        chatListItem?.participantTokens?.remove(CurrUser.getToken())
+
+                        snapshot.ref.setValue(chatListItem)
+
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
         }

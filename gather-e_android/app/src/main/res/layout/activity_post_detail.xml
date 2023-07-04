@@ -170,11 +170,19 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="1" />-->
+    <Button
+        android:id="@+id/shareSNS"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
+        android:layout_height="70sp"
+        android:layout_margin="15sp"
+        android:background="@drawable/round_board"
+        android:text="SNS공유"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
     <Button
         android:visibility="gone"
         android:id="@+id/join_btn"

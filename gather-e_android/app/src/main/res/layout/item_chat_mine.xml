@@ -10,9 +10,8 @@
 
     <ImageView
         android:id="@+id/userImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_people"
@@ -56,8 +55,8 @@
 
         <ImageView
             android:id="@+id/imagePreview"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/logo"
             android:visibility="gone" />
 
@@ -74,8 +73,17 @@
         android:text="오전 10:23"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/messageLayout"
-        app:layout_constraintEnd_toStartOf="@+id/messageLayout"
+        app:layout_constraintEnd_toStartOf="@+id/messageLayout" />
+
+    <ImageView
+        android:id="@+id/imageDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_download"
+        android:layout_marginRight="10dp"
         app:layout_constraintTop_toTopOf="@+id/messageLayout"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintEnd_toStartOf="@+id/messageLayout"
+        app:layout_constraintBottom_toTopOf="@id/txt_date"
+        android:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
