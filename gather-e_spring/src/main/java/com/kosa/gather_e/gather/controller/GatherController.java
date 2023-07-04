@@ -6,6 +6,7 @@ import com.kosa.gather_e.gather.service.GatherService;
 import com.kosa.gather_e.gather.vo.GatherImgVO;
 import com.kosa.gather_e.gather.vo.GatherVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class GatherController {
 
     private final GatherService gatherService;
@@ -45,6 +47,7 @@ public class GatherController {
      */
     @GetMapping("/gather/{gatherSeq}")
     public ResponseEntity<GatherVO> getOneGather(@PathVariable int gatherSeq){
+        log.debug("하아ㅏ 왜 안댐 " + gatherSeq);
         return new ResponseEntity<>(gatherService.getOneGather(gatherSeq), HttpStatus.OK);
     }
 
@@ -100,5 +103,11 @@ public class GatherController {
     public ResponseEntity<GatherVO> updateOneGather(@RequestBody GatherVO gatherVO,  @PathVariable int gatherSeq){
         gatherVO.setGatherSeq(gatherSeq);
         return new ResponseEntity<>(gatherService.updateGather(gatherVO), HttpStatus.OK);
+    }
+
+    @GetMapping("/gather/{categorySeq}/category")
+    public ResponseEntity<List<GatherVO>> gatherByCategory(@PathVariable long categorySeq) {
+        log.debug("category seq: "+ categorySeq);
+        return ResponseEntity.ok(gatherService.getGatherByCategory(categorySeq));
     }
 }
