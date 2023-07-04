@@ -37,12 +37,14 @@
                 android:drawableLeft="@drawable/ic_list"
                 android:text="   참여한 모임" />
 
+
             <Button
                 android:id="@+id/action_navigation_map_to_map_button4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_mypage"
                 android:text="   내가 주최한 모임" />
+
 
         </LinearLayout>
 
