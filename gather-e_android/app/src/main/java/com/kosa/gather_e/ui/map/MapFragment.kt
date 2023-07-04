@@ -1,12 +1,7 @@
 package com.kosa.gather_e.ui.map
 
-import GatherInfoDialogFragment
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +26,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private lateinit var toolbarBinding: ToolbarMapBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,8 +49,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 초기화 버튼
         toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
-
-
             val mapAllGatherFragment = MapAllGatherFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
