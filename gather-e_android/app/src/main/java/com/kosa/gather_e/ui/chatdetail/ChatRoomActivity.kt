@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,10 +32,11 @@ import com.kosa.gather_e.DBKey.Companion.CHILD_CHAT
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
+import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.notification.PushNotificationData
 import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
 import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -14,7 +14,7 @@ import com.kosa.gather_e.DBKey.Companion.DB_CHATS
 import com.kosa.gather_e.R
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.databinding.FragmentChatListBinding
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
 
 

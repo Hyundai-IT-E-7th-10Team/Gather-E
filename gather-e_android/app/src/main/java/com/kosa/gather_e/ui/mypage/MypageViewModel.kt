@@ -3,8 +3,7 @@ package com.kosa.gather_e.ui.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakao.sdk.user.UserApiClient
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 
 class MypageViewModel : ViewModel() {
 

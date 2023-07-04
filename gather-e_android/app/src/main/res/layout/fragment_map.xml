@@ -20,15 +20,16 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar_map_layout"
         app:layout_constraintBottom_toBottomOf="parent" >
 
-    <FrameLayout
-            android:id="@+id/map_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <ImageButton
+            android:id="@+id/locationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="100dp"
+            android:src="@drawable/ic_locationbutton"
+            android:background="@drawable/circle_background"/>
 
-    <FrameLayout
-            android:id="@+id/frameLayout_map_current_recruite"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
     </FrameLayout>
 

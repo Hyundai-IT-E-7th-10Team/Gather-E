@@ -10,10 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.user.UserApiClient
@@ -23,10 +21,8 @@ import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.location.SearchLocationEntity
-import com.kosa.gather_e.model.entity.user.CurrUser
+import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
-import com.kosa.gather_e.ui.chatdetail.ChatRoomActivity
-import com.kosa.gather_e.ui.chatlist.ChatListFragment
 import com.kosa.gather_e.ui.searchlocation.SearchLocationActivity
 import retrofit2.Call
 import retrofit2.Callback
