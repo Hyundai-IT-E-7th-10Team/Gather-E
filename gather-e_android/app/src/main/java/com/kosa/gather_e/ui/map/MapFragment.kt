@@ -1,6 +1,10 @@
 package com.kosa.gather_e.ui.map
 
+import GatherInfoDialogFragment
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +16,12 @@ import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapBinding
 import com.kosa.gather_e.databinding.ToolbarMapBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
+import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
+import com.kosa.gather_e.model.entity.user.CurrUser
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -31,10 +39,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private lateinit var toolbarBinding: ToolbarMapBinding
 
-    private lateinit var locationSource: FusedLocationSource
-    private lateinit var naverMap: NaverMap
-
-    private lateinit var currentRecruitGatherList : List<GatherEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,30 +51,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        NaverMapSdk.getInstance(requireContext()).client =
-            NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naverClientId))
-
-        val fm = childFragmentManager
-        val mapFragment = fm.findFragmentById(R.id.map_fragment) as MapFragment?
-            ?: MapFragment.newInstance().also {
-                fm.beginTransaction().add(R.id.map_fragment, it).commit()
-            }
-
-        locationSource =
-            FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
-        mapFragment.getMapAsync(this)
+        // 처음 화면에 MapAllGatherFragment를 보여주기
+        val initialFragment = MapAllGatherFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(
+                R.id.map_frame_container,
+                initialFragment
+            )
+            .commit()
 
         // 초기화 버튼
         toolbarBinding.actionNavigationMapToMapButton1.setOnClickListener {
-            val mapFragment = com.kosa.gather_e.ui.map.MapFragment()
+
+
+            val mapAllGatherFragment = MapAllGatherFragment()
             parentFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
-            .addToBackStack(null)
-            .commit()
+                .setReorderingAllowed(true)
+                .replace(
+                    R.id.map_frame_container,
+                    mapAllGatherFragment
+                ) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .addToBackStack(null)
+                .commit()
         }
 
         // 현재 모집 중 버튼
@@ -78,7 +81,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val mapCurrentRecruiteFragment = MapCurrentRecruiteFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.map_frame_container, mapCurrentRecruiteFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .replace(
+                    R.id.map_frame_container,
+                    mapCurrentRecruiteFragment
+                ) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
                 .addToBackStack(null)
                 .commit()
         }
@@ -88,111 +94,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val mapPastMeetingFragment = MapPastMeetingFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.map_frame_container, mapPastMeetingFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .replace(
+                    R.id.map_frame_container,
+                    mapPastMeetingFragment
+                ) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
                 .addToBackStack(null)
                 .commit()
         }
 
         // 내가 주최한 모임 버튼
         toolbarBinding.actionNavigationMapToMapButton4.setOnClickListener {
-            val mapFragment = MapRecruitedByMeFragment()
+            val mapRecruitedByMeFragment = MapRecruitedByMeFragment()
             parentFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.map_frame_container, mapFragment) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
+                .replace(
+                    R.id.map_frame_container,
+                    mapRecruitedByMeFragment
+                ) //Fragment 트랜잭션의 백 스택 작업을 원자적인 작업(한번에 하나의 트랜잭션만 가능)으로 설정
                 .addToBackStack(null)
                 .commit()
         }
-
-        val callGetCurrentRecruitGather: Call<List<GatherEntity>> = SpringRetrofitProvider.getRetrofit().getGather()
-        callGetCurrentRecruitGather.enqueue(object : Callback<List<GatherEntity>> {
-            override fun onResponse(
-                call: Call<List<GatherEntity>>,
-                response: Response<List<GatherEntity>>
-            ) {
-                Log.d("gather", "$call, $response")
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        currentRecruitGatherList = it
-                        Log.d("gather", "$currentRecruitGatherList")
-                    }
-                }
-            }
-            override fun onFailure(call: Call<List<GatherEntity>>, t: Throwable) {
-                Log.d("gather", "callgetCurrentRecruitGather 실패")
-            }
-        })
-
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated) { // 권한 거부됨
-                naverMap.locationTrackingMode = LocationTrackingMode.None
-            }
-            return
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    companion object {
+        val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
-    @SuppressLint("ResourceAsColor")
+
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
 
-        val transaction = parentFragmentManager.beginTransaction()
 
-        for (i in currentRecruitGatherList.indices) {
-            val marker = Marker()
-
-//           marker.setOnClickListener { overlay ->
-//
-//            }
-
-
-            marker.position = LatLng(
-                currentRecruitGatherList[i].gatherLatitude,
-                currentRecruitGatherList[i].gatherLongitude
-            )
-            marker.width = 150
-            marker.height = 150
-
-
-            when (currentRecruitGatherList[i].categorySeq) {
-                1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_1_football)
-                2 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_2_tennis)
-                3 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_3_golf)
-                4 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_4_basketball)
-                5 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_5_hiking)
-                6 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_6_shuttlecock)
-                7 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_7_volleyball)
-                8 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_8_bowling)
-                9 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_9_squash)
-                10 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_10_pingpong)
-                11 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_11_swimmig)
-                12 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_12_riding)
-                13 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_13_skate)
-                14 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_14_cycling)
-                15 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_15_yoga)
-                16 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_16_pilates)
-                17 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_17_climbing)
-                18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_18_billiard)
-                19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
-                20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
-            }
-
-            marker.iconTintColor = R.color.purple
-            marker.alpha = 1f
-            marker.map = naverMap
-        }
-        this.naverMap = naverMap
-        naverMap.locationSource = locationSource
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
     }
 
-    companion object {
-        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-    }
 }
 

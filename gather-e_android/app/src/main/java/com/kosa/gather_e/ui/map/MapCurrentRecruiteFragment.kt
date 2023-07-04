@@ -1,5 +1,6 @@
 package com.kosa.gather_e.ui.map
 
+import GatherInfoDialogFragment
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
@@ -16,6 +17,8 @@ import com.kosa.gather_e.databinding.FragmentMapCurrentRecruiteBinding
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
@@ -124,9 +127,6 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
                         for (i in filteredList.indices) {
                             val marker = Marker()
 
-            //           marker.setOnClickListener { overlay ->
-            //
-            //            }
                             marker.position = LatLng(
                                 currentRecruitGatherList[i].gatherLatitude,
                                 currentRecruitGatherList[i].gatherLongitude
@@ -157,9 +157,16 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
                                 19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
                                 20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
                             }
+
+                            marker.setOnClickListener { it ->
+                                naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
+                                val dialog = GatherInfoDialogFragment(filteredList[i])
+                                dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+
+                                true
+                            }
                             marker.map = naverMap
                         }
-
                     }
                 }
             }
@@ -167,12 +174,7 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
                 Log.d("gather", "callgetCurrentRecruitGather 실패")
             }
         })
-
-
     }
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-    }
 }
 
