@@ -288,15 +288,8 @@ class ChatRoomActivity : AppCompatActivity() {
                         .load(uri)
                         .transform(CenterCrop(), RoundedCorners(30))
                         .override(300, 450) // 원하는 크기로 조정
+                        .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
                         .into(binding.selectedImage)
-//                    Glide.with(binding.imagePreview)
-//                        .load(chatItem.image)
-//                        .placeholder(R.drawable.loading_spinner)
-//                        .thumbnail(0.1f)
-//                        .override(450, 600) // 원하는 크기로 조정
-//                        .transform(CenterCrop(), RoundedCorners(30))
-//                        .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
-//                        .into(binding.imagePreview)
                     binding.selectedImage.visibility = View.VISIBLE
 //                    binding.messageEditText.
                 } else {
