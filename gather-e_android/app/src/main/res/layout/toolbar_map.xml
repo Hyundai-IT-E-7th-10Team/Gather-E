@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:orientation="horizontal"
 
             >
@@ -28,6 +28,7 @@
                 android:drawablePadding="10dp"
                 android:layout_marginRight="10dp"
                 android:elevation="30dp"
+                android:textSize="13dp"
                 android:fontFamily="@font/gmarketsansmedium"
                 android:background="@drawable/background_map_button"
                 android:text="초기화" />
@@ -40,6 +41,7 @@
                 android:drawableTint="@color/light_purple"
                 android:paddingHorizontal="15dp"
                 android:drawablePadding="10dp"
+                android:textSize="13dp"
                 android:layout_marginRight="10dp"
                 android:elevation="30dp"
                 android:fontFamily="@font/gmarketsansmedium"
@@ -53,6 +55,7 @@
                 android:drawableStart="@drawable/ic_list"
                 android:drawableTint="@color/light_purple"
                 android:paddingHorizontal="15dp"
+                android:textSize="13dp"
                 android:drawablePadding="10dp"
                 android:layout_marginRight="10dp"
                 android:elevation="30dp"
@@ -68,6 +71,7 @@
                 android:drawableTint="@color/light_purple"
                 android:paddingHorizontal="15dp"
                 android:drawablePadding="10dp"
+                android:textSize="13dp"
                 android:layout_marginRight="10dp"
                 android:elevation="30dp"
                 android:fontFamily="@font/gmarketsansmedium"
