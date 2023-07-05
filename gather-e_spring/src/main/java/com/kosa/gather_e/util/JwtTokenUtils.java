@@ -60,7 +60,7 @@ public class JwtTokenUtils {
 
     public Date createExpiredDate() {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.HOUR, 10);
+        c.add(Calendar.YEAR, 10);
         return c.getTime();
     }
 

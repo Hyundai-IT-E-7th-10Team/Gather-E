@@ -1,10 +1,10 @@
 package com.kosa.gather_e.model.repository.spring
 
-import com.kosa.gather_e.model.entity.user.JwtToken
 import com.kosa.gather_e.model.entity.category.CategoryEntity
 import com.kosa.gather_e.model.entity.gather.GatherEntity
 import com.kosa.gather_e.model.entity.user.UserEntity
 import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
+import com.kosa.gather_e.model.entity.user.LoginResponse
 import com.kosa.gather_e.model.entity.user_gather.UserGather
 import retrofit2.Call
 import retrofit2.http.Body
@@ -18,7 +18,7 @@ import retrofit2.http.Query
 interface SpringInterface {
 
     @GET("auth/kakao")
-    fun login(@Query("accessToken") token: String): Call<JwtToken>
+    fun kakaoLogin(@Query("accessToken") token: String): Call<LoginResponse>
     @GET("category")
     fun getCategory() : Call<List<CategoryEntity>>
     @POST("gather")
