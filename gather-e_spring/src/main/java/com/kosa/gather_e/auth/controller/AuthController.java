@@ -1,7 +1,8 @@
 package com.kosa.gather_e.auth.controller;
 
+import com.kosa.gather_e.auth.service.Provider;
+import com.kosa.gather_e.auth.service.UserService;
 import com.kosa.gather_e.auth.vo.LoginResponse;
-import com.kosa.gather_e.auth.service.KakaoAuthService;
 import com.kosa.gather_e.auth.vo.UserVO;
 import com.kosa.gather_e.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final JwtTokenUtils jwtTokenUtils;
-    private final KakaoAuthService kakaoAuthService;
-
+    private final UserService userService;
     /**
      * KAKAO 소셜 로그인
      * @return ResponseEntity<AuthResource>
      */
     @GetMapping("/kakao")
-    public ResponseEntity<LoginResponse> login(@RequestParam String accessToken) {
-        UserVO user = kakaoAuthService.login(accessToken);
+    public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String kakaoToken) throws Exception {
+        UserVO user = userService.login(kakaoToken, Provider.KAKAO);
+        String token = jwtTokenUtils.generateJwtToken(user);
+        return new ResponseEntity<>(new LoginResponse(user, token), HttpStatus.OK);
+    }
+
+    @GetMapping("/google")
+    public ResponseEntity<LoginResponse> googleLogin(@RequestParam String googleToken) throws Exception {
+        UserVO user = userService.login(googleToken, Provider.GOOGLE);
         String token = jwtTokenUtils.generateJwtToken(user);
         return new ResponseEntity<>(new LoginResponse(user, token), HttpStatus.OK);
     }

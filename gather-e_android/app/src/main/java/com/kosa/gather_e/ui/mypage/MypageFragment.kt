@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.kakao.sdk.user.UserApiClient
 import com.kosa.gather_e.LoginActivity
 import com.kosa.gather_e.databinding.FragmentHomeBinding
@@ -20,6 +23,7 @@ import com.kosa.gather_e.databinding.FragmentMypageBinding
 class MypageFragment : Fragment() {
 
     private var _binding: FragmentMypageBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -42,9 +46,9 @@ class MypageFragment : Fragment() {
             binding.profileName.text = it
         }
         binding.logoutBtn.setOnClickListener {
-            UserApiClient.instance.logout {
-                startActivity(Intent(activity,LoginActivity::class.java))
-            }
+            UserApiClient.instance.logout {}
+            GoogleSignIn.getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN).signOut()
+            startActivity(Intent(activity, LoginActivity::class.java))
         }
 
         return root

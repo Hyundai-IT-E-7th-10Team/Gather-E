@@ -139,15 +139,16 @@ class WriteActivity : AppCompatActivity() {
                     Toast.makeText(this@WriteActivity, "${gather.gatherTitle} 모임이 생성되었습니다.", Toast.LENGTH_SHORT).show()
                     Log.d("gather", "성공 $call, $response")
                     Log.d("gather", "$gather")
+                    finish()
                 }
 
                 override fun onFailure(call: Call<GatherEntity>, t: Throwable) {
                     Toast.makeText(this@WriteActivity, "${gather.gatherTitle} 모임에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     Log.d("gather", "실패 $t")
                     Log.d("gather", "실패 $call")
+                    finish()
                 }
             })
-            finish()
         }
 
 

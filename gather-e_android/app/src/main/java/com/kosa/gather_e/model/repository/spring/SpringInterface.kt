@@ -18,7 +18,9 @@ import retrofit2.http.Query
 interface SpringInterface {
 
     @GET("auth/kakao")
-    fun kakaoLogin(@Query("accessToken") token: String): Call<LoginResponse>
+    fun kakaoLogin(@Query("kakaoToken") token: String): Call<LoginResponse>
+    @GET("auth/google")
+    fun googleLogin(@Query("googleToken") token: String): Call<LoginResponse>
     @GET("category")
     fun getCategory() : Call<List<CategoryEntity>>
     @POST("gather")

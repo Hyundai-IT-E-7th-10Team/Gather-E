@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.user.UserApiClient
@@ -48,11 +50,29 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        if (account != null) {
+            account.idToken?.let { googleLogin(it) }
+        }
     }
 
     private fun kakaoLogin(token: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val loginResponse = LoginUtil.kakaoLogin(token)
+            if (loginResponse != null) {
+                startActivity(Intent(this@SplashActivity, BottomNavigationVarActivity::class.java))
+                finish()
+            } else {
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                finish()
+            }
+        }
+    }
+
+    private fun googleLogin(token: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d("kww", token)
+            val loginResponse = LoginUtil.googleLogin(token)
             if (loginResponse != null) {
                 startActivity(Intent(this@SplashActivity, BottomNavigationVarActivity::class.java))
                 finish()
