@@ -68,7 +68,8 @@
                 android:id="@+id/road_address_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="서울 종로구 새문안로 3길 23"
+                android:hint="도로명 주소 미제공
+"
                 android:textSize="13dp"/>
 
         </LinearLayout>

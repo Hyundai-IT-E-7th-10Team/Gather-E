@@ -12,8 +12,21 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       android:background="@color/light_purple"
-      android:elevation="10dp"
+      android:elevation="30dp"
       app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:text="선택한 장소 위치"
+      android:textSize="18dp"
+      android:elevation="30dp"
+      android:textColor="@color/white"
+      app:layout_constraintEnd_toEndOf="@+id/toolbar"
+      app:layout_constraintStart_toStartOf="@+id/toolbar"
+      app:layout_constraintTop_toTopOf="@+id/toolbar"
+      app:layout_constraintBottom_toBottomOf="@+id/toolbar" />
 
   <ImageButton
       android:id="@+id/cancelBtn"
@@ -21,7 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
       android:layout_marginTop="10dp"
-      android:elevation="10dp"
+      android:elevation="30dp"
       android:background="?attr/selectableItemBackground"
       android:contentDescription="Cancel Button"
       android:padding="10dp"
@@ -29,6 +42,8 @@
       android:tint="@color/white"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+
 
   <!-- 네이버 지도 프레임 레이아웃 -->
 
@@ -43,9 +58,11 @@
   <LinearLayout
       android:id="@+id/detailContainer"
       android:layout_width="match_parent"
-      android:layout_height="220dp"
+      android:layout_height="200dp"
       android:orientation="vertical"
+      android:elevation="30dp"
       android:padding="8dp"
+      android:background="@color/white"
       app:layout_constraintBottom_toBottomOf="parent">
 
     <TextView
@@ -100,7 +117,7 @@
           android:id="@+id/road_address_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="서울 종로구 새문안로 3길 23"
+          android:hint="도로명 주소 미제공 장소입니다."
           android:textSize="13dp"/>
 
     </LinearLayout>
@@ -136,9 +153,6 @@
     </LinearLayout>
 
 
-
-
-
     <Button
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
@@ -147,10 +161,6 @@
         android:background="@drawable/purple_write_button"/>
 
   </LinearLayout>
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

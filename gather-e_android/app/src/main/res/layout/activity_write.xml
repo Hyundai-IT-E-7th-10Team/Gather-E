@@ -91,7 +91,7 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="95dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
@@ -141,7 +141,7 @@
             <TextView
                 android:id="@+id/dateText"
                 android:layout_width="130dp"
-                android:layout_height="40dp"
+                android:layout_height="41dp"
                 android:background="@drawable/edittext_background"
                 android:gravity="center"
                 android:hint="선택한 날짜"
@@ -183,7 +183,7 @@
             <TextView
                 android:id="@+id/timeText"
                 android:layout_width="130dp"
-                android:layout_height="wrap_content"
+                android:layout_height="41dp"
                 android:background="@drawable/edittext_background"
                 android:gravity="center"
                 android:hint="선택한 시간"

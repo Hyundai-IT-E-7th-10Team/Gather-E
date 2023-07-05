@@ -1,6 +1,7 @@
 package com.kosa.gather_e
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -154,6 +155,7 @@ class WriteActivity : AppCompatActivity() {
         val callCategoryList: Call<List<CategoryEntity>> =
             SpringRetrofitProvider.getRetrofit().getCategory()
         callCategoryList.enqueue(object : Callback<List<CategoryEntity>> {
+            @SuppressLint("ResourceAsColor")
             override fun onResponse(
                 call: Call<List<CategoryEntity>>, response: Response<List<CategoryEntity>>
             ) {
@@ -162,6 +164,8 @@ class WriteActivity : AppCompatActivity() {
                     categoryList?.let { categories ->
                         val buttonContainer: LinearLayout = findViewById(R.id.buttonContainer)
 
+                        var selectedLayout: LinearLayout? = null
+
                         for (category in categories) {
                             val layout = LinearLayout(this@WriteActivity)
                             layout.orientation = LinearLayout.VERTICAL
@@ -169,7 +173,7 @@ class WriteActivity : AppCompatActivity() {
                             layout.gravity = Gravity.CENTER_HORIZONTAL
 
                             val imageView = ImageView(this@WriteActivity)
-                            val imageLayoutParams = LinearLayout.LayoutParams(150, 150)  // Adjust width and height
+                            val imageLayoutParams = LinearLayout.LayoutParams(220, 220)
                             imageView.layoutParams = imageLayoutParams
                             when (category.categorySeq) {
                                 1 -> imageView.setImageResource(R.drawable.ic_1_football)
@@ -198,7 +202,7 @@ class WriteActivity : AppCompatActivity() {
                             val textView = TextView(this@WriteActivity)
                             textView.text = category.categoryName
                             textView.setTextColor(Color.GRAY)
-                            textView.textSize = 13f
+                            textView.textSize = 10f
                             textView.gravity = Gravity.CENTER
 
                             layout.addView(imageView)
@@ -212,7 +216,12 @@ class WriteActivity : AppCompatActivity() {
                                 chatRoom.gatherCategorySeq = category.categorySeq
                                 Log.d("Button Clicked", "Category ID: ${category.categoryName}")
                                 Log.d("Button Clicked", "Category ID: ${category.categorySeq}")
-                                layout.setBackgroundColor(Color.GREEN)
+                                // 이전에 선택한 항목이 있다면 배경색을 원래대로 변경
+                                selectedLayout?.setBackgroundColor(Color.TRANSPARENT)
+
+                                // 새로운 항목을 선택하면 배경색을 변경
+                                layout.setBackgroundColor(R.color.light_gray)
+                                selectedLayout = layout
                             }
                         }
                     }
@@ -236,6 +245,7 @@ class WriteActivity : AppCompatActivity() {
         binding.calendarBtn.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
+                R.style.MyPickerDialogTheme,
                 { _, year, month, day ->
                     binding.dateText.text = "$year/${month + 1}/${day}"
                     // DB로 넣기 위해 포맷팅
@@ -258,6 +268,7 @@ class WriteActivity : AppCompatActivity() {
         binding.clockBtn.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
                 this,
+                R.style.MyPickerDialogTheme,
                 { _, hour, minute ->
                     binding.timeText.text = "${hour}시 ${minute}분"
                     // DB로 넣기 위해 포맷팅

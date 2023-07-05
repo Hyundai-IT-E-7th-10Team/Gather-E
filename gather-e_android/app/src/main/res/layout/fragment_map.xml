@@ -27,8 +27,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="100dp"
-            android:src="@drawable/ic_locationbutton"
-            android:background="@drawable/circle_background"/>
+            android:background="@drawable/circle_background"
+            android:src="@drawable/ic_locationbutton" />
 
         <FrameLayout
             android:id="@+id/map_fragment"
