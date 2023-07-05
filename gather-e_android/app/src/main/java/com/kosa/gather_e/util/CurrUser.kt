@@ -2,6 +2,7 @@ package com.kosa.gather_e.util
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.model.User
+import com.kosa.gather_e.model.entity.user.UserEntity
 
 object CurrUser {
     private var name: String = ""
@@ -17,9 +18,9 @@ object CurrUser {
         return profileImgUrl
     }
 
-    fun setCurrUser(user: User) {
-        name = user.kakaoAccount?.profile?.nickname.toString()
-        profileImgUrl = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+    fun setCurrUser(user: UserEntity) {
+        name = user.userName
+        profileImgUrl = user.userProfileImg
     }
 
     fun setToken(){
@@ -35,9 +36,6 @@ object CurrUser {
         return token
     }
 
-    fun setSeq(seq: Long){
-        CurrUser.seq = seq
-    }
     fun getSeq() : Long {
         return seq
     }

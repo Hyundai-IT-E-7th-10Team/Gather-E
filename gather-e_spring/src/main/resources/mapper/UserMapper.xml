@@ -13,6 +13,9 @@
     <insert id="insertUser" parameterType="UserVO">
         INSERT INTO tb_user(user_email, user_name, user_nickname, user_profile_img)
         values (#{userEmail}, #{userName}, #{userNickname}, #{userProfileImg})
+        <selectKey keyProperty="userSeq" resultType="long" order="AFTER">
+            SELECT tb_user_seq.currVal FROM dual
+        </selectKey>
     </insert>
 
     <update id="updateUser" parameterType="UserVO">
