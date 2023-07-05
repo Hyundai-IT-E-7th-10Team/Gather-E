@@ -5,14 +5,14 @@
     android:pivotY="50%"
     android:toDegrees="360" >
     <shape
-        android:innerRadiusRatio="3"
+        android:innerRadiusRatio="30"
         android:shape="ring"
-        android:thicknessRatio="8"
+        android:thicknessRatio="30"
         android:useLevel="false">
 
         <size
-            android:width="10dp"
-            android:height="10dp"/>
+            android:width="40dp"
+            android:height="40dp"/>
         <gradient
             android:angle="0"
             android:endColor="@color/purple"

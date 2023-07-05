@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:background="@drawable/round_board"
-    android:orientation="vertical">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="5dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/card_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8sp"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
+            android:text="모집중"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/card_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8sp"
+            android:layout_marginStart="8dp"
+            android:text="축구"
             android:textSize="14sp" />
 
         <TextView
@@ -32,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8sp"
+            android:text="Kosa"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -39,8 +45,8 @@
         android:id="@+id/card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8sp"
-        android:layout_marginTop="8sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
         android:text="Title"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -50,24 +56,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Time"
+        android:layout_marginTop="80dp"
+        android:text="2023/07/28  17:45"
         android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8sp"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/writer_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="8dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/logo_rex" />
+            android:src="@drawable/splash_logo"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
         <TextView
             android:id="@+id/writer"
@@ -93,8 +101,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="8sp"
-            android:layout_marginEnd="8sp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="n/n" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
