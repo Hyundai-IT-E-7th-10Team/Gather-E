@@ -92,11 +92,11 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
             binding.messageTextView.text = chatItem.message
             binding.txtDate.text = chatItem.sendTime
 
-            Glide.with(itemView)
-                .load(chatItem.senderImage)
-//                .override(30, 40) // 원하는 크기로 조정
-                .apply(RequestOptions().transform(CircleCrop()))
-                .into(binding.userImage)
+//            Glide.with(itemView)
+//                .load(chatItem.senderImage)
+////                .override(30, 40) // 원하는 크기로 조정
+//                .apply(RequestOptions().transform(CircleCrop()))
+//                .into(binding.userImage)
 
             if (!chatItem.image.isBlank()) {
                 binding.imagePreview.visibility = View.VISIBLE
@@ -106,10 +106,9 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                     .load(chatItem.image)
                     .placeholder(R.drawable.loading_spinner)
                     .thumbnail(0.1f)
-                    .override(300, 400) // 원하는 크기로 조정
+                    .override(450, 600) // 원하는 크기로 조정
                     .transform(CenterCrop(),RoundedCorners(30))
                     .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
-                    .centerCrop()
                     .into(binding.imagePreview)
 
             } else {
@@ -145,7 +144,6 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
 
             Glide.with(itemView)
                 .load(chatItem.senderImage)
-//                .override(90, 120) // 원하는 크기로 조정
                 .apply(RequestOptions().transform(CircleCrop()))
                 .into(binding.userImage)
 
@@ -157,10 +155,9 @@ class ChatItemAdapter : ListAdapter<ChatItem, RecyclerView.ViewHolder>(diffUtil)
                     .load(chatItem.image)
                     .placeholder(R.drawable.loading_spinner)
                     .thumbnail(0.1f)
-                    .override(300, 400) // 원하는 크기로 조정
+                    .override(450, 600) // 원하는 크기로 조정
                     .transform(CenterCrop(),RoundedCorners(30))
                     .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
-                    .centerCrop()
                     .into(binding.imagePreview)
             } else {
                 binding.imagePreview.visibility = View.GONE
