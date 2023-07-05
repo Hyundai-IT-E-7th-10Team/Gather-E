@@ -1,5 +1,7 @@
 package com.kosa.gather_e.model.entity.map
 
+import java.io.Serializable
+
 data class PastMeetingGatherEntity(
 
     var categorySeq: Int,

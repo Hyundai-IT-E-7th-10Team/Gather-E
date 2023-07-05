@@ -1,6 +1,5 @@
 package com.kosa.gather_e.model.entity.gather
 
-import com.kosa.gather_e.model.entity.user.UserEntity
 import java.io.Serializable
 
 data class GatherEntity(
