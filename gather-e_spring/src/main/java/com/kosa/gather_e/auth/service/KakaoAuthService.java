@@ -1,26 +1,22 @@
 package com.kosa.gather_e.auth.service;
 
-import com.kosa.gather_e.auth.dao.UserDAO;
+import com.kosa.gather_e.auth.dto.KakaoUserResponse;
 import com.kosa.gather_e.auth.vo.UserVO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
-@Service
-@RequiredArgsConstructor
+@Component
 public class KakaoAuthService {
 
-    private final UserDAO userDAO;
-    private final KakaoClient kakaoClient;
-
-    public UserVO login(String token) {
-        UserVO user = kakaoClient.getUser(token);
-        UserVO selectedUser = userDAO.selectUserByEmail(user.getUserEmail());
-        if(selectedUser == null) {//첫 로그인
-            userDAO.insertUser(user);
-        } else {//가입이 되어있는 경우
-            userDAO.updateUser(user);
-            user.setUserSeq(selectedUser.getUserSeq());
-        }
-        return user;
-    };
+    public UserVO getUser(String accessToken) throws NullPointerException {
+        WebClient webClient = WebClient.create();
+        KakaoUserResponse kakaoUserResponse = webClient.get()
+                .uri("https://kapi.kakao.com/v2/user/me")
+                .headers(h -> h.setBearerAuth(accessToken))
+                .retrieve()
+                .bodyToMono(KakaoUserResponse.class)
+                .block();
+        if (kakaoUserResponse == null) throw new NullPointerException();
+        return kakaoUserResponse.toUserVO();
+    }
 }

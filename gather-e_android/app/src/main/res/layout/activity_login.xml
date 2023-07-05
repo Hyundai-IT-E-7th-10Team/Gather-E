@@ -20,8 +20,14 @@
         android:layout_weight="1"/>
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/kakao_login_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="40dp"
+        android:paddingHorizontal="40dp"
         android:src="@drawable/kakao_login_large_wide" />
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="40dp"
+        android:layout_marginBottom="80dp"/>
 </LinearLayout>
