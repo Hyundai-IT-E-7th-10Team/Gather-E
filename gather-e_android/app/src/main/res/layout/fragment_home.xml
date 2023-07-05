@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#8696FE"
+        android:background="@color/purple"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -20,6 +20,7 @@
             android:layout_marginStart="20sp"
             android:background="@drawable/round_button"
             android:backgroundTint="@color/white"
+            android:fontFamily="@font/jalnan"
             android:text="전체 보기"/>
         <Spinner
             android:id="@+id/category_spinner"

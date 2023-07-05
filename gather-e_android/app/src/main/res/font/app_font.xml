@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <font-->
+<!--        android:font="@font/cutefont"-->
+<!--        android:fontStyle="normal"-->
+<!--        android:fontWeight="300"-->
+<!--        app:fontStyle="normal"-->
+<!--        app:font="@font/cutefont"-->
+<!--        app:fontWeight="300"-->
+<!--        tools:targetApi="o" />-->
+    <font
+        android:font="@font/jalnan"
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        app:fontStyle="normal"
+        app:font="@font/jalnan"
+        app:fontWeight="300"
+        tools:targetApi="o" />
+</font-family>
