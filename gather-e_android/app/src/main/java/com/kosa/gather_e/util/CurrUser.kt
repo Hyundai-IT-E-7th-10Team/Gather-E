@@ -21,6 +21,7 @@ object CurrUser {
     fun setCurrUser(user: UserEntity) {
         name = user.userName
         profileImgUrl = user.userProfileImg
+        seq = user.userSeq
     }
 
     fun setToken(){
