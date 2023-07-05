@@ -30,15 +30,8 @@ android:background="@color/white">
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:padding="5dp"
-        android:background="@color/light_purple">
+        android:background="@color/double_light_purple">
 
-<!--            <ImageButton-->
-<!--            android:id="@+id/imgbtn_quit"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:tint="@color/white"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:srcCompat="@drawable/btn_quit" />-->
         <ImageButton
             android:id="@+id/imgbtn_quit"
             android:layout_width="wrap_content"
@@ -52,16 +45,19 @@ android:background="@color/white">
             app:tint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/toolbar" />
+
             <ImageView
                 android:id="@+id/circleImageView"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_plus" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
             android:orientation="vertical">
 
@@ -70,8 +66,9 @@ android:background="@color/white">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chat Room Title"
+                android:fontFamily="@font/gmarketsansbold"
                 android:textColor="@android:color/black"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -86,6 +83,7 @@ android:background="@color/white">
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:scaleType="centerCrop"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/ic_location" />
 
                 <TextView
@@ -93,8 +91,9 @@ android:background="@color/white">
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="June 26, 2023"
-                    android:layout_marginTop="0dp"
-                    android:textColor="@android:color/black"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/gmarketsansmedium"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="13sp" />
 
             </LinearLayout>
@@ -121,97 +120,36 @@ android:background="@color/white">
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:text="3"
-                android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:fontFamily="@font/gmarketsansmedium"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:text="/"
-                android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:fontFamily="@font/gmarketsansmedium"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
             <TextView
                 android:id="@+id/participants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="bottom|end"
                 android:text="3"
-                android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:fontFamily="@font/gmarketsansmedium"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:text="명"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"/>
+                android:fontFamily="@font/gmarketsansmedium"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"/>
 
         </LinearLayout>
-    <EditText
-        android:id="@+id/messageEditText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/transparent"
-        android:hint="메시지 입력"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-
-        app:layout_constraintStart_toEndOf="@+id/btnSelectImage"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintHeight_percent="0.1"
-     />
-
-        <ImageView
-            android:id="@+id/btnSelectImage"
-            android:layout_width="35dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/messageEditText"
-            app:layout_constraintEnd_toStartOf="@id/messageEditText"
-            app:layout_constraintTop_toTopOf="@id/messageEditText"
-            app:srcCompat="@drawable/baseline_image_24"
-            app:tint="@color/purple"
-            android:layout_marginStart="10dp"
-            />
-        <ImageView
-            android:id="@+id/selectedImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/btnSelectImage"
-            app:layout_constraintStart_toStartOf="parent"
-            android:scaleType="centerCrop"
-            android:visibility="visible"
-            />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/divider_bottom"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#B6B6B6"
-        app:layout_constraintBottom_toTopOf="@+id/messageEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/sendButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:text="전송"
-        android:src="@drawable/send"
-        android:textColor="@color/black"
-        android:layout_marginEnd="20dp"
-        app:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/messageEditText" />
-
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -228,6 +166,75 @@ android:background="@color/white">
         app:layout_constraintTop_toBottomOf="@+id/chatHead"
         app:layout_constraintBottom_toTopOf="@+id/selectedImage"
         app:layout_constraintVertical_bias="1.0" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/divider_bottom"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#B6B6B6"
+        app:layout_constraintBottom_toTopOf="@+id/messageEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/selectedImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/btnSelectImage"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:id="@+id/messageEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="메시지 입력"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/btnSelectImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendButton"
+        app:layout_constraintHeight_percent="0.1"
+        />
+
+    <ImageView
+        android:id="@+id/btnSelectImage"
+        android:layout_width="36dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/messageEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/messageEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/messageEditText"
+        app:srcCompat="@drawable/baseline_image_24"
+        app:tint="@color/purple" />
+
+
+
+
+    <ImageView
+        android:id="@+id/sendButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="전송"
+        android:src="@drawable/send"
+        android:textColor="@color/black"
+        android:layout_marginEnd="20dp"
+        app:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/messageEditText" />
+
+
 
     <ProgressBar
         android:id="@+id/progressBar2"

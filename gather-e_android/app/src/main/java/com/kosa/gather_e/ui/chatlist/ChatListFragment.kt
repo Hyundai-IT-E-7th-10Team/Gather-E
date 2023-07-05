@@ -44,6 +44,9 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
                 intent.putExtra("gatherCategory", chatRoom.gatherCategory)
                 intent.putExtra("gatherCategorySeq", chatRoom.gatherCategorySeq)
                 intent.putExtra("gatherParticipants", ArrayList(chatRoom.participants))
+                if (!chatRoom.participantTokens.contains(CurrUser.getToken())){
+                    chatRoom.participantTokens.add(CurrUser.getToken())
+                }
                 intent.putExtra("gatherParticipantTokens", ArrayList(chatRoom.participantTokens))
                 intent.putExtra("gatherPlace", chatRoom.gatherPlace)
                 startActivity(intent)

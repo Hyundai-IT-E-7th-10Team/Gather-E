@@ -61,7 +61,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             channel.description = CHANNEL_DESCRIPTION
             // 설정
@@ -75,6 +75,32 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         }
     }
 
+    /*
+val NOTIFICATION_ID = 1001;
+createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, false,
+    getString(R.string.app_name), "App notification channel")   // 1
+
+val channelId = "$packageName-${getString(R.string.app_name)}"
+val title = "Android Developer"
+val content = "Notifications in Android P"
+
+val intent = Intent(baseContext, NewActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, 0,
+        intent, PendingIntent.FLAG_UPDATE_CURRENT)    // 2
+
+val builder = NotificationCompat.Builder(this, channelId)
+builder.setSmallIcon(R.drawable.ic_codechacha)
+builder.setContentTitle(title)
+builder.setContentText(content)
+builder.priority = NotificationCompat.PRIORITY_HIGH   // 3
+builder.setAutoCancel(true)
+builder.setFullScreenIntent(fullScreenPendingIntent, true)   // 4
+
+val notificationManager = NotificationManagerCompat.from(this)
+notificationManager.notify(NOTIFICATION_ID, builder.build())
+     */
+
     private fun createNotification(
         type: NotificationType,
         title: String?,
@@ -87,12 +113,15 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getActivity(this, type.id, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, 0,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo)
             .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
             .setAutoCancel(true)
 
         when (type) {
@@ -131,9 +160,9 @@ class FirebaseMessagingService: FirebaseMessagingService() {
     }
 
     companion object {
-        private const val CHANNEL_NAME = "Emoji Party"
-        private const val CHANNEL_DESCRIPTION = "Emoji Party를 위한 채널"
-        private const val CHANNEL_ID = "Channel Id"
+        private const val CHANNEL_NAME = "Gather&E Channel"
+        private const val CHANNEL_DESCRIPTION = "Gather&E"
+        private const val CHANNEL_ID = "gatherne"
     }
 
 }

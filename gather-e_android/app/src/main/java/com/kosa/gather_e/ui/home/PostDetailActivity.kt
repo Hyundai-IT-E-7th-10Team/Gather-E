@@ -18,8 +18,12 @@ import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityPostDetailBinding
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
+import com.kosa.gather_e.model.entity.notification.PushNotificationData
+import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
+import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
 import com.kosa.gather_e.model.entity.user.UserEntity
 import com.kosa.gather_e.model.entity.user_gather.UserGather
+import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.util.GatherUtil
@@ -32,6 +36,8 @@ class PostDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostDetailBinding
     private lateinit var gatherEntity: GatherEntity
     val chatDB = Firebase.database.reference.child(DBKey.DB_CHATS)
+    private lateinit var registration_ids : MutableList<String>
+    private lateinit var currentParticipants : MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,22 @@ class PostDetailActivity : AppCompatActivity() {
         gatherEntity = intent.getSerializableExtra("gather") as GatherEntity
         val isBefore = GatherUtil.isGathering(gatherEntity)
         val isFull = GatherUtil.isFull(gatherEntity)
+
+        val createQuery = chatDB.orderByChild("gatherTitle").equalTo(gatherEntity.gatherTitle)
+        Log.d("gather", "create 채팅방 가져오기 : ${createQuery}")
+        createQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val chatListItem = snapshot.getValue(ChatListItem::class.java)
+                    Log.d("gather", "토큰들들들 : ${chatListItem?.participantTokens}")
+                    registration_ids = chatListItem?.participantTokens!!
+                    currentParticipants = chatListItem?.participants!!
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+        })
 
 
         binding.backBtn.setOnClickListener {
@@ -56,6 +78,7 @@ class PostDetailActivity : AppCompatActivity() {
                             if (GatherUtil.isGathering(this) && !GatherUtil.isFull(this)) {
                                 "모집중"
                             } else {
+
                                 "모집 종료"
                             }
                         binding.titleText.text = gatherTitle
@@ -144,7 +167,6 @@ class PostDetailActivity : AppCompatActivity() {
 
                         chatListItem?.participants?.add(CurrUser.getUserName())
                         chatListItem?.participantTokens?.add(CurrUser.getToken())
-
                         snapshot.ref.setValue(chatListItem)
 
                     }
@@ -153,6 +175,66 @@ class PostDetailActivity : AppCompatActivity() {
                 override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
+
+            if(gatherEntity.gatherLimit <= currentParticipants.size+1){
+                Log.d("gather", "${gatherEntity.gatherLimit} <= ${currentParticipants.size+1}")
+                val pushNotificationData = PushNotificationData(
+                    type = "NORMAL",
+                    title = gatherEntity.gatherTitle,
+                    message = "모임 정원이 충족되었습니다."
+                )
+
+                val pushNotificationEntity = PushNotificationEntity(
+                    registration_ids = registration_ids,
+                    priority = "high",
+                    data = pushNotificationData
+                )
+
+                // 알림 요청 전송
+                val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+                callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+                    override fun onResponse(call: Call<PushNotificationResponse>, response: Response<PushNotificationResponse>) {
+                        Log.d("gather", "성공 $call, $response")
+                        Log.d("gather", "$pushNotificationEntity")
+                    }
+
+                    override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+                        Log.d("gather", "실패 $t")
+                        Log.d("gather", "실패 $call")
+                    }
+                })
+            }
+
+            // 알림
+            Log.d("gather", "채팅방 입장 토큰 : ${registration_ids}")
+            // 알림 데이터 생성
+            val pushNotificationData = PushNotificationData(
+                type = "NORMAL",
+                title = gatherEntity.gatherTitle,
+                message = "${CurrUser.getUserName()}님이 참여하셨습니다"
+            )
+
+            // 알림 요청 데이터 생성
+            val pushNotificationEntity = PushNotificationEntity(
+                registration_ids = registration_ids,
+                priority = "high",
+                data = pushNotificationData
+            )
+
+            // 알림 요청 전송
+            val callPushNotification: Call<PushNotificationResponse> = FCMRetrofitProvider.getRetrofit().sendPushNotification(pushNotificationEntity)
+            callPushNotification.enqueue(object : Callback<PushNotificationResponse> {
+                override fun onResponse(call: Call<PushNotificationResponse>, response: Response<PushNotificationResponse>) {
+                    Log.d("gather", "성공 $call, $response")
+                    Log.d("gather", "$pushNotificationEntity")
+                }
+
+                override fun onFailure(call: Call<PushNotificationResponse>, t: Throwable) {
+                    Log.d("gather", "실패 $t")
+                    Log.d("gather", "실패 $call")
+                }
+            })
+
         }
     }
 
