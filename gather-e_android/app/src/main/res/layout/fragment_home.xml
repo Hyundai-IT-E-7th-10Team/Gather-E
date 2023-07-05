@@ -8,28 +8,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/purple"
-        android:orientation="horizontal">
+        android:layout_height="100dp"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:fontFamily="@font/gmarketsansmedium">
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            />
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/all_or_gathering_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:textSize="13dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20sp"
-            android:background="@drawable/round_button"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/jalnan"
+            android:layout_marginStart="5dp"
+            android:drawableLeft="@drawable/ic_all"
+            android:drawableTint="@color/light_purple"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/background_map_button"
+            android:fontFamily="@font/gmarketsansmedium"
             android:text="전체 보기"/>
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/round_button"
-            android:layout_marginStart="20sp"
-            android:backgroundTint="@color/white"/>
+
 
     </LinearLayout>
 
@@ -37,21 +45,20 @@
         android:id="@+id/home_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="80dp"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/writeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="모임 만들기"
-        android:drawableStart="@drawable/ic_mypage"
+        android:src="@drawable/ic_write"
         android:drawablePadding="10dp"
-        android:backgroundTint="@color/light_purple"
+        android:backgroundTint="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="100dp" />
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="90dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
