@@ -24,7 +24,7 @@ class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) : ListAdapter<C
             }
 
             binding.chatRoomTitleTextView.text = chatListItem.gatherTitle
-            binding.dateTextView.text = chatListItem.gatherDate
+            binding.dateTextView.text = chatListItem.gatherPlace
             binding.participants.text = chatListItem.gatherLimit.toString()
             binding.currentParticipants.text = chatListItem.participants.size.toString()
 
