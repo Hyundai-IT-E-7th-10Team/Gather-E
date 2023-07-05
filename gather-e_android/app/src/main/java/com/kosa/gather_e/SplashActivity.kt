@@ -33,6 +33,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         KakaoSdk.init(this, "da3fb6c1f547e9e4707b46e0e748cc80")
+        val account = GoogleSignIn.getLastSignedInAccount(this)
 
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { token, error ->
@@ -45,15 +46,14 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        } else if(account != null) {
+            account.idToken?.let { googleLogin(it) }
         } else {
             intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        if (account != null) {
-            account.idToken?.let { googleLogin(it) }
-        }
+        
     }
 
     private fun kakaoLogin(token: String) {
