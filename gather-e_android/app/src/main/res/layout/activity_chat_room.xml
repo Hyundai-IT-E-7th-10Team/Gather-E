@@ -32,14 +32,26 @@ android:background="@color/white">
         android:padding="5dp"
         android:background="@color/light_purple">
 
-            <ImageButton
+<!--            <ImageButton-->
+<!--            android:id="@+id/imgbtn_quit"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:tint="@color/white"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            app:srcCompat="@drawable/btn_quit" />-->
+        <ImageButton
             android:id="@+id/imgbtn_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:elevation="30dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Cancel Button"
+            android:padding="10dp"
+            android:src="@drawable/ic_before"
             app:tint="@color/white"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_quit" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/toolbar" />
             <ImageView
                 android:id="@+id/circleImageView"
                 android:layout_width="48dp"
@@ -65,7 +77,9 @@ android:background="@color/white">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
 
                 <ImageView
                     android:layout_gravity="bottom"
@@ -76,12 +90,12 @@ android:background="@color/white">
 
                 <TextView
                     android:id="@+id/dateTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="June 26, 2023"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -166,12 +180,12 @@ android:background="@color/white">
             />
         <ImageView
             android:id="@+id/selectedImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/btnSelectImage"
             app:layout_constraintStart_toStartOf="parent"
             android:scaleType="centerCrop"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -208,11 +222,11 @@ android:background="@color/white">
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/messageEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatHead"
+        app:layout_constraintBottom_toTopOf="@+id/selectedImage"
         app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
