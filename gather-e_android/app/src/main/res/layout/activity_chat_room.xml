@@ -146,6 +146,14 @@ android:background="@color/white">
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hmallList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/chatHead"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -157,7 +165,9 @@ android:background="@color/white">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatHead"
+        app:layout_constraintTop_toBottomOf="@+id/hmallList"
+        app:layout_constraintBottom_toTopOf="@+id/selectedImage"
+
         app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

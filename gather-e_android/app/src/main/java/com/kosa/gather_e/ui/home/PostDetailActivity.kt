@@ -162,7 +162,6 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun initDynamicLink(): Uri {
         val playStoreUri : Uri =Uri.parse("https://play.google.com")
-//        val inviteCode = viewModel.inviteCode.value
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("https://kosa.page.link/rniX")
             domainUriPrefix = "https://kosa.page.link/rniX"
