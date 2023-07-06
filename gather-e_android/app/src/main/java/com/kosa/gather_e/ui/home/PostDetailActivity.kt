@@ -1,10 +1,13 @@
 package com.kosa.gather_e.ui.home
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -12,9 +15,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.dynamiclinks.ktx.androidParameters
+import com.google.firebase.dynamiclinks.ktx.dynamicLink
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.navigationInfoParameters
 import com.google.firebase.ktx.Firebase
+import com.kosa.gather_e.BottomNavigationVarActivity
 import com.kosa.gather_e.DBKey
 import com.kosa.gather_e.R
+import com.kosa.gather_e.SplashActivity
 import com.kosa.gather_e.databinding.ActivityPostDetailBinding
 import com.kosa.gather_e.model.entity.chat.ChatListItem
 import com.kosa.gather_e.model.entity.gather.GatherEntity
@@ -121,15 +130,44 @@ class PostDetailActivity : AppCompatActivity() {
 
 
         binding.shareSNS.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.setType("image/*")
-            intent.putExtra(Intent.EXTRA_STREAM, R.drawable.logo)
-            val chooser = Intent.createChooser(intent, "친구에게 공유하기")
+
+            val dynamicLink = initDynamicLink().toString()
+            Log.d("gather","dynamic Link : : ${dynamicLink}")
+
+            val msg = Intent(Intent.ACTION_SEND)
+
+            msg.addCategory(Intent.CATEGORY_DEFAULT)
+            msg.putExtra(
+                Intent.EXTRA_TEXT, dynamicLink)
+            msg.type = "text/plain"
+            startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"))
+
+
+            val chooser = Intent.createChooser(msg, "친구에게 공유하기")
             startActivity(chooser)
         }
 
 
         setContentView(binding.root)
+    }
+
+    private fun initDynamicLink(): Uri {
+        val playStoreUri : Uri =Uri.parse("https://play.google.com")
+//        val inviteCode = viewModel.inviteCode.value
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = Uri.parse("https://kosa.page.link/rniX")
+            domainUriPrefix = "https://kosa.page.link/rniX"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                androidParameters(SplashActivity::class.java.packageName) {
+                    fallbackUrl = playStoreUri
+                }
+            }
+            navigationInfoParameters {
+                forcedRedirectEnabled = true
+            }
+        }
+        val dynamicLinkUri = dynamicLink.uri
+        return dynamicLinkUri
     }
 
     fun setBtnJoin() {

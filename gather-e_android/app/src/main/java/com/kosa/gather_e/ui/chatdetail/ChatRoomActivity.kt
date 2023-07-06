@@ -5,15 +5,18 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -49,6 +52,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -193,6 +199,7 @@ class ChatRoomActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val uri = withContext(Dispatchers.IO) {
+                            Log.d("gather","보낼 때 사진 압축 후 일까? ${photoUri}")
                             uploadPhoto(photoUri)
                         }
                         sendMessageWithImage(uri, message)
@@ -272,6 +279,23 @@ class ChatRoomActivity : AppCompatActivity() {
         }
     }
 
+    private fun convertResizeImage(imageUri: Uri): Uri {
+        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
+
+        val tempFile = File.createTempFile("resized_image", ".jpg", this.cacheDir)
+        val fileOutputStream = FileOutputStream(tempFile)
+        fileOutputStream.write(byteArrayOutputStream.toByteArray())
+        fileOutputStream.close()
+
+        return Uri.fromFile(tempFile)
+    }
+
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -282,8 +306,9 @@ class ChatRoomActivity : AppCompatActivity() {
             2020 -> {
                 val uri = data?.data
                 if (uri != null) {
-                    Log.d("gather","사진 가져와서 띄워주기 ${uri}")
-                    selectedImageUri = uri
+                    Log.d("gather","압축 전 ${uri}")
+                    selectedImageUri = convertResizeImage(uri)
+                    Log.d("gather","압축 후 ${selectedImageUri}")
                     Glide.with(this)
                         .load(uri)
                         .transform(CenterCrop(), RoundedCorners(30))
@@ -291,7 +316,6 @@ class ChatRoomActivity : AppCompatActivity() {
                         .diskCacheStrategy(DiskCacheStrategy.ALL) // 모든 이미지를 캐시
                         .into(binding.selectedImage)
                     binding.selectedImage.visibility = View.VISIBLE
-//                    binding.messageEditText.
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
