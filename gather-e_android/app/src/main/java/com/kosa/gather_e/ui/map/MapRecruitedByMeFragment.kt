@@ -126,8 +126,8 @@ class MapRecruitedByMeFragment : Fragment(), OnMapReadyCallback {
                                 filteredList[i].gatherLongitude
                             )
 
-                            marker.width = 150
-                            marker.height = 150
+                            marker.width = 130
+                            marker.height = 130
 
 
                             when (filteredList[i].categorySeq) {
@@ -154,16 +154,12 @@ class MapRecruitedByMeFragment : Fragment(), OnMapReadyCallback {
                             }
 
                             marker.setOnClickListener { it ->
-                                naverMap.moveCamera(
-                                    CameraUpdate.scrollTo(marker.position).animate(
-                                        CameraAnimation.Easing))
+                                naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
                                 val dialog = GatherInfoDialogFragment(filteredList[i])
                                 dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
 
                                 true
                             }
-
-
                             marker.map = naverMap
 
                         }

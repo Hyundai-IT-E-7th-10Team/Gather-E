@@ -25,7 +25,7 @@
         android:contentDescription="Cancel Button"
         android:padding="10dp"
         android:src="@drawable/ic_before"
-        android:tint="@color/white"
+        app:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
@@ -45,11 +45,13 @@
     <EditText
         android:id="@+id/searchLocationEdittext"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_height="45dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="100dp"
+        android:layout_marginEnd="10dp"
         android:hint="장소를 검색하세요."
-        android:textSize="15dp"
+        android:textSize="14dp"
         android:drawableLeft="@drawable/ic_map_pin"
         android:drawableTint="@color/light_purple"
         android:inputType="text"
@@ -57,16 +59,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.7"
-        android:background="@drawable/edittext_background"/>
+        android:background="@drawable/background_map_button"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/searchLocationBtn"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
         android:text="검색"
-        android:background="@drawable/purple_write_button"
+        android:fontFamily="@font/gmarketsansmedium"
+        android:background="@drawable/background_map_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/searchLocationEdittext"
         app:layout_constraintTop_toTopOf="parent"

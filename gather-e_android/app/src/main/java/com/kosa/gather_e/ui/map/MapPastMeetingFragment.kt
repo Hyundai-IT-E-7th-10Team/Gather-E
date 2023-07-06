@@ -121,8 +121,8 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
                                 pastMeetingGatherList[i].gatherLatitude,
                                 pastMeetingGatherList[i].gatherLongitude
                             )
-                            marker.width = 150
-                            marker.height = 150
+                            marker.width = 130
+                            marker.height = 130
 
 
                             when (pastMeetingGatherList[i].categorySeq) {
@@ -149,11 +149,10 @@ class MapPastMeetingFragment : Fragment(), OnMapReadyCallback {
                             }
 
                             marker.setOnClickListener { it ->
-                                naverMap.moveCamera(
-                                    CameraUpdate.scrollTo(marker.position).animate(
-                                        CameraAnimation.Easing))
-//                                val dialog = GatherInfoDialogFragment(pastMeetingGatherList[i])
-//                                dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+                                naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
+                                val dialog = GatherInfoDialogFragment(pastMeetingGatherList[i])
+                                dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+
                                 true
                             }
                             marker.map = naverMap
