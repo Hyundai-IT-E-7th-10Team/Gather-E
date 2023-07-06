@@ -19,7 +19,7 @@
 <!--    </ImageView>-->
         <View
             android:id="@+id/userImage"
-            android:layout_width="10dp"
+            android:layout_width="5dp"
             android:layout_height="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -28,8 +28,8 @@
         android:id="@+id/senderTextView"
         tools:text="NICKNAME"
         android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="bold"
+        android:textSize="13sp"
+        android:fontFamily="@font/gmarketsansmedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="10dp"
@@ -55,6 +55,7 @@
             android:gravity="start|center_vertical"
             android:linksClickable="true"
             android:padding="10dp"
+            android:layout_marginTop="3dp"
             android:text="안녕하세요."
             android:textColor="@color/white"
             android:visibility="visible" />

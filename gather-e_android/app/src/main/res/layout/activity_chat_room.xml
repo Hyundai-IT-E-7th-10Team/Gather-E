@@ -28,7 +28,7 @@ android:background="@color/white">
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/chatHead"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:padding="5dp"
         android:background="@color/double_light_purple">
 
@@ -38,6 +38,7 @@ android:background="@color/white">
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:elevation="30dp"
+            android:layout_gravity="center_vertical"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="Cancel Button"
             android:padding="10dp"
@@ -66,7 +67,6 @@ android:background="@color/white">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chat Room Title"
-                android:fontFamily="@font/gmarketsansbold"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -196,6 +196,7 @@ android:background="@color/white">
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="메시지 입력"
+        android:fontFamily="@font/gmarketsansmedium"
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="18dp"
@@ -216,7 +217,7 @@ android:background="@color/white">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/messageEditText"
         app:srcCompat="@drawable/baseline_image_24"
-        app:tint="@color/purple" />
+        app:tint="@color/blue" />
 
 
 

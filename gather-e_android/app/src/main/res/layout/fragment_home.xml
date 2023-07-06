@@ -13,15 +13,15 @@
         android:orientation="horizontal"
         android:fontFamily="@font/gmarketsansmedium">
 
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_gravity="center_vertical"
-            android:paddingHorizontal="10dp"
-            />
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/category_spinner"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/background_map_button"
+            android:paddingHorizontal="10dp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/all_or_gathering_btn"

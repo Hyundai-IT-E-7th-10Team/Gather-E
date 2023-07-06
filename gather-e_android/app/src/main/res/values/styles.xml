@@ -9,10 +9,6 @@
         <item name="colorAccent">@color/double_light_purple</item>
     </style>
 
-<!--    <style name="myFont" parent="@android:style/Widget.DeviceDefault.TextView">-->
-<!--        <item name="android:fontFamily">@font/app_font</item>-->
-<!--    </style>-->
-
     <style name="myFrontText" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
