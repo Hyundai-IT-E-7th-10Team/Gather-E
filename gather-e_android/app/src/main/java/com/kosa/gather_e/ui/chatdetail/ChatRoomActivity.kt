@@ -14,18 +14,16 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -38,17 +36,18 @@ import com.kosa.gather_e.DBKey.Companion.CHILD_CHAT
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.ActivityChatRoomBinding
 import com.kosa.gather_e.model.entity.chat.ChatItem
-import com.kosa.gather_e.model.entity.chat.ChatListItem
+import com.kosa.gather_e.model.entity.chat.HmallItem
 import com.kosa.gather_e.model.entity.notification.PushNotificationData
 import com.kosa.gather_e.model.entity.notification.PushNotificationEntity
 import com.kosa.gather_e.model.entity.notification.PushNotificationResponse
-import com.kosa.gather_e.util.CurrUser
 import com.kosa.gather_e.model.repository.firebase.FCMRetrofitProvider
+import com.kosa.gather_e.util.CurrUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,7 +68,8 @@ class ChatRoomActivity : AppCompatActivity() {
 
     private var userName = CurrUser.getUserName()
     private var userImage = CurrUser.getProfileImgUrl()
-
+    private var hmallImageList = mutableListOf<HmallItem>()
+    private lateinit var imageAdapter: ImageAdapter
 
     private val storage: FirebaseStorage by lazy {
         Firebase.storage
@@ -100,6 +100,53 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.dateTextView.text = gatherPlace
         binding.participants.text = gatherLimit.toString()
         binding.currentParticipants.text = participantsCnt.toString()
+
+        val keyword = "테니스"
+        val hmall = "https://www.hmall.com/p/pde/search.do?searchTerm=${keyword}&gnbSearchYn=Y&gaSearchType=1"
+
+        Thread {
+            val doc = Jsoup.connect(hmall).get()
+
+            val wrapElement = doc.selectFirst("div.wrap.searchresult")
+            val mainElement = wrapElement?.selectFirst("main.cmain.results")
+            val div1Element = mainElement?.getElementById("reflashArea")
+            val formElement = div1Element?.selectFirst("form[name=pdeSearchForm]")
+            val div2Element = formElement?.selectFirst("div.container.gird-l2x")
+            val div3Element = div2Element?.selectFirst("div.contents")
+            val div4Element = div3Element?.selectFirst("div.product-area")
+            val div5Element = div4Element?.selectFirst("div.pdlist-wrap")
+            val ulElement = div5Element?.selectFirst("ul")
+            val liList = ulElement?.select("li")
+
+            for (liElement in liList!!) {
+                var imageItem = HmallItem()
+                var aElement = liElement.selectFirst("a")
+                var divElement = aElement?.selectFirst("div.thumb")
+                var imgElement = divElement?.selectFirst("img")
+                var img = imgElement?.attr("src")
+                imageItem.itemImage = img.toString()
+                imageItem.itemUrl = "https://www.hmall.com/p/pde/search.do?searchTerm=테니스&gnbSearchYn=Y&gaSearchType=1"
+                hmallImageList.add(imageItem)
+            }
+
+            runOnUiThread {
+                Log.d("crawling",hmallImageList.toString())
+                val recyclerView: RecyclerView = binding.hmallList
+                recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+
+                imageAdapter = ImageAdapter(onItemClicked = { hmallItem ->
+                    this?.let {
+                        val url = hmallItem.itemUrl
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                    }
+                })
+                recyclerView.adapter = imageAdapter
+                imageAdapter.submitList(hmallImageList)
+
+            }
+        }.start()
+
 
         var categoryImage = R.drawable.ic_1_football
         when (gatherCategortSeq) {
