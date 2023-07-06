@@ -103,26 +103,26 @@ class ChatRoomActivity : AppCompatActivity() {
 
         var categoryImage = R.drawable.ic_1_football
         when (gatherCategortSeq) {
-            1 -> categoryImage = R.drawable.ic_p1_football
-            2 -> categoryImage = R.drawable.ic_p2_tennis
-            3 -> categoryImage = R.drawable.ic_p3_golf
-            4 -> categoryImage = R.drawable.ic_p4_basketball
-            5 -> categoryImage = R.drawable.ic_p5_hiking
-            6 -> categoryImage = R.drawable.ic_p6_shuttlecock
-            7 -> categoryImage = R.drawable.ic_p7_volleyball
-            8 -> categoryImage = R.drawable.ic_p8_bowling
-            9 -> categoryImage = R.drawable.ic_p9_squash
-            10 -> categoryImage = R.drawable.ic_p10_pingpong
-            11 -> categoryImage = R.drawable.ic_p11_swimmig
-            12 -> categoryImage = R.drawable.ic_p12_riding
-            13 -> categoryImage = R.drawable.ic_p13_skate
-            14 -> categoryImage = R.drawable.ic_p14_cycling
-            15 -> categoryImage = R.drawable.ic_p15_yoga
-            16 -> categoryImage = R.drawable.ic_p16_pilates
-            17 -> categoryImage = R.drawable.ic_p17_climbing
-            18 -> categoryImage = R.drawable.ic_p18_billiard
-            19 -> categoryImage = R.drawable.ic_p19_dancing
-            20 -> categoryImage = R.drawable.ic_p20_boxing
+            1 -> categoryImage = R.drawable.ic_1_football
+            2 -> categoryImage = R.drawable.ic_2_tennis
+            3 -> categoryImage = R.drawable.ic_3_golf
+            4 -> categoryImage = R.drawable.ic_4_basketball
+            5 -> categoryImage = R.drawable.ic_5_hiking
+            6 -> categoryImage = R.drawable.ic_6_shuttlecock
+            7 -> categoryImage = R.drawable.ic_7_volleyball
+            8 -> categoryImage = R.drawable.ic_8_bowling
+            9 -> categoryImage = R.drawable.ic_9_squash
+            10 -> categoryImage = R.drawable.ic_10_pingpong
+            11 -> categoryImage = R.drawable.ic_11_swimmig
+            12 -> categoryImage = R.drawable.ic_12_riding
+            13 -> categoryImage = R.drawable.ic_13_skate
+            14 -> categoryImage = R.drawable.ic_14_cycling
+            15 -> categoryImage = R.drawable.ic_15_yoga
+            16 -> categoryImage = R.drawable.ic_16_pilates
+            17 -> categoryImage = R.drawable.ic_17_climbing
+            18 -> categoryImage = R.drawable.ic_18_billiard
+            19 -> categoryImage = R.drawable.ic_19_dancing
+            20 -> categoryImage = R.drawable.ic_20_boxing
         }
         Glide.with(this)
             .load(categoryImage)

@@ -55,7 +55,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_location"
-                app:tint="@color/yellow" />
+                app:tint="@color/gray" />
 
             <TextView
                 android:id="@+id/dateTextView"
@@ -78,7 +78,7 @@ android:layout_marginLeft="5dp"
                 android:layout_marginEnd="10dp"
 
                 android:src="@drawable/ic_people"
-                app:tint="@color/yellow"></ImageView>
+                app:tint="@color/gray"></ImageView>
 
             <TextView
                 android:id="@+id/currentParticipants"

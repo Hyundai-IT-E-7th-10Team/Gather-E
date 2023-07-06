@@ -21,6 +21,7 @@
       android:gravity="center_horizontal"
       android:text="선택한 장소 위치"
       android:textSize="18dp"
+      android:fontFamily="@font/gmarketsansmedium"
       android:elevation="30dp"
       android:textColor="@color/white"
       app:layout_constraintEnd_toEndOf="@+id/toolbar"
@@ -39,7 +40,7 @@
       android:contentDescription="Cancel Button"
       android:padding="10dp"
       android:src="@drawable/ic_before"
-      android:tint="@color/white"
+      app:tint="@color/white"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@id/toolbar" />
 
@@ -84,7 +85,7 @@
           android:layout_height="wrap_content"
           android:layout_marginEnd="10dp"
           android:src="@drawable/ic_map_marker"
-          android:tint="@color/light_purple" />
+          app:tint="@color/light_purple" />
 
       <TextView
           android:id="@+id/place_name"
@@ -109,7 +110,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_map"
-          android:tint="@color/light_purple"
+          app:tint="@color/light_purple"
           android:layout_marginEnd="10dp"
           />
 
@@ -131,34 +132,36 @@
       <ImageButton
           android:id="@+id/phone_call_button"
           android:src="@drawable/ic_phone"
-          android:tint="@color/light_purple"
+          app:tint="@color/light_purple"
           android:layout_width="0dp"
-          android:layout_height="wrap_content"
+          android:layout_height="40dp"
           android:layout_weight="1"
           android:layout_marginTop="10dp"
           android:layout_marginBottom="5dp"
-          android:background="@drawable/edittext_background"/>
+          android:layout_marginRight="5dp"
+          android:background="@drawable/background_map_button"/>
 
       <ImageButton
           android:id="@+id/place_url_button"
           android:src="@drawable/ic_internet"
-          android:tint="@color/light_purple"
+          app:tint="@color/light_purple"
           android:layout_width="0dp"
-          android:layout_height="wrap_content"
+          android:layout_height="40dp"
           android:layout_weight="1"
+          android:layout_marginLeft="5dp"
           android:layout_marginTop="10dp"
           android:layout_marginBottom="5dp"
-          android:background="@drawable/edittext_background"/>
+          android:background="@drawable/background_map_button"/>
 
     </LinearLayout>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="이곳으로 정하기"
-        android:background="@drawable/purple_write_button"/>
+        android:background="@drawable/background_map_button"/>
 
   </LinearLayout>
 

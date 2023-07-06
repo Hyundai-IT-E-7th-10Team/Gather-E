@@ -22,134 +22,127 @@ android:background="@color/white">
         android:indeterminateTintMode="src_in"
         />
 
+
+
     <LinearLayout
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/chatHead"
+        android:background="@color/double_light_purple"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:padding="5dp"
-        android:background="@color/double_light_purple">
+        >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imgbtn_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:elevation="30dp"
-            android:layout_gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="Cancel Button"
             android:padding="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_before"
-            app:tint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/toolbar" />
+            app:tint="@color/white"/>
 
-            <ImageView
-                android:id="@+id/circleImageView"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_plus" />
+        <ImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_10_pingpong" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+
+            >
 
             <TextView
                 android:id="@+id/chatRoomTitleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Chat Room Title"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+
+                />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                >
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_gravity="bottom"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:scaleType="centerCrop"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_location" />
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_location"
+                    app:tint="@color/light_purple" />
 
                 <TextView
                     android:id="@+id/dateTextView"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="June 26, 2023"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
                     android:fontFamily="@font/gmarketsansmedium"
-                    android:textColor="@android:color/darker_gray"
+                    android:text="혜화 락 볼링장 "
+                    android:textColor="@android:color/black"
                     android:textSize="13sp" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+
+                    android:src="@drawable/ic_people"
+                    app:tint="@color/light_purple"></ImageView>
+
+                <TextView
+                    android:id="@+id/currentParticipants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/gmarketsansmedium"
+                    android:text="3"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/gmarketsansmedium"
+                    android:text="/"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/participants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/gmarketsansmedium"
+                    android:text="3"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:src="@drawable/ic_people"
-            android:layout_marginEnd="5dp"
-            >
-        </ImageView>
-            <TextView
-                android:id="@+id/currentParticipants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:text="3"
-                android:fontFamily="@font/gmarketsansmedium"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:text="/"
-                android:fontFamily="@font/gmarketsansmedium"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
-            <TextView
-                android:id="@+id/participants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:text="3"
-                android:fontFamily="@font/gmarketsansmedium"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:text="명"
-                android:fontFamily="@font/gmarketsansmedium"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -160,13 +153,12 @@ android:background="@color/white">
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/selectedImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatHead"
-        app:layout_constraintBottom_toTopOf="@+id/selectedImage"
         app:layout_constraintVertical_bias="1.0" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/divider_bottom"

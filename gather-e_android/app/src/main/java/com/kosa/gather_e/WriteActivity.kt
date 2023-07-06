@@ -174,7 +174,7 @@ class WriteActivity : AppCompatActivity() {
                             layout.gravity = Gravity.CENTER_HORIZONTAL
 
                             val imageView = ImageView(this@WriteActivity)
-                            val imageLayoutParams = LinearLayout.LayoutParams(220, 220)
+                            val imageLayoutParams = LinearLayout.LayoutParams(170, 170)
                             imageView.layoutParams = imageLayoutParams
                             when (category.categorySeq) {
                                 1 -> imageView.setImageResource(R.drawable.ic_1_football)
@@ -200,6 +200,7 @@ class WriteActivity : AppCompatActivity() {
 
                             }
 
+
                             val textView = TextView(this@WriteActivity)
                             textView.text = category.categoryName
                             textView.setTextColor(Color.GRAY)
@@ -221,7 +222,7 @@ class WriteActivity : AppCompatActivity() {
                                 selectedLayout?.setBackgroundColor(Color.TRANSPARENT)
 
                                 // 새로운 항목을 선택하면 배경색을 변경
-                                layout.setBackgroundColor(R.color.light_gray)
+                                layout.setBackgroundResource(R.drawable.background_map_button)
                                 selectedLayout = layout
                             }
                         }

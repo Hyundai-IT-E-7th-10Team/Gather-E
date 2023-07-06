@@ -1,11 +1,13 @@
 package com.kosa.gather_e.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +22,6 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.navigationInfoParameters
 import com.google.firebase.ktx.Firebase
-import com.kosa.gather_e.BottomNavigationVarActivity
 import com.kosa.gather_e.DBKey
 import com.kosa.gather_e.R
 import com.kosa.gather_e.SplashActivity
@@ -87,7 +88,6 @@ class PostDetailActivity : AppCompatActivity() {
                             if (GatherUtil.isGathering(this) && !GatherUtil.isFull(this)) {
                                 "모집중"
                             } else {
-
                                 "모집 종료"
                             }
                         binding.titleText.text = gatherTitle
@@ -116,6 +116,9 @@ class PostDetailActivity : AppCompatActivity() {
                 response.body()?.forEach {
                     if (CurrUser.getSeq() == it.userSeq) {
                         isJoined = true
+                    }
+                    if (response.body()?.size!! > 1) {
+                        addUserToLayout(it)
                     }
                 }
                 if (isJoined && isBefore) setBtnCancle()
@@ -151,6 +154,12 @@ class PostDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    private fun addUserToLayout(userEntity: UserEntity) {
+        binding.userName.text = userEntity.userName
+        Glide.with(this@PostDetailActivity).load(userEntity.userProfileImg)
+            .into(binding.userProfileImg)
+    }
+
     private fun initDynamicLink(): Uri {
         val playStoreUri : Uri =Uri.parse("https://play.google.com")
 //        val inviteCode = viewModel.inviteCode.value
@@ -173,7 +182,7 @@ class PostDetailActivity : AppCompatActivity() {
     fun setBtnJoin() {
         binding.joinBtn.setOnClickListener(null)
         binding.joinBtn.visibility = View.VISIBLE
-        binding.joinBtn.text = "참가 하기"
+        binding.joinBtn.text = "참가하기"
         binding.joinBtn.backgroundTintList = ContextCompat.getColorStateList(
             this@PostDetailActivity, R.color.light_purple
         )
@@ -276,12 +285,14 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     fun setBtnCancle() {
         binding.joinBtn.setOnClickListener(null)
         binding.joinBtn.visibility = View.VISIBLE
         binding.joinBtn.text = "참가 취소"
+
         binding.joinBtn.backgroundTintList = ContextCompat.getColorStateList(
-            this@PostDetailActivity, R.color.light_purple_cancled
+            this@PostDetailActivity, R.color.gray
         )
         binding.joinBtn.setOnClickListener {
 
@@ -322,9 +333,11 @@ class PostDetailActivity : AppCompatActivity() {
         binding.joinBtn.visibility = View.GONE
     }
 
+    @SuppressLint("ResourceAsColor")
     fun setBtnDone() {
         binding.joinBtn.visibility = View.VISIBLE
         binding.joinBtn.text = "모집 종료"
+        binding.joinBtn.setTextColor(R.color.black)
         binding.joinBtn.isEnabled = false
     }
 }

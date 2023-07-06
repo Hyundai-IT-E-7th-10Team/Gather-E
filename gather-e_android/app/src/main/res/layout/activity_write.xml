@@ -17,8 +17,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/light_purple"
+            android:background="@android:color/transparent"
             app:layout_constraintTop_toTopOf="parent"
+
             tools:layout_editor_absoluteX="0dp" />
 
         <ImageButton
@@ -31,7 +32,7 @@
             android:contentDescription="Cancel Button"
             android:padding="10dp"
             android:src="@drawable/ic_cancel"
-            android:tint="@color/white"
+            app:tint="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/toolbar" />
 
@@ -42,7 +43,8 @@
             android:gravity="center_horizontal"
             android:text="모임 만들기"
             android:textSize="18dp"
-            android:textColor="@color/white"
+            android:fontFamily="@font/gmarketsansmedium"
+            android:textColor="@color/blue"
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
             app:layout_constraintStart_toStartOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="@+id/toolbar"
@@ -56,6 +58,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"
             android:text="제목"
+            android:fontFamily="@font/gmarketsansmedium"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -68,13 +71,14 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:hint="모집할 모임 제목을 입력하세요."
-            android:textSize="15dp"
+            android:background="@drawable/background_map_button"
             android:gravity="center"
-            android:background="@drawable/edittext_background"
-            android:singleLine="true"
+            android:hint="모집할 모임 제목을 입력하세요."
             android:padding="10dp"
+            android:singleLine="true"
+            android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
@@ -83,11 +87,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="110dp"
+            android:fontFamily="@font/gmarketsansmedium"
             android:text="모임 목적"
             android:textSize="16dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/titleEditText"  />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -112,41 +117,41 @@
             android:id="@+id/dateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="125dp"
+            android:fontFamily="@font/gmarketsansmedium"
             android:text="만나는 날짜"
             android:textSize="16dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="240dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/categoryView" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="270dp"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/dateView">
 
-            <Button
+            <ImageButton
                 android:id="@+id/calendarBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:drawableLeft="@drawable/ic_calendar"
-                android:drawableTint="@color/white"
-                android:text="날짜 설정"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/purple_write_button"/>
+                android:src="@drawable/ic_calendar"
+                app:tint="@color/light_purple"
+                android:backgroundTint="@android:color/transparent"
+                 />
 
             <TextView
                 android:id="@+id/dateText"
                 android:layout_width="130dp"
                 android:layout_height="41dp"
-                android:background="@drawable/edittext_background"
+                android:background="@drawable/background_map_button"
                 android:gravity="center"
                 android:hint="선택한 날짜"
-                android:textSize="15dp"
-                />
+                android:textSize="14dp" />
 
         </LinearLayout>
 
@@ -155,39 +160,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="320dp"
+            android:layout_marginTop="60dp"
             android:text="만나는 시간"
             android:textSize="16dp"
+            android:fontFamily="@font/gmarketsansmedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/dateView" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="350dp"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/timeView">
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/clockBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:drawableLeft="@drawable/ic_clock"
-                android:drawableTint="@color/white"
-                android:text="시간 설정"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/purple_write_button"/>
+                android:backgroundTint="@android:color/transparent"
+                app:tint="@color/light_purple"
+                android:src="@drawable/ic_clock"
+                 />
 
             <TextView
                 android:id="@+id/timeText"
                 android:layout_width="130dp"
-                android:layout_height="41dp"
-                android:background="@drawable/edittext_background"
+                android:layout_height="40dp"
+                android:background="@drawable/background_map_button"
                 android:gravity="center"
                 android:hint="선택한 시간"
-                android:textSize="15dp" />
+                android:textSize="14dp" />
 
         </LinearLayout>
 
@@ -196,11 +203,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="410dp"
+            android:layout_marginTop="70dp"
             android:text="상세 내용"
             android:textSize="16dp"
+            android:fontFamily="@font/gmarketsansmedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/timeView" />
 
 
         <EditText
@@ -208,12 +216,13 @@
             android:layout_width="0dp"
             android:layout_height="130dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/background_map_button"
             android:gravity="top|left"
+            android:padding="14dp"
             android:hint="본문을 입력하세요."
-            android:textSize="15dp"
+            android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/contentTextView" />
@@ -223,42 +232,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="590dp"
+            android:layout_marginTop="160dp"
             android:text="장소"
             android:textSize="16dp"
+            android:fontFamily="@font/gmarketsansmedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"  />
+            app:layout_constraintTop_toBottomOf="@id/contentTextView"  />
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/placeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:drawableLeft="@drawable/ic_map"
                 android:drawableTint="@color/white"
+                android:drawablePadding="10dp"
                 android:text="장소 검색하기"
+                android:textSize="13dp"
+                android:textColor="@color/white"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/purple_write_button"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="620dp"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+                android:fontFamily="@font/gmarketsansmedium"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/placeView"/>
 
-            <TextView
-                android:id="@+id/placeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_background"
-                android:gravity="center"
-                android:drawableLeft="@drawable/ic_map_pin"
-                android:drawableTint="@color/light_purple"
-                android:hint="선택한 장소"
-                android:textSize="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="665dp"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+        <TextView
+            android:id="@+id/placeText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:paddingHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_map_button"
+            android:drawableLeft="@drawable/ic_map_pin"
+            android:drawableTint="@color/light_purple"
+            android:gravity="center"
+            android:hint="선택한 장소"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/placeBtn" />
 
 
         <LinearLayout
@@ -266,46 +281,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="720dp"
+            android:layout_marginTop="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/placeText">
 
             <TextView
                 android:id="@+id/personnelView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
+                android:fontFamily="@font/gmarketsansmedium"
                 android:text="모임 인원"
                 android:textSize="16dp" />
 
             <NumberPicker
                 android:id="@+id/personnel_number_picker"
                 android:layout_width="wrap_content"
-                android:layout_height="70dp" />
+                android:layout_height="55dp"
+                android:fontFamily="@font/gmarketsansmedium" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/gmarketsansmedium"
                 android:text="명"
                 android:textSize="16dp" />
 
         </LinearLayout>
 
-
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/completeBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/purple_write_button"
+            android:background="@drawable/background_map_button"
             android:padding="5dp"
             android:text="작성하기"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:layout_marginTop="810dp"
+            android:fontFamily="@font/gmarketsansmedium"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginTop="850dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -314,7 +331,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="860dp"
+            android:layout_marginTop="900dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"

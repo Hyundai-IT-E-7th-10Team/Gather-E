@@ -131,8 +131,8 @@ class MapCurrentRecruiteFragment : Fragment(), OnMapReadyCallback {
                                 currentRecruitGatherList[i].gatherLatitude,
                                 currentRecruitGatherList[i].gatherLongitude
                             )
-                            marker.width = 150
-                            marker.height = 150
+                            marker.width = 130
+                            marker.height = 130
 
 
                             when (filteredList[i].categorySeq) {
