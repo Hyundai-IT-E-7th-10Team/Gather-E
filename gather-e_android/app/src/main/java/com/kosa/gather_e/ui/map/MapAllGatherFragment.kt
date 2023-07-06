@@ -4,7 +4,6 @@ import GatherInfoDialogFragment
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,6 @@ import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import com.kosa.gather_e.R
 import com.kosa.gather_e.databinding.FragmentMapAllGatherBinding
-import com.kosa.gather_e.model.entity.gather.GatherEntity
-import com.kosa.gather_e.model.entity.map.PastMeetingGatherEntity
 import com.kosa.gather_e.model.repository.spring.SpringRetrofitProvider
 import com.kosa.gather_e.util.CurrUser
 import com.naver.maps.geometry.LatLng
@@ -130,8 +127,8 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                         i.gatherLatitude,
                         i.gatherLongitude
                     )
-                    marker.width = 150
-                    marker.height = 150
+                    marker.width = 130
+                    marker.height = 130
 
                     when (i.categorySeq) {
                         1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_1_football)
@@ -154,6 +151,13 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                         18 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_18_billiard)
                         19 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_19_dancing)
                         20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_20_boxing)
+                    }
+                    marker.setOnClickListener { it ->
+                        naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
+                        val dialog = GatherInfoDialogFragment(i)
+                        dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+
+                        true
                     }
                     marker.map = naverMap
                 }
@@ -179,8 +183,8 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                         i.gatherLatitude,
                         i.gatherLongitude
                     )
-                    marker.width = 150
-                    marker.height = 150
+                    marker.width = 130
+                    marker.height = 130
 
 
                     when (i.categorySeq) {
@@ -206,16 +210,13 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                         20 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_p20_boxing)
                     }
 
-//                    marker.setOnClickListener { it ->
-//                        naverMap.moveCamera(
-//                            CameraUpdate.scrollTo(marker.position).animate(
-//                                CameraAnimation.Easing
-//                            )
-//                        )
-//                        val dialog = GatherInfoDialogFragment(i)
-//                        dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
-//                        true
-//                    }
+                    marker.setOnClickListener { it ->
+                        naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
+                        val dialog = GatherInfoDialogFragment(i)
+                        dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
+
+                        true
+                    }
                     marker.map = naverMap
 
                 }
@@ -243,8 +244,8 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                             i.gatherLatitude,
                             i.gatherLongitude
                         )
-                        marker.width = 150
-                        marker.height = 150
+                        marker.width = 130
+                        marker.height = 130
 
                         when (i.categorySeq) {
                             1 -> marker.icon = OverlayImage.fromResource(R.drawable.ic_m1_football)
@@ -270,11 +271,7 @@ class MapAllGatherFragment : Fragment(), OnMapReadyCallback {
                         }
 
                         marker.setOnClickListener { it ->
-                            naverMap.moveCamera(
-                                CameraUpdate.scrollTo(marker.position).animate(
-                                    CameraAnimation.Easing
-                                )
-                            )
+                            naverMap.moveCamera(CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing))
                             val dialog = GatherInfoDialogFragment(i)
                             dialog.show(parentFragmentManager, "GatherInfoDialogFragment")
 
