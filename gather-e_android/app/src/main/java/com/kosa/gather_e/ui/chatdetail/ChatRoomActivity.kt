@@ -57,6 +57,9 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 
 class ChatRoomActivity : AppCompatActivity() {
 
@@ -101,8 +104,8 @@ class ChatRoomActivity : AppCompatActivity() {
         binding.participants.text = gatherLimit.toString()
         binding.currentParticipants.text = participantsCnt.toString()
 
-        val keyword = "테니스"
-        val hmall = "https://www.hmall.com/p/pde/search.do?searchTerm=${keyword}&gnbSearchYn=Y&gaSearchType=1"
+//        val keyword = "탁구"
+        val hmall = "https://www.hmall.com/p/pde/search.do?searchTerm=${gatherCategory}&gnbSearchYn=Y&gaSearchType=1"
 
         Thread {
             val doc = Jsoup.connect(hmall).get()
@@ -124,8 +127,24 @@ class ChatRoomActivity : AppCompatActivity() {
                 var divElement = aElement?.selectFirst("div.thumb")
                 var imgElement = divElement?.selectFirst("img")
                 var img = imgElement?.attr("src")
+
+                // onclick 속성 값 추출
+                val onclick: String = aElement.attr("onclick")
+
+                val pattern = Pattern.compile("itemDetailLinkProc\\('([^']*)'")
+                val matcher: Matcher = pattern.matcher(onclick)
+
+                var firstArgument: String? = ""
+                if (matcher.find()) {
+                    firstArgument = matcher.group(1)
+                }
+
+
+                Log.d("crawling",firstArgument!!)
+
+
                 imageItem.itemImage = img.toString()
-                imageItem.itemUrl = "https://www.hmall.com/p/pde/search.do?searchTerm=테니스&gnbSearchYn=Y&gaSearchType=1"
+                imageItem.itemUrl = "https://www.hmall.com${firstArgument}}"
                 hmallImageList.add(imageItem)
             }
 
